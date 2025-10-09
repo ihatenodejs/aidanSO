@@ -1,25 +1,43 @@
-import React from 'react'
 import { Metadata, Viewport } from 'next'
 import './globals.css'
 import { GeistSans } from 'geist/font/sans'
-import AnimatedTitle from '../components/AnimatedTitle'
-import I18nProvider from '../components/I18nProvider'
+import AnimatedTitle from '../components/objects/AnimatedTitle'
+import { Header, Footer } from '../components/navigation'
+import { footerMessages } from '../components/objects/footerMessages'
+
+export const dynamic = 'force-dynamic'
+
+const getFooterMessageIndex = (): number | undefined => {
+  const totalMessages = footerMessages.length
+
+  if (!totalMessages) {
+    return undefined
+  }
+
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const buffer = new Uint32Array(1)
+    crypto.getRandomValues(buffer)
+    return buffer[0] % totalMessages
+  }
+
+  return Math.floor(Math.random() * totalMessages)
+}
 
 export const metadata: Metadata = {
-  title: 'aidxn.cc',
+  title: 'aidan.so',
   description: "The Internet home of Aidan. Come on in!",
-  authors: [{ name: 'aidxn.cc' }],
+  authors: [{ name: 'aidan.so' }],
   robots: 'index, follow',
-  metadataBase: new URL('https://aidxn.cc'),
+  metadataBase: new URL('https://aidan.so'),
   openGraph: {
     type: "website",
-    url: "https://aidxn.cc",
-    title: "aidxn.cc",
+    url: "https://aidan.so",
+    title: "aidan.so",
     description: "The Internet home of Aidan. Come on in!",
-    siteName: "aidxn.cc",
+    siteName: "aidan.so",
     images: [
       {
-        url: "https://aidxn.cc/android-icon-192x192.png",
+        url: "https://aidan.so/android-icon-192x192.png",
         width: 192,
         height: 192,
       },
@@ -58,13 +76,17 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const footerMessageIndex = getFooterMessageIndex()
+
   return (
-    <html lang="en" className="dark">
-      <body className={`${GeistSans.className} bg-gray-900 text-gray-100`}>
+    <html lang="en" className="dark h-full">
+      <body className={`${GeistSans.className} bg-gray-900 text-gray-100 flex min-h-screen flex-col`}>
         <AnimatedTitle />
-        <I18nProvider>
+        <Header />
+        <main className="flex-1 w-full">
           {children}
-        </I18nProvider>
+        </main>
+        <Footer footerMessageIndex={footerMessageIndex} />
       </body>
     </html>
   );

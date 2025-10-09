@@ -1,7 +1,6 @@
 "use client"
 
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import PageHeader from '@/components/objects/PageHeader'
 import { Brain } from 'lucide-react'
 import TopPick from './components/TopPick'
 import AIStack from './components/AIStack'
@@ -11,15 +10,13 @@ import { aiTools, favoriteModels, aiReviews } from './data'
 
 export default function AI() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="w-full px-2 sm:px-6">
+    <div className="w-full px-2 sm:px-6">
         <div className="my-12 text-center">
-          <div className="flex justify-center mb-6">
-            <Brain size={60} />
-          </div>
-          <h1 className="text-4xl font-bold mb-2 text-gray-100 glow">AI</h1>
-          <p className="text-gray-400">My journey with using LLMs</p>
+          <PageHeader
+            icon={<Brain size={60} />}
+            title="AI"
+            subtitle="My journey with using LLMs"
+          />
         </div>
 
         <TopPick />
@@ -32,8 +29,6 @@ export default function AI() {
           <FavoriteModels models={favoriteModels} />
           <FavoriteTools reviews={aiReviews} />
         </div>
-      </main>
-      <Footer />
     </div>
   )
 }

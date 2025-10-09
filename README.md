@@ -17,10 +17,16 @@ Just create a `.env` file with the below variables, run `docker compose -d --bui
 
 ## Environment Variables
 
-| Variable             | Required? | Description                                                                         |
-|----------------------|-----------|-------------------------------------------------------------------------------------|
-| `LISTENBRAINZ_TOKEN` | No        | Get this from your ListenBrainz [user settings](https://listenbrainz.org/settings/) |
-| `LASTFM_API_KEY`     | Yes       | Get this from your Last.fm [API account](https://www.last.fm/api/account/create)    |
+| Variable               | Required? | Description                                                                                              |
+|------------------------|-----------|----------------------------------------------------------------------------------------------------------|
+| `LASTFM_API_KEY`       | Yes       | Get this from your Last.fm [API account](https://www.last.fm/api/account/create)                         |
+| `LISTENBRAINZ_TOKEN`   | No        | Get this from your ListenBrainz [user settings](https://listenbrainz.org/settings/)                      |
+| `GITHUB_PROJECTS_USER` | No        | GitHub username to display in the footer projects list (defaults to `ihatenodejs`)                       |
+| `GITHUB_USERNAME`      | No        | Fallback GitHub username if `GITHUB_PROJECTS_USER` is not set                                            |
+| `GITHUB_PROJECTS_PAT`  | No        | GitHub personal access token used to increase API limits for the footer projects list                    |
+| `GITHUB_PAT`           | No        | Fallback GitHub personal access token if `GITHUB_PROJECTS_PAT` is not set                                |
+| `PORT`                 | No        | Server port (defaults to `3000`)                                                                         |
+| `NODE_ENV`             | No        | Environment mode (`production` or `development`, automatically set by deployment platform)               |
 
 ## MusicBrainz
 

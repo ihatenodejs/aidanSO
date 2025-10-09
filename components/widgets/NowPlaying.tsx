@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress"
 import Link from "@/components/objects/Link"
 import ScrollTxt from "@/components/objects/MusicText"
 import { connectSocket, disconnectSocket } from "@/lib/socket"
+import { effects } from '@/lib/theme/effects'
 
 interface LastFmResponse {
   album?: {
@@ -148,7 +149,7 @@ const NowPlaying: React.FC = () => {
           href={nowPlaying.mbid ? `https://musicbrainz.org/release/${nowPlaying.mbid}` : `https://listenbrainz.org/user/p0ntus`}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-gradient-to-b from-gray-700 to-gray-900 border-b border-gray-700 px-2 py-0 block" style={{background: 'linear-gradient(to bottom, #4b5563 0%, #374151 30%, #1f2937 70%, #111827 100%)'}}
+          className="border-b border-gray-700 px-2 py-0 block" style={{background: effects.gradients.musicPlayer}}
         >
           <div className="text-center leading-none pb-1">
             <ScrollTxt text={nowPlaying.artist_name?.toUpperCase() || ''} type="artist" className="-mt-0.5" />
@@ -196,7 +197,7 @@ const NowPlaying: React.FC = () => {
         {/* Virtual screen */}
         <div className="mx-2 mt-2 flex-1 bg-black overflow-hidden flex flex-col">
           {screenOn && (
-            <div className="bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900 border-b border-gray-700" style={{background: 'linear-gradient(to bottom, #4b5563 0%, #374151 30%, #1f2937 70%, #111827 100%)'}}>
+            <div className="border-b border-gray-700" style={{background: effects.gradients.musicPlayer}}>
               <div className="relative flex items-center pr-1 py-0.5">
                 <FaBluetoothB size={14} className="text-gray-400" />
                 <div className="absolute left-1/2 transform -translate-x-1/2 text-white text-xs font-medium">{formatTime(currentTime)}</div>
@@ -212,7 +213,7 @@ const NowPlaying: React.FC = () => {
           )}
           {/* Player controls and seekbar */}
           {screenOn && nowPlaying.track_name && (
-            <div className={`bg-gradient-to-b from-gray-700 to-gray-900 ${nowPlaying.release_name ? "pb-3" : "pb-[12.5px]"} flex flex-col items-center`} style={{background: 'linear-gradient(to bottom, #4b5563 0%, #374151 30%, #1f2937 70%, #111827 100%)'}}>
+            <div className={`${nowPlaying.release_name ? "pb-3" : "pb-[12.5px]"} flex flex-col items-center`} style={{background: effects.gradients.musicPlayer}}>
               <div className="flex justify-center items-center gap-0 px-2">
               <button className="hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter hover:brightness-110 transition-all duration-200 p-1 rounded-full overflow-hidden">
                 <svg width="38" height="34" viewBox="0 0 24 20" className="drop-shadow-sm">

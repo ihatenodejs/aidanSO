@@ -1,0 +1,30 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "lib/services",
+    "lib/utils",
+    "lib/types",
+    "lib/theme",
+    "lib/github.ts"
+  ],
+  "entryPointStrategy": "expand",
+  "out": "public/docs/html",
+  "json": "public/docs/api.json",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "readme": "none",
+  "plugin": [],
+  "sort": ["source-order"],
+  "includeVersion": false,
+  "searchInComments": true,
+  "categorizeByGroup": true,
+  "defaultCategory": "Other",
+  "categoryOrder": [
+    "Services",
+    "Utils",
+    "Types",
+    "Theme",
+    "*"
+  ]
+}

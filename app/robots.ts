@@ -5,7 +5,7 @@ export const robots: MetadataRoute.Robots = {
     userAgent: '*',
     allow: '/',
   },
-  sitemap: 'https://aidxn.cc/sitemap.xml',
+  sitemap: 'https://aidan.so/sitemap.xml',
 }
 
 export default function handler(): MetadataRoute.Robots {

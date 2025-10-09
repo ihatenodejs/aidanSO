@@ -1,21 +1,14 @@
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import PageHeader from '@/components/objects/PageHeader'
 import { BookOpen } from 'lucide-react'
 
 export default function Manifesto() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="grow container mx-auto px-4 py-12">
+    <div className="grow container mx-auto px-4 py-12">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="flex flex-col gap-4">
-            <div className="flex justify-center">
-              <BookOpen size={60} />
-            </div>
-            <h1 className="text-4xl font-bold mt-2 text-center text-gray-200" style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.5)' }}>
-              Internet Manifesto
-            </h1>
-          </div>
+          <PageHeader
+            icon={<BookOpen size={60} />}
+            title="Internet Manifesto"
+          />
           <div className="px-6 pt-12">
             <h2 className="text-2xl font-semibold mb-4 text-gray-200">
               1. Empathy and Understanding
@@ -74,8 +67,6 @@ export default function Manifesto() {
             </p>
           </div>
         </div>
-      </main>
-      <Footer />
     </div>
   )
 }

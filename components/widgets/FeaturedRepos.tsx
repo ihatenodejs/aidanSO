@@ -1,17 +1,22 @@
 import { SiGithub, SiForgejo } from "react-icons/si"
 import { TbStar, TbGitBranch } from "react-icons/tb"
-import featuredProjects from "@/public/data/featured.json"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import type { FeaturedProject } from "@/lib/github"
 
-export default function GitHubFeatured({ className }: { className?: string }) {
+interface FeaturedReposProps {
+  projects: FeaturedProject[]
+  className?: string
+}
+
+export default function FeaturedRepos({ projects, className }: FeaturedReposProps) {
   return (
     <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-4", className)}>
-      {featuredProjects.map((project) => (
+      {projects.map((project) => (
         <div key={project.id} className="bg-gray-800 p-6 rounded-lg shadow-md min-h-[200px] flex flex-col">
           <div className="flex-1">
             <h3 className="flex items-center justify-center text-xl font-bold text-gray-100 mb-3">
-              {project.github ? <SiGithub className="mr-2" /> : <SiForgejo className="mr-2" />} {project.name}
+              {project.platform === 'github' ? <SiGithub className="mr-2" /> : <SiForgejo className="mr-2" />} {project.name}
             </h3>
             <p className="text-gray-300 grow">{project.description}</p>
           </div>

@@ -1,232 +1,159 @@
-"use client"
-
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import Link from '@/components/objects/Link'
 import Button from '@/components/objects/Button'
 import FeaturedRepos from '@/components/widgets/FeaturedRepos'
-import Image from 'next/image'
-import { useState } from 'react'
+import GitHubStatsImage from '@/components/widgets/GitHubStatsImage'
+import PageHeader from '@/components/objects/PageHeader'
+import { Card } from '@/components/ui/Card'
+import { CardGrid } from '@/components/ui/CardGrid'
 import { SiGoogle } from 'react-icons/si'
 import { TbUserHeart } from 'react-icons/tb'
-import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
+import { getFeaturedReposWithMetrics } from '@/lib/github'
 
-export default function About() {
-  const { t } = useTranslation()
-  const [imageError, setImageError] = useState(false)
-  const mainStrings: string[][] = [
-    t('about.projects', { returnObjects: true }) as string[],
-    t('about.hobbies', { returnObjects: true }) as string[],
-    t('about.devices', { returnObjects: true }) as string[],
-    t('about.contributions', { returnObjects: true }) as string[],
-    t('about.featuredProjects', { returnObjects: true }) as string[]
-  ]
+const getGitHubUsername = () => {
+  return process.env.GITHUB_PROJECTS_USER ?? process.env.GITHUB_USERNAME ?? 'ihatenodejs'
+}
 
-  const mainSections = [
-    t('about.sections.projects'),
-    t('about.sections.hobbies'),
-    t('about.sections.devices'),
-    t('about.sections.contributions'),
-    t('about.sections.featuredProjects')
-  ]
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="w-full">
-        <div className="my-12 text-center">
-          <div className="flex justify-center mb-6">
-            <TbUserHeart size={60} />
+interface ContentSection {
+  title: string
+  content: React.ReactElement
+}
+
+export default async function About() {
+  const featuredProjects = await getFeaturedReposWithMetrics()
+  const githubUsername = getGitHubUsername()
+
+  const sections: ContentSection[] = [
+    {
+      title: "Projects",
+      content: (
+        <>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I have worked on countless projects over the past five years, for the most part. I started learning to code with Python when I was seven and my interest has only evolved from there. I got into web development due to my uncle, who taught my how to write my first lines of HTML.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            Recently, I have been involved in developing several projects, especially with TypeScript, which is my new favorite language as of a year ago. My biggest project currently is <Link href="https://p0ntus.com/">p0ntus</Link>, a free service provider for privacy-focused individuals.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            You will also come to find that I have an addiction to Docker! Almost every project I&apos;ve made is able to be run in Docker.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            Me and my developer friends operate an organization called <Link href="https://github.com/abocn">ABOCN</Link>, where we primarily maintain a Telegram bot called <Link href="https://github.com/abocn/TelegramBot">Kowalski</Link>. You can find it on Telegram as <Link href="https://t.me/KowalskiNodeBot">@KowalskiNodeBot</Link>.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I have learned system administration from the past three years of learning Linux for practical use and fun. I currently operate four servers running in the cloud, ran out of Canada, Germany, and the United States.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I own a channel called <Link href="https://t.me/PontusHub">PontusHub</Link> on Telegram, where I post updates about my projects, along with commentary and info about my projects related to the Android rooting community.
+          </p>
+        </>
+      )
+    },
+    {
+      title: "Hobbies",
+      content: (
+        <>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            When I&apos;m not programming, I can typically be found distro hopping or flashing a new ROM to <Link href="/device/cheetah">my phone</Link>. I also spend a lot of time spreading Next.js and TypeScript propaganda to JavaScript developers.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I consider maintaining my devices as a hobby as well, as I devote a lot of time to it. I genuinely enjoy installing Arch, Gentoo, and NixOS frequently, and flashing new ROMs to the phones I own.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I am frequently active on <Link href="https://git.p0ntus.com/">my Forgejo server</Link> and GitHub, and aim to make daily contributions. I am a big fan of open source software and public domain software (which most of my repos are licensed under). In fact, the website you&apos;re currently on is free and open source. It&apos;s even under the public domain!
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            When I touch grass, I prefer to walk on the streets, especially in Boston, Massachusetts. I also used to swim competitively, though it has turned into to a casual hobby over time.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            Editing Wikipedia has also been a good pastime for me, and I have been editing for a year and a half now. As of writing, I have made 6.1k edits to the English Wikipedia. I am also an <Link href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Articles_for_creation">AfC</Link> reviewer, new page reviewer, and rollbacker. You can find me on Wikipedia as <Link href="https://en.wikipedia.org/wiki/User:OnlyNano">OnlyNano</Link>.
+          </p>
+        </>
+      )
+    },
+    {
+      title: "Devices",
+      content: (
+        <>
+          <h3 className="text-xl font-semibold mb-2 text-gray-200">Mobile Devices</h3>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I use a Google Pixel 9 Pro XL (komodo) as my daily driver. It runs <Link href="https://developer.android.com/about/versions/16/get">Android 16</Link> and is proudly rooted with <Link href="https://github.com/KernelSU-Next/KernelSU-Next">KernelSU-Next</Link>.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            My previous phone, the Google Pixel 7 Pro (cheetah), is still in use as my secondary WiFi-only device. It runs <Link href="https://developer.android.com/about/versions/16/get">Android 16</Link> and is proudly rooted with <Link href="https://github.com/KernelSU-Next/KernelSU-Next">KernelSU-Next</Link>.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I also have a Google Pixel 3a XL (bonito) which I use as a tertiary device. It runs <Link href="https://wiki.lineageos.org/devices/bonito/">LineageOS 22.2</Link> and is rooted with Magisk.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+            <Button href="/device/komodo" icon={<SiGoogle />}>
+              Pixel 9 Pro XL
+            </Button>
+            <Button href="/device/cheetah" icon={<SiGoogle />}>
+              Pixel 7 Pro
+            </Button>
+            <Button href="/device/bonito" icon={<SiGoogle />}>
+              Pixel 3a XL
+            </Button>
           </div>
-          <h1 className="text-4xl font-bold mb-2 text-gray-100 glow">{t('about.title')}</h1>
-        </div>
+          <h3 className="text-xl font-semibold mb-2 text-gray-200 mt-4">Laptops</h3>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I currently daily-drive with a 16-inch MacBook Pro with an M4 Max, 64GB of memory, 2TB of storage, 16 core CPU, and a 40 core GPU.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I use a Lenovo Thinkpad T470s with macOS Sequoia (using <Link href="https://github.com/acidanthera/OpenCorePkg">OpenCore</Link>) as my &quot;side piece,&quot; if you will. I&apos;ve had it for about a year now, and it&apos;s been a great experience.
+          </p>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            I also own two MacBook Airs (2015 and 2013 base models) and an HP Chromebook, used as secondary devices. The 2013 runs unsupported macOS Sequoia Beta, the 2015 runs <Link href="https://xubuntu.org/">Xubuntu</Link>, and the Chromebook runs Arch Linux.
+          </p>
+        </>
+      )
+    },
+    {
+      title: "Contributions",
+      content: (
+        <>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            Most of my repositories have migrated to <Link href="https://git.p0ntus.com/">p0ntus git</Link>. My username is <Link href="https://git.p0ntus.com/aidan/">aidan</Link>. You can find me on GitHub as <Link href={`https://github.com/${githubUsername}/`}>{githubUsername}</Link>.
+          </p>
+          <GitHubStatsImage username={githubUsername} />
+        </>
+      )
+    },
+    {
+      title: "Featured Projects",
+      content: (
+        <>
+          <p className="text-gray-300 leading-relaxed mt-2">
+            Here&apos;s just four of my top projects. Star and fork counts are fetched in real-time from both GitHub and Forgejo APIs.
+          </p>
+          <FeaturedRepos projects={featuredProjects} className="mt-4" />
+        </>
+      )
+    }
+  ]
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-          {mainStrings.map((section, index) => {
-            if (mainSections[index] === t('about.sections.featuredProjects')) {
-              return (
-                <section key={index} className="p-4 sm:p-8 border-2 border-gray-700 rounded-lg lg:col-span-2 hover:border-gray-600 transition-colors duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 text-gray-200">{mainSections[index]}</h2>
-                  {section.map((text, index) => (
-                    <p key={index} className="text-gray-300 leading-relaxed mt-2">
-                      {text}
-                    </p>
-                  ))}
-                  <FeaturedRepos className="mt-4" />
-                </section>
-              )
-            } else if (mainSections[index] === t('about.sections.contributions')) {
-              return (
-                <section key={index} className="p-4 sm:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 text-gray-200">{mainSections[index]}</h2>
-                  {section.map((text, index) => (
-                    <p key={index} className="text-gray-300 leading-relaxed mt-2">
-                      {text.split(/(ihatenodejs|p0ntus git|aidan)/).map((part, i) => {
-                        if (part === 'ihatenodejs') {
-                          return <Link key={i} href="https://github.com/ihatenodejs/">ihatenodejs</Link>
-                        }
-                        if (part === 'p0ntus git') {
-                          return <Link key={i} href="https://git.p0ntus.com/">p0ntus git</Link>
-                        }
-                        if (part === 'aidan') {
-                          return <Link key={i} href="https://git.p0ntus.com/aidan/">aidan</Link>
-                        }
-                        return part
-                      })}
-                    </p>
-                  ))}
-                  {!imageError && (
-                    <div className="flex flex-col justify-center items-center w-full mt-4 gap-4">
-                      <Image
-                        src="https://github-readme-stats.vercel.app/api?username=ihatenodejs&theme=dark&show_icons=true&hide_border=true&count_private=true"
-                        alt="ihatenodejs's Stats"
-                        width={420}
-                        height={200}
-                        onError={() => setImageError(true)}
-                        loading="eager"
-                        priority
-                        unoptimized
-                        className="max-w-full h-auto"
-                      />
-                      <Image
-                        src="https://github-readme-stats.vercel.app/api/top-langs/?username=ihatenodejs&theme=dark&show_icons=true&hide_border=true&layout=compact"
-                        alt="ihatenodejs's Top Languages"
-                        width={300}
-                        height={200}
-                        onError={() => setImageError(true)}
-                        loading="eager"
-                        priority
-                        unoptimized
-                        className="max-w-full h-auto"
-                      />
-                    </div>
-                  )}
-                </section>
-              )
-            } else if (mainSections[index] === t('about.sections.devices')) {
-              return (
-                <section key={index} className="p-4 sm:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 text-gray-200">{mainSections[index]}</h2>
-                  {Object.entries(section).map(([key, value], index) => (
-                    <div key={index}>
-                      <h3 className={cn("text-xl font-semibold mb-2 text-gray-200", key === "Laptops" && "mt-4")}>{key}</h3>
-                      {(value as unknown as string[]).map((text: string, index: number) => (
-                        <p key={index} className="text-gray-300 leading-relaxed mt-2">
-                          {text.split(/(KernelSU-Next|LineageOS 22.2|Android 16|Xubuntu)/).map((part, i) => {
-                            if (part === 'KernelSU-Next') {
-                              return <Link key={i} href="https://github.com/KernelSU-Next/KernelSU-Next">KernelSU-Next</Link>
-                            }
-                            if (part === 'LineageOS 22.2') {
-                              return <Link key={i} href="https://wiki.lineageos.org/devices/bonito/">LineageOS 22.2</Link>
-                            }
-                            if (part === 'Android 16') {
-                              return <Link key={i} href="https://developer.android.com/about/versions/16/get">Android 16</Link>
-                            }
-                            if (part === 'OpenCore') {
-                              return <Link key={i} href="https://github.com/acidanthera/OpenCorePkg">OpenCore</Link>
-                            }
-                            if (part === 'Xubuntu') {
-                              return <Link key={i} href="https://xubuntu.org/">Xubuntu</Link>
-                            }
-                            return part
-                          })}
-                        </p>
-                      ))}
-                      {key === "Mobile Devices" && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
-                          <Button
-                            href="/device/komodo"
-                            icon={<SiGoogle />}
-                          >
-                            Pixel 9 Pro XL
-                          </Button>
-                          <Button
-                            href="/device/cheetah"
-                            icon={<SiGoogle />}
-                          >
-                            Pixel 7 Pro
-                          </Button>
-                          <Button
-                            href="/device/bonito"
-                            icon={<SiGoogle />}
-                          >
-                            Pixel 3a XL
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </section>
-              )
-            } else if (mainSections[index] === t('about.sections.hobbies')) {
-              return (
-                <section key={index} className="p-4 sm:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 text-gray-200">{mainSections[index]}</h2>
-                  {section.map((text, index) => (
-                    <p key={index} className="text-gray-300 leading-relaxed mt-2">
-                      {text.split(/(my Forgejo server|my phone|AfC|OnlyNano)/).map((part, i) => {
-                        if (part === 'my Forgejo server') {
-                          return <Link key={i} href="https://git.p0ntus.com/">my Forgejo server</Link>
-                        }
-                        if (part === 'my phone') {
-                          return <Link key={i} href="/device/cheetah">my phone</Link>
-                        }
-                        if (part === 'AfC') {
-                          return <Link key={i} href="https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Articles_for_creation">AfC</Link>
-                        }
-                        if (part === 'OnlyNano') {
-                          return <Link key={i} href="https://en.wikipedia.org/wiki/User:OnlyNano">OnlyNano</Link>
-                        }
-                        return part
-                      })}
-                    </p>
-                  ))}
-                </section>
-              )
-            } else if (mainSections[index] === t('about.sections.projects')) {
-              return (
-                <section key={index} className="p-4 sm:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 text-gray-200">{mainSections[index]}</h2>
-                  {section.map((text, index) => (
-                    <p key={index} className="text-gray-300 leading-relaxed mt-2">
-                      {text.split(/(p0ntus|PontusHub|ABOCN|Kowalski|@KowalskiNodeBot)/).map((part, i) => {
-                        if (part === 'p0ntus') {
-                          return <Link key={i} href="https://p0ntus.com/">p0ntus</Link>
-                        }
-                        if (part === 'PontusHub') {
-                          return <Link key={i} href="https://t.me/PontusHub">PontusHub</Link>
-                        }
-                        if (part === 'ABOCN') {
-                          return <Link key={i} href="https://github.com/abocn">ABOCN</Link>
-                        }
-                        if (part === 'Kowalski') {
-                          return <Link key={i} href="https://github.com/abocn/TelegramBot">Kowalski</Link>
-                        }
-                        if (part === '@KowalskiNodeBot') {
-                          return <Link key={i} href="https://t.me/KowalskiNodeBot">@KowalskiNodeBot</Link>
-                        }
-                        return part
-                      })}
-                    </p>
-                  ))}
-                </section>
-              )
-            } else {
-              return (
-                <section key={index} className="p-4 sm:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 text-gray-200">{mainSections[index]}</h2>
-                  {section.map((text, index) => (
-                    <p key={index} className="text-gray-300 leading-relaxed mt-2">
-                      {text}
-                    </p>
-                  ))}
-                </section>
-              )
-            }
-          })}
-        </div>
-      </main>
-      <Footer />
+  return (
+    <div className="w-full">
+      <div className="my-12 text-center">
+        <PageHeader
+          icon={<TbUserHeart size={60} />}
+          title="Get to Know Me"
+        />
+      </div>
+
+      <CardGrid cols="3">
+        {sections.map((section) => (
+          <Card
+            key={section.title}
+            variant="default"
+            title={section.title}
+            spanCols={section.title === "Featured Projects" ? 2 : undefined}
+            className="p-4 sm:p-8"
+          >
+            {section.content}
+          </Card>
+        ))}
+      </CardGrid>
     </div>
   )
 }

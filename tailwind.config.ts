@@ -53,7 +53,15 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       boxShadow: {
-        neon: '0 0 5px theme("colors.blue.400"), 0 0 20px theme("colors.blue.700")',
+        glow: '0 0 10px rgba(255, 255, 255, 0.8)',
+        'glow-hover': '0 0 15px rgba(255, 255, 255, 0.9)',
+        'glow-intense': '0 0 20px rgba(255, 255, 255, 1)',
+      },
+      textShadow: {
+        glow: '0 0 10px rgba(255, 255, 255, 0.8)',
+        'glow-hover': '0 0 15px rgba(255, 255, 255, 0.9)',
+        'glow-intense': '0 0 20px rgba(255, 255, 255, 1)',
+        subtle: '0 0 10px rgba(255, 255, 255, 0.5)',
       },
     },
   },

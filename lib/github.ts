@@ -133,7 +133,8 @@ interface RepoMetrics {
  * @internal
  */
 const resolveConfiguredUser = (): string => {
-  const configured = process.env.GITHUB_PROJECTS_USER ?? process.env.GITHUB_USERNAME
+  const configured =
+    process.env.GITHUB_PROJECTS_USER ?? process.env.GITHUB_USERNAME
   const fallback = DEFAULT_GITHUB_USER
 
   if (!configured) {
@@ -172,7 +173,7 @@ const resolveAuthHeader = (): string | undefined => {
 const buildGitHubHeaders = (): Record<string, string> => {
   const headers: Record<string, string> = {
     Accept: 'application/vnd.github+json',
-    'User-Agent': 'aidan.so',
+    'User-Agent': 'aidan.so'
   }
 
   const authHeader = resolveAuthHeader()
@@ -196,7 +197,9 @@ const buildGitHubHeaders = (): Record<string, string> => {
  *
  * @internal
  */
-const fetchRecentRepos = async (username: string): Promise<GitHubRepoSummary[]> => {
+const fetchRecentRepos = async (
+  username: string
+): Promise<GitHubRepoSummary[]> => {
   const url = new URL(`https://api.github.com/users/${username}/repos`)
   url.searchParams.set('sort', 'updated')
   url.searchParams.set('per_page', REPO_LIMIT.toString())
@@ -206,12 +209,14 @@ const fetchRecentRepos = async (username: string): Promise<GitHubRepoSummary[]> 
       headers: buildGitHubHeaders(),
       next: {
         revalidate: REVALIDATE_SECONDS,
-        tags: [`github-repos-${username}`],
-      },
+        tags: [`github-repos-${username}`]
+      }
     })
 
     if (!response.ok) {
-      console.error(`Failed to fetch GitHub repos for ${username}: ${response.status} ${response.statusText}`)
+      console.error(
+        `Failed to fetch GitHub repos for ${username}: ${response.status} ${response.statusText}`
+      )
       return []
     }
 
@@ -221,10 +226,13 @@ const fetchRecentRepos = async (username: string): Promise<GitHubRepoSummary[]> 
       id: repo.id,
       name: repo.name,
       url: repo.html_url,
-      updatedAt: repo.updated_at,
+      updatedAt: repo.updated_at
     }))
   } catch (error) {
-    console.error(`Unexpected error fetching GitHub repos for ${username}:`, error)
+    console.error(
+      `Unexpected error fetching GitHub repos for ${username}:`,
+      error
+    )
     return []
   }
 }
@@ -243,7 +251,7 @@ const getCachedRecentRepos = unstable_cache(
   ['github-recent-repos'],
   {
     revalidate: REVALIDATE_SECONDS,
-    tags: ['github-repos'],
+    tags: ['github-repos']
   }
 )
 
@@ -275,7 +283,7 @@ export const getRecentGitHubRepos = cache(async () => {
 
   return {
     username,
-    repos,
+    repos
   }
 })
 
@@ -288,18 +296,26 @@ export const getRecentGitHubRepos = cache(async () => {
  *
  * @internal
  */
-const fetchGitHubRepoMetrics = async (owner: string, repo: string): Promise<RepoMetrics | null> => {
+const fetchGitHubRepoMetrics = async (
+  owner: string,
+  repo: string
+): Promise<RepoMetrics | null> => {
   try {
-    const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-      headers: buildGitHubHeaders(),
-      next: {
-        revalidate: REVALIDATE_SECONDS,
-        tags: [`github-repo-${owner}-${repo}`],
-      },
-    })
+    const response = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}`,
+      {
+        headers: buildGitHubHeaders(),
+        next: {
+          revalidate: REVALIDATE_SECONDS,
+          tags: [`github-repo-${owner}-${repo}`]
+        }
+      }
+    )
 
     if (!response.ok) {
-      console.error(`Failed to fetch GitHub repo ${owner}/${repo}: ${response.status}`)
+      console.error(
+        `Failed to fetch GitHub repo ${owner}/${repo}: ${response.status}`
+      )
       return null
     }
 
@@ -307,7 +323,7 @@ const fetchGitHubRepoMetrics = async (owner: string, repo: string): Promise<Repo
 
     return {
       stars: data.stargazers_count ?? 0,
-      forks: data.forks_count ?? 0,
+      forks: data.forks_count ?? 0
     }
   } catch (error) {
     console.error(`Error fetching GitHub repo ${owner}/${repo}:`, error)
@@ -328,7 +344,7 @@ const getCachedGitHubRepoMetrics = unstable_cache(
   ['github-repo-metrics'],
   {
     revalidate: REVALIDATE_SECONDS,
-    tags: ['github-metrics'],
+    tags: ['github-metrics']
   }
 )
 
@@ -353,16 +369,18 @@ const fetchForgejoRepoMetrics = async (
     const response = await fetch(apiUrl, {
       headers: {
         Accept: 'application/json',
-        'User-Agent': 'aidan.so',
+        'User-Agent': 'aidan.so'
       },
       next: {
         revalidate: REVALIDATE_SECONDS,
-        tags: [`forgejo-repo-${forgejoBaseUrl}-${owner}-${repo}`],
-      },
+        tags: [`forgejo-repo-${forgejoBaseUrl}-${owner}-${repo}`]
+      }
     })
 
     if (!response.ok) {
-      console.error(`Failed to fetch Forgejo repo ${owner}/${repo} from ${forgejoBaseUrl}: ${response.status}`)
+      console.error(
+        `Failed to fetch Forgejo repo ${owner}/${repo} from ${forgejoBaseUrl}: ${response.status}`
+      )
       return null
     }
 
@@ -370,10 +388,13 @@ const fetchForgejoRepoMetrics = async (
 
     return {
       stars: data.stars_count ?? 0,
-      forks: data.forks_count ?? 0,
+      forks: data.forks_count ?? 0
     }
   } catch (error) {
-    console.error(`Error fetching Forgejo repo ${owner}/${repo} from ${forgejoBaseUrl}:`, error)
+    console.error(
+      `Error fetching Forgejo repo ${owner}/${repo} from ${forgejoBaseUrl}:`,
+      error
+    )
     return null
   }
 }
@@ -387,12 +408,15 @@ const fetchForgejoRepoMetrics = async (
  * @internal
  */
 const getCachedForgejoRepoMetrics = unstable_cache(
-  async (owner: string, repo: string, forgejoBaseUrl: string = DEFAULT_FORGEJO_URL) =>
-    fetchForgejoRepoMetrics(owner, repo, forgejoBaseUrl),
+  async (
+    owner: string,
+    repo: string,
+    forgejoBaseUrl: string = DEFAULT_FORGEJO_URL
+  ) => fetchForgejoRepoMetrics(owner, repo, forgejoBaseUrl),
   ['forgejo-repo-metrics'],
   {
     revalidate: REVALIDATE_SECONDS,
-    tags: ['forgejo-metrics'],
+    tags: ['forgejo-metrics']
   }
 )
 
@@ -422,20 +446,24 @@ const fetchFeaturedProjects = async (): Promise<FeaturedProject[]> => {
         )
       }
 
-      const url = config.platform === 'github'
-        ? `https://github.com/${config.owner}/${config.repo}`
-        : `https://${config.forgejoUrl ?? DEFAULT_FORGEJO_URL}/${config.owner}/${config.repo}`
+      const url =
+        config.platform === 'github'
+          ? `https://github.com/${config.owner}/${config.repo}`
+          : `https://${config.forgejoUrl ?? DEFAULT_FORGEJO_URL}/${config.owner}/${config.repo}`
 
       return {
         id: config.id,
         owner: config.owner,
         repo: config.repo,
-        name: config.owner === config.repo ? config.repo : `${config.owner}/${config.repo}`,
+        name:
+          config.owner === config.repo
+            ? config.repo
+            : `${config.owner}/${config.repo}`,
         description: config.description,
         platform: config.platform,
         url,
         stars: metrics?.stars ?? 0,
-        forks: metrics?.forks ?? 0,
+        forks: metrics?.forks ?? 0
       }
     })
   )
@@ -475,12 +503,8 @@ const fetchFeaturedProjects = async (): Promise<FeaturedProject[]> => {
  * @public
  */
 export const getFeaturedReposWithMetrics = cache(
-  unstable_cache(
-    async () => fetchFeaturedProjects(),
-    ['featured-repos'],
-    {
-      revalidate: REVALIDATE_SECONDS,
-      tags: ['featured-projects'],
-    }
-  )
+  unstable_cache(async () => fetchFeaturedProjects(), ['featured-repos'], {
+    revalidate: REVALIDATE_SECONDS,
+    tags: ['featured-projects']
+  })
 )

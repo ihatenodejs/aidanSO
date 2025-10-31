@@ -1,50 +1,59 @@
-import type { ReactElement } from 'react';
-import { ArrowUpRight, Star, StarHalf, StarOff } from 'lucide-react';
+import type { ReactElement } from 'react'
+import { ArrowUpRight, Star, StarHalf, StarOff } from 'lucide-react'
 
-import Link from '@/components/objects/Link';
+import Link from '@/components/objects/Link'
 import type {
   DevicePageShellProps,
   DeviceStatGroup,
-  StatsGridProps,
   StatItemProps,
   SectionsGridProps,
   SectionCardProps,
   SectionRowProps,
   RatingProps,
-  StarState,
-} from '@/lib/types';
-import { isExternalHref, externalLinkProps } from '@/lib/utils/styles';
-import { iconSizes } from '@/lib/devices/config';
+  StarState
+} from '@/lib/types'
+import { isExternalHref, externalLinkProps } from '@/lib/utils/styles'
+import { iconSizes } from '@/lib/config/devices/config'
 
-import DeviceHero from './DeviceHero';
+import DeviceHero from './DeviceHero'
 
-export default function DevicePageShell({ device }: DevicePageShellProps): ReactElement {
+export default function DevicePageShell({
+  device
+}: DevicePageShellProps): ReactElement {
   return (
     <div className="space-y-12">
       <DeviceHero device={device} />
 
-      {device.stats.length ? <StatsGrid stats={device.stats} /> : null}
-
-      {device.sections.length ? <SectionsGrid sections={device.sections} /> : null}
+      {device.stats.length || device.sections.length ? (
+        <SectionsGrid stats={device.stats} sections={device.sections} />
+      ) : null}
     </div>
-  );
+  )
 }
 
-function StatsGrid({ stats }: StatsGridProps): ReactElement {
+function SectionsGrid({
+  stats,
+  sections
+}: {
+  stats: DeviceStatGroup[]
+  sections: SectionsGridProps['sections']
+}): ReactElement {
   return (
     <section className="space-y-5">
-      <h2 className="text-xl font-semibold text-gray-100">At a glance</h2>
-      <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
+      <div className="grid auto-rows-fr gap-5 lg:grid-cols-2 xl:grid-cols-3">
         {stats.map((group) => (
           <StatCard key={group.title} group={group} />
         ))}
+        {sections.map((section) => (
+          <SectionCard key={section.id} section={section} />
+        ))}
       </div>
     </section>
-  );
+  )
 }
 
 function StatCard({ group }: { group: DeviceStatGroup }): ReactElement {
-  const Icon = group.icon;
+  const Icon = group.icon
 
   return (
     <article className="flex h-full flex-col gap-4 rounded-2xl border border-gray-800 bg-gray-900/60 p-5 backdrop-blur-sm">
@@ -66,15 +75,15 @@ function StatCard({ group }: { group: DeviceStatGroup }): ReactElement {
         ))}
       </div>
     </article>
-  );
+  )
 }
 
 function StatItem({ item, groupIcon }: StatItemProps): ReactElement {
-  const isExternal = isExternalHref(item.href);
-  const linkProps = isExternal ? externalLinkProps : {};
+  const isExternal = isExternalHref(item.href)
+  const linkProps = isExternal ? externalLinkProps : {}
   const baseClasses =
-    'relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/70 px-4 py-5 text-gray-100 transition';
-  const GroupIcon = groupIcon;
+    'relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/70 px-4 py-5 text-gray-100 transition'
+  const GroupIcon = groupIcon
 
   const content = (
     <>
@@ -88,17 +97,21 @@ function StatItem({ item, groupIcon }: StatItemProps): ReactElement {
       {item.href && isExternal ? (
         <ArrowUpRight
           aria-hidden
-          className="pointer-events-none absolute bottom-4 right-4 z-20 text-gray-500"
+          className="pointer-events-none absolute right-4 bottom-4 z-20 text-gray-500"
         />
       ) : null}
       <div className="relative z-10 space-y-2 pr-10">
         {item.label ? (
-          <p className="text-xs uppercase tracking-wide text-gray-500">{item.label}</p>
+          <p className="text-xs tracking-wide text-gray-500 uppercase">
+            {item.label}
+          </p>
         ) : null}
-        <div className="text-lg font-semibold leading-snug text-gray-100">{item.value}</div>
+        <div className="text-lg leading-snug font-semibold text-gray-100">
+          {item.value}
+        </div>
       </div>
     </>
-  );
+  )
 
   if (item.href) {
     return (
@@ -109,33 +122,21 @@ function StatItem({ item, groupIcon }: StatItemProps): ReactElement {
       >
         {content}
       </Link>
-    );
+    )
   }
 
-  return <div className={baseClasses}>{content}</div>;
-}
-
-function SectionsGrid({ sections }: SectionsGridProps): ReactElement {
-  return (
-    <section className="space-y-5">
-      <h2 className="text-xl font-semibold text-gray-100">Deep dive</h2>
-      <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
-        {sections.map((section) => (
-          <SectionCard key={section.id} section={section} />
-        ))}
-      </div>
-    </section>
-  );
+  return <div className={baseClasses}>{content}</div>
 }
 
 function SectionCard({ section }: SectionCardProps): ReactElement {
-  const Icon = section.icon;
+  const Icon = section.icon
   const shouldSpanWide =
-    !!section.paragraphs?.length && (!section.rows || section.paragraphs.length > 1);
+    !!section.paragraphs?.length &&
+    (!section.rows || section.paragraphs.length > 1)
 
   return (
     <article
-      className={`rounded-2xl border border-gray-800 bg-gray-900/60 p-5 backdrop-blur-sm flex flex-col gap-4 ${
+      className={`flex flex-col gap-4 rounded-2xl border border-gray-800 bg-gray-900/60 p-5 backdrop-blur-sm ${
         shouldSpanWide ? 'lg:col-span-2 xl:col-span-2' : ''
       }`}
     >
@@ -144,7 +145,9 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
           <Icon className="h-5 w-5" />
         </span>
         <div>
-          <h3 className="text-lg font-semibold text-gray-100">{section.title}</h3>
+          <h3 className="text-lg font-semibold text-gray-100">
+            {section.title}
+          </h3>
           {section.rating ? <Rating rating={section.rating} /> : null}
         </div>
       </header>
@@ -160,8 +163,8 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
       {section.listItems?.length ? (
         <ul className="grid gap-2 text-sm text-gray-300">
           {section.listItems.map((item) => {
-            const isExternal = isExternalHref(item.href);
-            const linkProps = isExternal ? externalLinkProps : {};
+            const isExternal = isExternalHref(item.href)
+            const linkProps = isExternal ? externalLinkProps : {}
             return (
               <li key={item.label}>
                 {item.href ? (
@@ -170,11 +173,13 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
                     className="relative block rounded-xl border border-gray-800 bg-gray-900/70 px-3 py-2 text-gray-100 transition hover:text-white hover:no-underline"
                     {...linkProps}
                   >
-                    <span className="block pr-10 font-medium">{item.label}</span>
+                    <span className="block pr-10 font-medium">
+                      {item.label}
+                    </span>
                     {isExternal ? (
                       <ArrowUpRight
                         aria-hidden
-                        className="pointer-events-none absolute bottom-2.5 right-3 text-gray-500"
+                        className="pointer-events-none absolute right-3 bottom-2.5 text-gray-500"
                       />
                     ) : null}
                   </Link>
@@ -184,10 +189,12 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
                   </div>
                 )}
                 {item.description ? (
-                  <p className="mt-1 text-xs text-gray-500">{item.description}</p>
+                  <p className="mt-1 text-xs text-gray-500">
+                    {item.description}
+                  </p>
                 ) : null}
               </li>
-            );
+            )
           })}
         </ul>
       ) : null}
@@ -200,34 +207,41 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
         </div>
       ) : null}
     </article>
-  );
+  )
 }
 
 function SectionRow({ row }: SectionRowProps): ReactElement {
-  const { icon: RowIcon } = row;
-  const isExternal = isExternalHref(row.href);
-  const linkProps = isExternal ? externalLinkProps : {};
+  const { icon: RowIcon } = row
+  const isExternal = isExternalHref(row.href)
+  const linkProps = isExternal ? externalLinkProps : {}
   const baseClasses =
-    'relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/70 px-4 py-5 text-gray-100 transition';
+    'relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/70 px-4 py-5 text-gray-100 transition'
 
   const content = (
     <>
       {RowIcon ? (
-        <RowIcon className="pointer-events-none absolute -top-4 -right-4 text-gray-800/70" size={iconSizes.section} />
+        <RowIcon
+          className="pointer-events-none absolute -top-4 -right-4 text-gray-800/70"
+          size={iconSizes.section}
+        />
       ) : null}
       {row.href && isExternal ? (
         <ArrowUpRight
           aria-hidden
-          className="pointer-events-none absolute bottom-4 right-4 z-20 h-4 w-4 text-gray-500"
+          className="pointer-events-none absolute right-4 bottom-4 z-20 h-4 w-4 text-gray-500"
         />
       ) : null}
       <div className="relative z-10 space-y-2 pr-10">
-        <p className="text-xs uppercase tracking-wide text-gray-500">{row.label}</p>
-        <div className="text-lg font-semibold leading-snug text-gray-100">{row.value}</div>
+        <p className="text-xs tracking-wide text-gray-500 uppercase">
+          {row.label}
+        </p>
+        <div className="text-lg leading-snug font-semibold text-gray-100">
+          {row.value}
+        </div>
         {row.note ? <p className="text-xs text-gray-500">{row.note}</p> : null}
       </div>
     </>
-  );
+  )
 
   if (row.href) {
     return (
@@ -238,46 +252,50 @@ function SectionRow({ row }: SectionRowProps): ReactElement {
       >
         {content}
       </Link>
-    );
+    )
   }
 
-  return <div className={baseClasses}>{content}</div>;
+  return <div className={baseClasses}>{content}</div>
 }
 
 function Rating({ rating }: RatingProps): ReactElement {
-  const stars = buildStars(rating.value, rating.scale ?? 5);
+  const stars = buildStars(rating.value, rating.scale ?? 5)
 
   return (
     <div className="mt-1 flex items-center gap-2 text-sm text-gray-400">
       <span className="flex items-center text-gray-200">
         {stars.map((state, idx) => {
-          const key = `${rating.label ?? rating.value}-${idx}`;
+          const key = `${rating.label ?? rating.value}-${idx}`
           if (state === 'full') {
-            return <Star key={key} className="fill-current" />;
+            return <Star key={key} className="fill-current" />
           }
           if (state === 'half') {
-            return <StarHalf key={key} className="fill-current" />;
+            return <StarHalf key={key} className="fill-current" />
           }
-          return <StarOff key={key} className="text-gray-600" />;
+          return <StarOff key={key} className="text-gray-600" />
         })}
       </span>
       <span className="text-gray-300">{rating.value.toFixed(1)}</span>
-      {rating.label ? <span className="text-xs uppercase tracking-wide text-gray-600">{rating.label}</span> : null}
+      {rating.label ? (
+        <span className="text-xs tracking-wide text-gray-600 uppercase">
+          {rating.label}
+        </span>
+      ) : null}
     </div>
-  );
+  )
 }
 
 function buildStars(value: number, scale: number): StarState[] {
-  const stars: StarState[] = [];
-  const normalized = Math.max(0, Math.min(value, scale));
+  const stars: StarState[] = []
+  const normalized = Math.max(0, Math.min(value, scale))
   for (let i = 1; i <= scale; i += 1) {
     if (normalized >= i) {
-      stars.push('full');
+      stars.push('full')
     } else if (normalized > i - 1 && normalized < i) {
-      stars.push('half');
+      stars.push('half')
     } else {
-      stars.push('empty');
+      stars.push('empty')
     }
   }
-  return stars;
+  return stars
 }

@@ -17,14 +17,9 @@ export function Section({
   title
 }: SectionProps) {
   return (
-    <section
-      id={id}
-      className={cn(surfaces.section[variant], className)}
-    >
+    <section id={id} className={cn(surfaces.section[variant], className)}>
       {title && (
-        <h2 className="text-2xl font-semibold mb-4 text-gray-200">
-          {title}
-        </h2>
+        <h2 className="mb-4 text-2xl font-semibold text-gray-200">{title}</h2>
       )}
       {children}
     </section>

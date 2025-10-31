@@ -44,16 +44,15 @@ export class Formatter {
   }
 
   /**
-   * Formats large numbers with metric suffixes (K, M, B) for readability.
+   * Formats large numbers with metric suffixes (K, M, B, T) for readability.
    *
    * @param value - The numeric value to format
    * @returns Formatted string with appropriate suffix
    *
    * @remarks
-   * - Values >= 1 billion use 'B' suffix
-   * - Values >= 1 million use 'M' suffix
-   * - Values >= 1 thousand use 'K' suffix
-   * - Smaller values return as integers
+   * Uses the native Intl.NumberFormat API with compact notation for automatic
+   * scaling and localization. Handles thousands (K), millions (M), billions (B),
+   * and trillions (T) automatically.
    *
    * @example
    * ```ts
@@ -66,16 +65,10 @@ export class Formatter {
    * @public
    */
   static tokens(value: number): string {
-    if (value >= 1_000_000_000) {
-      return `${(value / 1_000_000_000).toFixed(1)}B`
-    }
-    if (value >= 1_000_000) {
-      return `${(value / 1_000_000).toFixed(1)}M`
-    }
-    if (value >= 1_000) {
-      return `${(value / 1_000).toFixed(1)}K`
-    }
-    return value.toFixed(0)
+    return new Intl.NumberFormat('en', {
+      notation: 'compact',
+      maximumFractionDigits: 1
+    }).format(value)
   }
 
   /**
@@ -124,7 +117,10 @@ export class Formatter {
    *
    * @public
    */
-  static date(date: Date | string, format: 'short' | 'long' | 'iso' = 'short'): string {
+  static date(
+    date: Date | string,
+    format: 'short' | 'long' | 'iso' = 'short'
+  ): string {
     const d = typeof date === 'string' ? new Date(date) : date
 
     switch (format) {
@@ -277,7 +273,11 @@ export class Formatter {
    *
    * @public
    */
-  static truncate(str: string, maxLength: number, suffix: string = '...'): string {
+  static truncate(
+    str: string,
+    maxLength: number,
+    suffix: string = '...'
+  ): string {
     if (str.length <= maxLength) return str
     return str.slice(0, maxLength - suffix.length) + suffix
   }

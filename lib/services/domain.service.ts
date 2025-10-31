@@ -1,5 +1,5 @@
 import type { Domain, DomainWithMetrics } from '@/lib/types'
-import { domains as domainData } from '@/lib/domains/data'
+import { projects } from '@/lib/config/projects'
 import type { SortOrder } from '@/lib/types/service'
 
 /**
@@ -86,11 +86,17 @@ export class DomainService {
     const ownershipDays = this.computeOwnershipDays(domain)
     const registrationDate = this.computeRegistrationDate(domain)
     const expirationDate = this.computeExpirationDate(domain)
-    const totalDays = Math.ceil((expirationDate.getTime() - registrationDate.getTime()) / (1000 * 60 * 60 * 24))
+    const totalDays = Math.ceil(
+      (expirationDate.getTime() - registrationDate.getTime()) /
+        (1000 * 60 * 60 * 24)
+    )
     return Math.min(100, Math.max(0, (ownershipDays / totalDays) * 100))
   }
 
-  private static isExpiringSoon(domain: Domain, thresholdDays: number = 90): boolean {
+  private static isExpiringSoon(
+    domain: Domain,
+    thresholdDays: number = 90
+  ): boolean {
     return this.computeDaysUntilExpiration(domain) <= thresholdDays
   }
 
@@ -136,12 +142,24 @@ export class DomainService {
   }
 
   /**
-   * Retrieves all domains from the data store.
+   * Retrieves all domains from projects.
    *
    * @returns {Domain[]} Array of all domain specifications
+   * @remarks Only includes projects that have domainInfo defined
    */
   static getAllDomains(): Domain[] {
-    return domainData
+    return projects
+      .filter((project) => project.domainInfo !== undefined)
+      .map((project) => ({
+        domain: project.domain,
+        usage: project.domainInfo!.usage,
+        registrar: project.domainInfo!.registrar,
+        autoRenew: project.domainInfo!.autoRenew,
+        status: project.domainInfo!.status,
+        category: project.domainInfo!.category,
+        tags: project.domainInfo!.tags,
+        renewals: project.domainInfo!.renewals
+      }))
   }
 
   /**
@@ -150,7 +168,7 @@ export class DomainService {
    * @returns {DomainWithMetrics[]} Array of all domains with computed properties
    */
   static getAllDomainsEnriched(): DomainWithMetrics[] {
-    return domainData.map(domain => this.enrichDomain(domain))
+    return this.getAllDomains().map((domain) => this.enrichDomain(domain))
   }
 
   /**
@@ -158,10 +176,24 @@ export class DomainService {
    *
    * @param domainName - The full domain name (e.g., 'aidxn.com')
    * @returns {DomainWithMetrics | null} Enriched domain or null if not found
+   * @remarks Returns null if the project doesn't have domainInfo
    */
   static getDomainByName(domainName: string): DomainWithMetrics | null {
-    const domain = domainData.find(d => d.domain === domainName)
-    return domain ? this.enrichDomain(domain) : null
+    const project = projects.find((p) => p.domain === domainName)
+    if (!project || !project.domainInfo) return null
+
+    const domain: Domain = {
+      domain: project.domain,
+      usage: project.domainInfo.usage,
+      registrar: project.domainInfo.registrar,
+      autoRenew: project.domainInfo.autoRenew,
+      status: project.domainInfo.status,
+      category: project.domainInfo.category,
+      tags: project.domainInfo.tags,
+      renewals: project.domainInfo.renewals
+    }
+
+    return this.enrichDomain(domain)
   }
 
   /**
@@ -181,37 +213,54 @@ export class DomainService {
    * const expiringDomains = DomainService.filterDomains({ expiringSoon: true })
    * ```
    */
-  static filterDomains(
-    filters: {
-      status?: Domain['status']
-      category?: Domain['category']
-      registrar?: string
-      expiringSoon?: boolean
-      autoRenew?: boolean
-    }
-  ): DomainWithMetrics[] {
-    let filtered = domainData
+  static filterDomains(filters: {
+    status?: Domain['status']
+    category?: Domain['category']
+    registrar?: string
+    expiringSoon?: boolean
+    autoRenew?: boolean
+  }): DomainWithMetrics[] {
+    let filteredProjects = projects.filter((p) => p.domainInfo !== undefined)
 
     if (filters.status) {
-      filtered = filtered.filter(d => d.status === filters.status)
+      filteredProjects = filteredProjects.filter(
+        (p) => p.domainInfo!.status === filters.status
+      )
     }
 
     if (filters.category) {
-      filtered = filtered.filter(d => d.category === filters.category)
+      filteredProjects = filteredProjects.filter(
+        (p) => p.domainInfo!.category === filters.category
+      )
     }
 
     if (filters.registrar) {
-      filtered = filtered.filter(d => d.registrar === filters.registrar)
+      filteredProjects = filteredProjects.filter(
+        (p) => p.domainInfo!.registrar === filters.registrar
+      )
     }
 
     if (filters.autoRenew !== undefined) {
-      filtered = filtered.filter(d => d.autoRenew === filters.autoRenew)
+      filteredProjects = filteredProjects.filter(
+        (p) => p.domainInfo!.autoRenew === filters.autoRenew
+      )
     }
 
-    const enriched = filtered.map(d => this.enrichDomain(d))
+    const domains = filteredProjects.map((project) => ({
+      domain: project.domain,
+      usage: project.domainInfo!.usage,
+      registrar: project.domainInfo!.registrar,
+      autoRenew: project.domainInfo!.autoRenew,
+      status: project.domainInfo!.status,
+      category: project.domainInfo!.category,
+      tags: project.domainInfo!.tags,
+      renewals: project.domainInfo!.renewals
+    }))
+
+    const enriched = domains.map((d) => this.enrichDomain(d))
 
     if (filters.expiringSoon !== undefined) {
-      return enriched.filter(d => d.isExpiringSoon === filters.expiringSoon)
+      return enriched.filter((d) => d.isExpiringSoon === filters.expiringSoon)
     }
 
     return enriched
@@ -293,7 +342,10 @@ export class DomainService {
    *
    * @public
    */
-  static groupDomainsByCategory(): Record<Domain['category'], DomainWithMetrics[]> {
+  static groupDomainsByCategory(): Record<
+    Domain['category'],
+    DomainWithMetrics[]
+  > {
     const grouped: Record<Domain['category'], DomainWithMetrics[]> = {
       personal: [],
       service: [],
@@ -304,7 +356,7 @@ export class DomainService {
 
     const enriched = this.getAllDomainsEnriched()
 
-    enriched.forEach(domain => {
+    enriched.forEach((domain) => {
       grouped[domain.category].push(domain)
     })
 
@@ -359,22 +411,25 @@ export class DomainService {
 
     return {
       total: enriched.length,
-      active: enriched.filter(d => d.status === 'active').length,
-      parked: enriched.filter(d => d.status === 'parked').length,
-      reserved: enriched.filter(d => d.status === 'reserved').length,
-      expiringSoon: enriched.filter(d => d.isExpiringSoon).length,
-      autoRenew: enriched.filter(d => d.autoRenew).length,
+      active: enriched.filter((d) => d.status === 'active').length,
+      parked: enriched.filter((d) => d.status === 'parked').length,
+      reserved: enriched.filter((d) => d.status === 'reserved').length,
+      expiringSoon: enriched.filter((d) => d.isExpiringSoon).length,
+      autoRenew: enriched.filter((d) => d.autoRenew).length,
       byCategory: {
-        personal: enriched.filter(d => d.category === 'personal').length,
-        service: enriched.filter(d => d.category === 'service').length,
-        project: enriched.filter(d => d.category === 'project').length,
-        fun: enriched.filter(d => d.category === 'fun').length,
-        legacy: enriched.filter(d => d.category === 'legacy').length,
+        personal: enriched.filter((d) => d.category === 'personal').length,
+        service: enriched.filter((d) => d.category === 'service').length,
+        project: enriched.filter((d) => d.category === 'project').length,
+        fun: enriched.filter((d) => d.category === 'fun').length,
+        legacy: enriched.filter((d) => d.category === 'legacy').length
       },
-      byRegistrar: enriched.reduce((acc, d) => {
-        acc[d.registrar] = (acc[d.registrar] || 0) + 1
-        return acc
-      }, {} as Record<string, number>)
+      byRegistrar: enriched.reduce(
+        (acc, d) => {
+          acc[d.registrar] = (acc[d.registrar] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>
+      )
     }
   }
 }

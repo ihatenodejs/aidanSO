@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import type React from "react"
+import type React from 'react'
 
 interface ScrollTxtProps {
   text: string
@@ -8,9 +8,13 @@ interface ScrollTxtProps {
   type?: 'artist' | 'track' | 'release'
 }
 
-const ScrollTxt: React.FC<ScrollTxtProps> = ({ text, className = "", type }) => {
+const ScrollTxt: React.FC<ScrollTxtProps> = ({
+  text,
+  className = '',
+  type
+}) => {
   const getTypeClass = (type?: string) => {
-    switch(type) {
+    switch (type) {
       case 'artist':
         return 'text-white text-xs opacity-90 font-medium text-[8px]'
       case 'track':
@@ -26,7 +30,7 @@ const ScrollTxt: React.FC<ScrollTxtProps> = ({ text, className = "", type }) => 
 
   return (
     <div className={`overflow-hidden ${className}`}>
-      <div className="whitespace-nowrap inline-block">
+      <div className="inline-block whitespace-nowrap">
         <span className={textClass}>{text}</span>
       </div>
     </div>
@@ -34,4 +38,3 @@ const ScrollTxt: React.FC<ScrollTxtProps> = ({ text, className = "", type }) => 
 }
 
 export default ScrollTxt
-

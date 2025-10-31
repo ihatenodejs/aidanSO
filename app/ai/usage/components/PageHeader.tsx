@@ -9,8 +9,11 @@ interface PageHeaderProps {
   theme: ToolTheme
 }
 
-export default function PageHeader({ selectedProvider = 'all', theme }: PageHeaderProps) {
-  const iconSize = 60
+export default function PageHeader({
+  selectedProvider = 'all',
+  theme
+}: PageHeaderProps) {
+  const iconSize = 48
 
   const renderIcons = (): React.JSX.Element => {
     if (selectedProvider === 'claudeCode') {
@@ -25,8 +28,11 @@ export default function PageHeader({ selectedProvider = 'all', theme }: PageHead
       )
     } else {
       return (
-        <div className="flex gap-4 justify-center">
-          <SiClaude size={iconSize} style={{ color: toolThemes.claudeCode.accent }} />
+        <div className="flex justify-center gap-3 sm:gap-4">
+          <SiClaude
+            size={iconSize}
+            style={{ color: toolThemes.claudeCode.accent }}
+          />
           <SiOpenai
             size={iconSize}
             style={{ color: toolThemes.codex.accent }}
@@ -51,20 +57,25 @@ export default function PageHeader({ selectedProvider = 'all', theme }: PageHead
 
   return (
     <div className="relative">
-      <div className="container mx-auto px-4 relative">
+      <div className="relative container mx-auto px-4">
         <Link
           href="/ai"
-          className="absolute top-5 left-2 text-gray-400 hover:text-gray-200 hover:underline transition-colors duration-200 px-2 py-1 text-sm sm:text-base z-10"
+          className="absolute top-3 left-2 z-10 px-2 py-1 text-xs text-gray-400 transition-colors duration-200 hover:text-gray-200 hover:underline sm:top-5 sm:text-sm lg:text-base"
         >
           ← Back to AI
         </Link>
-        <div className="py-12 text-center">
-          <div className="flex justify-center mb-6">
+        <div className="py-8 text-center sm:py-12">
+          <div className="mb-4 flex justify-center sm:mb-6">
             {renderIcons()}
           </div>
-          <h1 className="text-4xl font-bold mb-2 text-gray-100 glow">{getTitle()}</h1>
-          <p className="text-gray-400">{getSubtitle()}</p>
-          <div className="mx-auto mt-6 h-1 w-16 rounded-full" style={{ backgroundColor: theme.accent }} />
+          <h1 className="glow mb-2 text-2xl font-bold text-gray-100 sm:text-3xl lg:text-4xl">
+            {getTitle()}
+          </h1>
+          <p className="text-sm text-gray-400 sm:text-base">{getSubtitle()}</p>
+          <div
+            className="mx-auto mt-4 h-1 w-12 rounded-full sm:mt-6 sm:w-16"
+            style={{ backgroundColor: theme.accent }}
+          />
         </div>
       </div>
     </div>

@@ -47,18 +47,20 @@ export default function PaginatedCardList<T>({
   }
 
   return (
-    <section className="p-4 sm:p-6 lg:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300 flex flex-col min-h-[500px] sm:min-h-[600px]">
-      <div className="flex flex-col sm:flex-row sm:justify-between gap-2 mb-4 sm:mb-6">
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-200 flex items-center gap-2">
+    <section className="flex min-h-[500px] flex-col rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600 sm:min-h-[600px] sm:p-6 lg:p-8">
+      <div className="mb-4 flex flex-col gap-2 sm:mb-6 sm:flex-row sm:justify-between">
+        <h2 className="flex items-center gap-2 text-xl font-semibold text-gray-200 sm:text-2xl">
           {icon}
           {title}
         </h2>
         {subtitle && (
-          <p className="text-muted-foreground italic text-xs sm:text-sm">{subtitle}</p>
+          <p className="text-muted-foreground text-xs italic sm:text-sm">
+            {subtitle}
+          </p>
         )}
       </div>
 
-      <div className="space-y-3 sm:space-y-4 flex-grow mb-4 sm:mb-6 min-h-[300px] sm:min-h-[400px]">
+      <div className="mb-4 min-h-[300px] grow space-y-3 sm:mb-6 sm:min-h-[400px] sm:space-y-4">
         {currentItems.map((item, index) => {
           const globalIndex = startIndex + index
           const key = getItemKey ? getItemKey(item, globalIndex) : globalIndex
@@ -67,26 +69,26 @@ export default function PaginatedCardList<T>({
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-auto pt-4 sm:pt-6 pb-1 sm:pb-2 border-t border-gray-700">
+        <div className="mt-auto flex items-center justify-between border-t border-gray-700 pt-4 pb-1 sm:pt-6 sm:pb-2">
           <button
             onClick={goToPreviousPage}
             disabled={currentPage === 1}
-            className="flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-300 hover:text-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-1 px-2 py-1.5 text-xs text-gray-300 transition-colors hover:text-gray-100 disabled:cursor-not-allowed disabled:text-gray-600 sm:px-3 sm:py-2 sm:text-sm"
           >
-            <ChevronLeft size={14} className="sm:w-4 sm:h-4" />
+            <ChevronLeft size={14} className="sm:h-4 sm:w-4" />
             <span className="hidden sm:inline">Previous</span>
             <span className="sm:hidden">Prev</span>
           </button>
-          <span className="text-xs sm:text-sm text-gray-400">
+          <span className="text-xs text-gray-400 sm:text-sm">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={goToNextPage}
             disabled={currentPage === totalPages}
-            className="flex items-center gap-1 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-300 hover:text-gray-100 disabled:text-gray-600 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-1 px-2 py-1.5 text-xs text-gray-300 transition-colors hover:text-gray-100 disabled:cursor-not-allowed disabled:text-gray-600 sm:px-3 sm:py-2 sm:text-sm"
           >
             Next
-            <ChevronRight size={14} className="sm:w-4 sm:h-4" />
+            <ChevronRight size={14} className="sm:h-4 sm:w-4" />
           </button>
         </div>
       )}

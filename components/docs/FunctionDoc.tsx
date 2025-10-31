@@ -13,21 +13,26 @@ interface FunctionDocProps {
   availableTypeIds?: Set<string>
 }
 
-export default function FunctionDoc({ item, className, availableTypeIds }: FunctionDocProps) {
+export default function FunctionDoc({
+  item,
+  className,
+  availableTypeIds
+}: FunctionDocProps) {
   return (
     <div id={item.id} className={cn('scroll-mt-20', className)}>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-3">
-            <div className="flex items-center gap-3 flex-wrap">
-              <h3 className="text-2xl font-bold" style={{ color: colors.text.primary }}>
+            <div className="flex flex-wrap items-center gap-3">
+              <h3
+                className="text-2xl font-bold"
+                style={{ color: colors.text.primary }}
+              >
                 {item.name}
               </h3>
               <span
-                className={cn(
-                  'rounded-md px-2.5 py-1 text-xs font-medium'
-                )}
+                className={cn('rounded-md px-2.5 py-1 text-xs font-medium')}
                 style={{
                   backgroundColor: colors.backgrounds.card,
                   color: colors.text.secondary
@@ -36,9 +41,7 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
                 {item.kind}
               </span>
               <span
-                className={cn(
-                  'rounded-md px-2.5 py-1 text-xs font-medium'
-                )}
+                className={cn('rounded-md px-2.5 py-1 text-xs font-medium')}
                 style={{
                   backgroundColor: colors.accents.docsBg,
                   color: colors.accents.docs,
@@ -64,7 +67,10 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
               )}
             </div>
             {item.description && (
-              <p className="leading-relaxed" style={{ color: colors.text.body }}>
+              <p
+                className="leading-relaxed"
+                style={{ color: colors.text.body }}
+              >
                 {item.description}
               </p>
             )}
@@ -76,7 +82,7 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
               rel="noopener noreferrer"
               className={cn(
                 'flex items-center gap-1.5 rounded-md px-3 py-2',
-                'text-xs border-2',
+                'border-2 text-xs',
                 effects.transitions.colors,
                 'flex-shrink-0'
               )}
@@ -102,19 +108,22 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
         {/* Remarks */}
         {item.remarks && (
           <div
-            className={cn(
-              'rounded-lg border-l-4 pl-4 py-2',
-              'space-y-2'
-            )}
+            className={cn('rounded-lg border-l-4 py-2 pl-4', 'space-y-2')}
             style={{
               borderColor: colors.accents.ai,
               backgroundColor: colors.backgrounds.card
             }}
           >
-            <h4 className="text-sm font-semibold" style={{ color: colors.text.secondary }}>
+            <h4
+              className="text-sm font-semibold"
+              style={{ color: colors.text.secondary }}
+            >
               Remarks
             </h4>
-            <div className="text-sm leading-relaxed prose prose-invert prose-sm max-w-none" style={{ color: colors.text.body }}>
+            <div
+              className="prose prose-invert prose-sm max-w-none text-sm leading-relaxed"
+              style={{ color: colors.text.body }}
+            >
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {item.remarks}
               </ReactMarkdown>
@@ -125,7 +134,10 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
         {/* Signature */}
         {item.signature && (
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold" style={{ color: colors.text.secondary }}>
+            <h4
+              className="text-sm font-semibold"
+              style={{ color: colors.text.secondary }}
+            >
               Signature
             </h4>
             <CodeBlock code={item.signature} language="typescript" />
@@ -135,20 +147,41 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
         {/* Parameters */}
         {item.parameters && item.parameters.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold" style={{ color: colors.text.secondary }}>
+            <h4
+              className="text-sm font-semibold"
+              style={{ color: colors.text.secondary }}
+            >
               Parameters
             </h4>
-            <div className="overflow-x-auto rounded-lg border-2" style={{ borderColor: colors.borders.default }}>
+            <div
+              className="overflow-x-auto rounded-lg border-2"
+              style={{ borderColor: colors.borders.default }}
+            >
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b-2" style={{ borderColor: colors.borders.default, backgroundColor: colors.backgrounds.card }}>
-                    <th className="px-4 py-3 text-left font-medium" style={{ color: colors.text.muted }}>
+                  <tr
+                    className="border-b-2"
+                    style={{
+                      borderColor: colors.borders.default,
+                      backgroundColor: colors.backgrounds.card
+                    }}
+                  >
+                    <th
+                      className="px-4 py-3 text-left font-medium"
+                      style={{ color: colors.text.muted }}
+                    >
                       Name
                     </th>
-                    <th className="px-4 py-3 text-left font-medium" style={{ color: colors.text.muted }}>
+                    <th
+                      className="px-4 py-3 text-left font-medium"
+                      style={{ color: colors.text.muted }}
+                    >
                       Type
                     </th>
-                    <th className="px-4 py-3 text-left font-medium" style={{ color: colors.text.muted }}>
+                    <th
+                      className="px-4 py-3 text-left font-medium"
+                      style={{ color: colors.text.muted }}
+                    >
                       Description
                     </th>
                   </tr>
@@ -160,19 +193,32 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
                       className="border-b last:border-0"
                       style={{ borderColor: colors.borders.subtle }}
                     >
-                      <td className="px-4 py-3 font-mono" style={{ color: colors.text.secondary }}>
+                      <td
+                        className="px-4 py-3 font-mono"
+                        style={{ color: colors.text.secondary }}
+                      >
                         {param.name}
                         {param.optional && (
                           <span style={{ color: colors.text.disabled }}>?</span>
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <TypeLink type={param.type} className="text-sm" availableTypeIds={availableTypeIds} />
+                        <TypeLink
+                          type={param.type}
+                          className="text-sm"
+                          availableTypeIds={availableTypeIds}
+                        />
                       </td>
-                      <td className="px-4 py-3" style={{ color: colors.text.body }}>
+                      <td
+                        className="px-4 py-3"
+                        style={{ color: colors.text.body }}
+                      >
                         {param.description || '—'}
                         {param.defaultValue && (
-                          <div className="mt-1 text-xs" style={{ color: colors.text.disabled }}>
+                          <div
+                            className="mt-1 text-xs"
+                            style={{ color: colors.text.disabled }}
+                          >
                             Default: <code>{param.defaultValue}</code>
                           </div>
                         )}
@@ -188,20 +234,24 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
         {/* Returns */}
         {item.returns && (
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold" style={{ color: colors.text.secondary }}>
+            <h4
+              className="text-sm font-semibold"
+              style={{ color: colors.text.secondary }}
+            >
               Returns
             </h4>
             <div
-              className={cn(
-                'rounded-lg border-2 p-4',
-                'space-y-2'
-              )}
+              className={cn('rounded-lg border-2 p-4', 'space-y-2')}
               style={{
                 borderColor: colors.borders.default,
                 backgroundColor: colors.backgrounds.card
               }}
             >
-              <TypeLink type={item.returns.type} className="text-sm" availableTypeIds={availableTypeIds} />
+              <TypeLink
+                type={item.returns.type}
+                className="text-sm"
+                availableTypeIds={availableTypeIds}
+              />
               {item.returns.description && (
                 <p className="text-sm" style={{ color: colors.text.body }}>
                   {item.returns.description}
@@ -214,16 +264,17 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
         {/* Throws */}
         {item.throws && item.throws.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold" style={{ color: colors.text.secondary }}>
+            <h4
+              className="text-sm font-semibold"
+              style={{ color: colors.text.secondary }}
+            >
               Throws
             </h4>
             <div className="space-y-2">
               {item.throws.map((throwsDoc, index) => (
                 <div
                   key={index}
-                  className={cn(
-                    'rounded-lg border-2 p-4'
-                  )}
+                  className={cn('rounded-lg border-2 p-4')}
                   style={{
                     borderColor: colors.accents.warningBg,
                     backgroundColor: colors.backgrounds.card
@@ -241,7 +292,10 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
         {/* Examples */}
         {item.examples && item.examples.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold" style={{ color: colors.text.secondary }}>
+            <h4
+              className="text-sm font-semibold"
+              style={{ color: colors.text.secondary }}
+            >
               Examples
             </h4>
             <div className="space-y-4">
@@ -261,10 +315,7 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
         {item.tags && item.tags.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {item.tags.map((tag) => (
-              <span
-                key={tag}
-                className={cn(surfaces.badge.muted)}
-              >
+              <span key={tag} className={cn(surfaces.badge.muted)}>
                 {tag}
               </span>
             ))}
@@ -274,7 +325,10 @@ export default function FunctionDoc({ item, className, availableTypeIds }: Funct
         {/* See Also */}
         {item.see && item.see.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold" style={{ color: colors.text.secondary }}>
+            <h4
+              className="text-sm font-semibold"
+              style={{ color: colors.text.secondary }}
+            >
               See Also
             </h4>
             <div className="space-y-2">

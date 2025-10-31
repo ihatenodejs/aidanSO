@@ -41,18 +41,14 @@
   body {
     color: rgb(var(--foreground-rgb));
     background: linear-gradient(
-        180deg,
-        rgb(var(--background-start-rgb)) 0%,
-        rgb(var(--background-end-rgb)) 100%
-      );
+      180deg,
+      rgb(var(--background-start-rgb)) 0%,
+      rgb(var(--background-end-rgb)) 100%
+    );
     background-attachment: fixed;
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 .glow {
@@ -60,7 +56,8 @@ html {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
   }
   50% {
@@ -222,4 +219,3 @@ html {
     @apply bg-background text-foreground;
   }
 }
-

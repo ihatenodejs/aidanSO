@@ -29,10 +29,10 @@ const SUPPORTED_LANGUAGES = [
   'html',
   'markdown',
   'yaml',
-  'sql',
+  'sql'
 ] as const
 
-type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number]
+type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number]
 
 /**
  * Normalizes language identifiers to their canonical forms.
@@ -88,7 +88,7 @@ export default function CodeBlock({
   language = 'typescript',
   title,
   showLineNumbers = false,
-  className,
+  className
 }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
   const normalizedLanguage = normalizeLanguage(language)
@@ -109,10 +109,16 @@ export default function CodeBlock({
             backgroundColor: colors.backgrounds.card
           }}
         >
-          <span className="text-sm font-medium" style={{ color: colors.text.secondary }}>
+          <span
+            className="text-sm font-medium"
+            style={{ color: colors.text.secondary }}
+          >
             {title}
           </span>
-          <span className="text-xs font-mono" style={{ color: colors.text.disabled }}>
+          <span
+            className="font-mono text-xs"
+            style={{ color: colors.text.disabled }}
+          >
             {normalizedLanguage}
           </span>
         </div>
@@ -131,7 +137,7 @@ export default function CodeBlock({
         <button
           onClick={handleCopy}
           className={cn(
-            'absolute right-3 top-3 z-10',
+            'absolute top-3 right-3 z-10',
             'rounded-md px-3 py-1.5',
             'text-xs font-medium',
             'flex items-center gap-1.5',
@@ -144,7 +150,9 @@ export default function CodeBlock({
             backgroundColor: colors.backgrounds.card,
             color: copied ? colors.accents.success : colors.text.muted,
             borderWidth: '2px',
-            borderColor: copied ? colors.accents.success : colors.borders.default
+            borderColor: copied
+              ? colors.accents.success
+              : colors.borders.default
           }}
           onMouseEnter={(e) => {
             if (!copied) {
@@ -182,12 +190,13 @@ export default function CodeBlock({
             margin: 0,
             padding: '1rem',
             fontSize: '0.875rem',
-            background: 'transparent',
+            background: 'transparent'
           }}
           codeTagProps={{
             style: {
-              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-            },
+              fontFamily:
+                'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace'
+            }
           }}
         >
           {code}

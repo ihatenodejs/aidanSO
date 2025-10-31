@@ -2,7 +2,9 @@ import type { ComponentType, ReactNode } from 'react'
 
 import type { GitHubRepoSummary } from '@/lib/github'
 
-export type NavigationIcon = ComponentType<{ className?: string; size?: number } & Record<string, unknown>>
+export type NavigationIcon = ComponentType<
+  { className?: string; size?: number } & Record<string, unknown>
+>
 
 export type NavigationLink = {
   label: string

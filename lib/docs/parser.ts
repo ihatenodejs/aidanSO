@@ -36,7 +36,7 @@ import type {
   DocSection,
   DocNavigation,
   DocCategory,
-  DocKind,
+  DocKind
 } from './types'
 
 /**
@@ -81,7 +81,7 @@ const KIND_MAP: Record<number, DocKind> = {
   4194304: 'property', // GetSignature
   8388608: 'property', // SetSignature
   16777216: 'type', // ObjectLiteral
-  33554432: 'type', // TypeLiteral
+  33554432: 'type' // TypeLiteral
 }
 
 /**
@@ -100,7 +100,7 @@ const KIND_MAP: Record<number, DocKind> = {
  * **Processing steps:**
  * 1. Recursively parse all top-level reflections
  * 2. Filter out items without descriptions or in 'Other' category
- * 3. Deduplicate items by ID
+ * 3. Deduplicate items by name, preferring specific files over index re-exports
  * 4. Group by category and sort items alphabetically
  * 5. Sort sections by predefined category order
  *
@@ -132,7 +132,7 @@ export function parseTypeDocJSON(json: TypeDocRoot): DocSection[] {
   for (const child of json.children) {
     const items = parseReflection(child, undefined, true)
     for (const item of items) {
-      if (item.description || item.category !== 'Other') {
+      if (item.description || item.category !== 'Other' || item.remarks) {
         const existing = categoryMap.get(item.category) || []
         existing.push(item)
         categoryMap.set(item.category, existing)
@@ -141,19 +141,64 @@ export function parseTypeDocJSON(json: TypeDocRoot): DocSection[] {
   }
 
   for (const [category, items] of categoryMap.entries()) {
-    const uniqueItems = Array.from(
-      new Map(items.map(item => [item.id, item])).values()
-    )
+    const itemsByName = new Map<string, DocItem>()
+
+    for (const item of items) {
+      const existing = itemsByName.get(item.name)
+
+      if (!existing) {
+        itemsByName.set(item.name, item)
+      } else {
+        // Prefer items with documentation
+        const itemHasDocs = !!(item.description || item.remarks)
+        const existingHasDocs = !!(existing.description || existing.remarks)
+
+        if (itemHasDocs && !existingHasDocs) {
+          // New item has docs, existing doesn't - replace
+          itemsByName.set(item.name, item)
+        } else if (!itemHasDocs && existingHasDocs) {
+          // Existing has docs, new doesn't - keep existing
+          continue
+        } else if (item.source && existing.source) {
+          // Both have docs or both lack docs - use file path logic
+          const itemIsIndex = item.source.file.includes('/index.ts')
+          const existingIsIndex = existing.source.file.includes('/index.ts')
+
+          if (existingIsIndex && !itemIsIndex) {
+            itemsByName.set(item.name, item)
+          } else if (
+            !existingIsIndex &&
+            !itemIsIndex &&
+            item.source.file.length > existing.source.file.length
+          ) {
+            itemsByName.set(item.name, item)
+          }
+        }
+      }
+    }
+
+    const uniqueItems = Array.from(itemsByName.values())
 
     sections.push({
       title: category,
       category,
-      items: uniqueItems.sort((a, b) => a.name.localeCompare(b.name)),
+      items: uniqueItems.sort((a, b) => a.name.localeCompare(b.name))
     })
   }
 
   return sections.sort((a, b) => {
-    const order = ['Services', 'Utils', 'Types', 'Theme', 'Devices', 'Domains', 'Docs', 'API', 'Other']
+    const order = [
+      'Services',
+      'Utils',
+      'Types',
+      'Theme',
+      'Devices',
+      'Domains',
+      'Configuration',
+      'Docs',
+      'API',
+      'Other'
+    ]
     return order.indexOf(a.category) - order.indexOf(b.category)
   })
 }
@@ -195,6 +240,17 @@ function parseReflection(
     return items
   }
 
+  // Skip module reflections - just parse their children
+  if (reflection.kindString === 'Module' || reflection.kind === 2) {
+    if (reflection.children) {
+      const moduleCategory = inferCategory(reflection)
+      for (const child of reflection.children) {
+        items.push(...parseReflection(child, moduleCategory, false))
+      }
+    }
+    return items
+  }
+
   const kind = reflection.kindString
     ? (reflection.kindString.toLowerCase() as DocKind)
     : KIND_MAP[reflection.kind] || 'variable'
@@ -206,9 +262,7 @@ function parseReflection(
     for (const signature of reflection.signatures) {
       items.push(createDocItemFromSignature(signature, reflection, category))
     }
-  }
-
-  else if (
+  } else if (
     kind === 'class' ||
     kind === 'interface' ||
     kind === 'type' ||
@@ -224,14 +278,18 @@ function parseReflection(
       see: extractSeeAlso(reflection.comment),
       source: extractSource(reflection),
       tags: extractTags(reflection.comment),
-      deprecated: isDeprecated(reflection.comment),
+      deprecated: isDeprecated(reflection.comment)
     }
 
     if (kind === 'type' || kind === 'interface') {
       item.signature = formatTypeSignature(reflection)
 
-      if (kind === 'interface' && reflection.children && reflection.children.length > 0) {
-        item.parameters = reflection.children.map(child => ({
+      if (
+        kind === 'interface' &&
+        reflection.children &&
+        reflection.children.length > 0
+      ) {
+        item.parameters = reflection.children.map((child) => ({
           name: child.name,
           type: child.type ? formatType(child.type) : 'any',
           description: extractDescription(child.comment),
@@ -248,9 +306,7 @@ function parseReflection(
         items.push(...parseReflection(child, category, false))
       }
     }
-  }
-
-  else if (!parentCategory || topLevel) {
+  } else {
     items.push({
       id: createId(reflection),
       name: reflection.name,
@@ -260,7 +316,7 @@ function parseReflection(
       signature: reflection.type ? formatType(reflection.type) : undefined,
       source: extractSource(reflection),
       tags: extractTags(reflection.comment),
-      deprecated: isDeprecated(reflection.comment),
+      deprecated: isDeprecated(reflection.comment)
     })
   }
 
@@ -294,7 +350,7 @@ function createDocItemFromSignature(
   const returns = signature.type
     ? {
         type: formatType(signature.type),
-        description: extractReturnDescription(signature.comment),
+        description: extractReturnDescription(signature.comment)
       }
     : undefined
 
@@ -313,7 +369,7 @@ function createDocItemFromSignature(
     see: extractSeeAlso(signature.comment),
     source: extractSource(parent),
     tags: extractTags(signature.comment),
-    deprecated: isDeprecated(signature.comment),
+    deprecated: isDeprecated(signature.comment)
   }
 }
 
@@ -327,28 +383,35 @@ function parseParameter(param: TypeDocParameter) {
     type: param.type ? formatType(param.type) : 'any',
     description: extractDescription(param.comment),
     optional: param.flags?.isOptional || false,
-    defaultValue: param.defaultValue,
+    defaultValue: param.defaultValue
   }
 }
 
 /**
  * Extract category from JSDoc @category tag
  */
-function extractCategory(comment?: TypeDocReflection['comment']): DocCategory | undefined {
+function extractCategory(
+  comment?: TypeDocReflection['comment']
+): DocCategory | undefined {
   const categoryTag = comment?.blockTags?.find((tag) => tag.tag === '@category')
   if (!categoryTag) return undefined
 
-  const categoryName = categoryTag.content.map((c) => c.text).join('').trim()
+  const categoryName = categoryTag.content
+    .map((c) => c.text)
+    .join('')
+    .trim()
 
   const categoryMap: Record<string, DocCategory> = {
-    'Services': 'Services',
-    'Utils': 'Utils',
-    'Types': 'Types',
-    'Theme': 'Theme',
-    'Devices': 'Devices',
-    'Domains': 'Domains',
-    'Docs': 'Docs',
-    'API': 'API',
+    Services: 'Services',
+    Utils: 'Utils',
+    Types: 'Types',
+    Theme: 'Theme',
+    Devices: 'Devices',
+    Domains: 'Domains',
+    Configuration: 'Configuration',
+    Docs: 'Docs',
+    Documentation: 'Docs',
+    API: 'API'
   }
 
   return categoryMap[categoryName] || undefined
@@ -365,11 +428,19 @@ function inferCategory(reflection: TypeDocReflection): DocCategory {
 
   if (name.includes('service')) return 'Services'
   if (name.includes('formatter') || name.includes('util')) return 'Utils'
-  if (name.includes('color') || name.includes('surface') || name.includes('theme'))
+  if (
+    name.includes('color') ||
+    name.includes('surface') ||
+    name.includes('theme')
+  )
     return 'Theme'
   if (name.includes('device')) return 'Devices'
   if (name.includes('domain')) return 'Domains'
-  if (reflection.kindString === 'Interface' || reflection.kindString === 'Type alias')
+  if (name.includes('config')) return 'Configuration'
+  if (
+    reflection.kindString === 'Interface' ||
+    reflection.kindString === 'Type alias'
+  )
     return 'Types'
 
   // Check source file path
@@ -381,6 +452,7 @@ function inferCategory(reflection: TypeDocReflection): DocCategory {
     if (source.includes('/types/')) return 'Types'
     if (source.includes('/devices/')) return 'Devices'
     if (source.includes('/domains/')) return 'Domains'
+    if (source.includes('/config/')) return 'Configuration'
     if (source.includes('/docs/')) return 'Docs'
   }
 
@@ -398,7 +470,9 @@ function extractDescription(comment?: TypeDocReflection['comment']): string {
 /**
  * Extract return description from comment
  */
-function extractReturnDescription(comment?: TypeDocSignature['comment']): string {
+function extractReturnDescription(
+  comment?: TypeDocSignature['comment']
+): string {
   const returnTag = comment?.blockTags?.find((tag) => tag.tag === '@returns')
   if (!returnTag) return ''
   return returnTag.content.map((c) => c.text).join('')
@@ -408,10 +482,15 @@ function extractReturnDescription(comment?: TypeDocSignature['comment']): string
  * Extract remarks (extended description) from comment
  * @internal
  */
-function extractRemarks(comment?: TypeDocReflection['comment']): string | undefined {
+function extractRemarks(
+  comment?: TypeDocReflection['comment']
+): string | undefined {
   const remarksTag = comment?.blockTags?.find((tag) => tag.tag === '@remarks')
   if (!remarksTag) return undefined
-  return remarksTag.content.map((c) => c.text).join('').trim()
+  return remarksTag.content
+    .map((c) => c.text)
+    .join('')
+    .trim()
 }
 
 /**
@@ -419,8 +498,14 @@ function extractRemarks(comment?: TypeDocReflection['comment']): string | undefi
  * @internal
  */
 function extractThrows(comment?: TypeDocReflection['comment']): string[] {
-  const throwsTags = comment?.blockTags?.filter((tag) => tag.tag === '@throws') || []
-  return throwsTags.map((tag) => tag.content.map((c) => c.text).join('').trim())
+  const throwsTags =
+    comment?.blockTags?.filter((tag) => tag.tag === '@throws') || []
+  return throwsTags.map((tag) =>
+    tag.content
+      .map((c) => c.text)
+      .join('')
+      .trim()
+  )
 }
 
 /**
@@ -429,14 +514,22 @@ function extractThrows(comment?: TypeDocReflection['comment']): string[] {
  */
 function extractSeeAlso(comment?: TypeDocReflection['comment']): string[] {
   const seeTags = comment?.blockTags?.filter((tag) => tag.tag === '@see') || []
-  return seeTags.map((tag) => tag.content.map((c) => c.text).join('').trim())
+  return seeTags.map((tag) =>
+    tag.content
+      .map((c) => c.text)
+      .join('')
+      .trim()
+  )
 }
 
 /**
  * Extracts language identifier from markdown code fences and removes fence markers.
  * @internal
  */
-function extractCodeAndLanguage(code: string): { code: string; language: string } {
+function extractCodeAndLanguage(code: string): {
+  code: string
+  language: string
+} {
   // Extract language from opening fence (e.g., ```ts, ```tsx, ```javascript)
   const languageMatch = code.match(/^```(\w+)\n/)
   const language = languageMatch?.[1] || 'typescript'
@@ -450,7 +543,7 @@ function extractCodeAndLanguage(code: string): { code: string; language: string 
   // Trim leading/trailing whitespace
   return {
     code: cleaned.trim(),
-    language,
+    language
   }
 }
 
@@ -458,8 +551,11 @@ function extractCodeAndLanguage(code: string): { code: string; language: string 
  * Extracts example code blocks with language identifiers from TypeDoc comment tags.
  * @internal
  */
-function extractExamples(comment?: TypeDocSignature['comment']): Array<{ code: string; language: string }> {
-  const exampleTags = comment?.blockTags?.filter((tag) => tag.tag === '@example') || []
+function extractExamples(
+  comment?: TypeDocSignature['comment']
+): Array<{ code: string; language: string }> {
+  const exampleTags =
+    comment?.blockTags?.filter((tag) => tag.tag === '@example') || []
   return exampleTags.map((tag) => {
     const rawExample = tag.content.map((c) => c.text).join('')
     return extractCodeAndLanguage(rawExample)
@@ -473,7 +569,18 @@ function extractTags(comment?: TypeDocReflection['comment']): string[] {
   if (!comment?.blockTags) return []
   return comment.blockTags
     .map((tag) => tag.tag.replace('@', ''))
-    .filter((tag) => !['returns', 'param', 'example', 'remarks', 'throws', 'see', 'category'].includes(tag))
+    .filter(
+      (tag) =>
+        ![
+          'returns',
+          'param',
+          'example',
+          'remarks',
+          'throws',
+          'see',
+          'category'
+        ].includes(tag)
+    )
 }
 
 /**
@@ -491,7 +598,7 @@ function extractSource(reflection: TypeDocReflection) {
   if (!source) return undefined
   return {
     file: source.fileName,
-    line: source.line,
+    line: source.line
   }
 }
 
@@ -589,9 +696,9 @@ export function buildNavigation(sections: DocSection[]): DocNavigation {
       items: section.items.map((item) => ({
         id: item.id,
         name: item.name,
-        kind: item.kind,
-      })),
-    })),
+        kind: item.kind
+      }))
+    }))
   }
 }
 
@@ -605,7 +712,10 @@ export function getAllItems(sections: DocSection[]): DocItem[] {
 /**
  * Find a doc item by ID
  */
-export function findItemById(sections: DocSection[], id: string): DocItem | undefined {
+export function findItemById(
+  sections: DocSection[],
+  id: string
+): DocItem | undefined {
   for (const section of sections) {
     const item = section.items.find((i) => i.id === id)
     if (item) return item

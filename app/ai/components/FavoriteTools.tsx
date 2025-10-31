@@ -16,34 +16,46 @@ export default function FavoriteTools({ reviews }: FavoriteToolsProps) {
       itemsPerPage={3}
       getItemKey={(review) => review.tool}
       renderItem={(review) => (
-        <div className="p-3 sm:p-4 bg-gray-800/50 rounded-lg">
-          <div className="flex justify-between items-center gap-2 mb-2 sm:mb-3">
-            <h3 className="font-semibold text-sm sm:text-base text-gray-200 truncate flex-1">{review.tool}</h3>
-            <div className="flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1 bg-yellow-400/10 border border-yellow-400/20 rounded-md flex-shrink-0">
-              <span className="text-base sm:text-lg font-bold text-yellow-400">
+        <div className="rounded-lg bg-gray-800/50 p-3 sm:p-4">
+          <div className="mb-2 flex items-center justify-between gap-2 sm:mb-3">
+            <h3 className="flex-1 truncate text-sm font-semibold text-gray-200 sm:text-base">
+              {review.tool}
+            </h3>
+            <div className="flex shrink-0 items-center gap-1 rounded-md border border-yellow-400/20 bg-yellow-400/10 px-2 py-0.5 sm:px-3 sm:py-1">
+              <span className="sm:text-md text-base font-bold text-yellow-400">
                 {review.rating.toFixed(1)}
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 mb-2 text-xs sm:text-sm">
+          <div className="mb-2 grid grid-cols-2 gap-2 text-xs sm:text-sm">
             <div>
-              <p className="text-green-400 font-medium mb-1 text-xs sm:text-sm">Pros:</p>
-              <ul className="text-gray-300 space-y-0.5 sm:space-y-1">
+              <p className="mb-1 text-xs font-medium text-green-400/65 sm:text-sm">
+                Pros:
+              </p>
+              <ul className="space-y-0.5 text-gray-300 sm:space-y-1">
                 {review.pros.map((pro, i) => (
-                  <li key={i} className="text-xs leading-tight">• {pro}</li>
+                  <li key={i} className="text-xs leading-tight">
+                    • {pro}
+                  </li>
                 ))}
               </ul>
             </div>
             <div>
-              <p className="text-red-400 font-medium mb-1 text-xs sm:text-sm">Cons:</p>
-              <ul className="text-gray-300 space-y-0.5 sm:space-y-1">
+              <p className="mb-1 text-xs font-medium text-red-400/65 sm:text-sm">
+                Cons:
+              </p>
+              <ul className="space-y-0.5 text-gray-300 sm:space-y-1">
                 {review.cons.map((con, i) => (
-                  <li key={i} className="text-xs leading-tight">• {con}</li>
+                  <li key={i} className="text-xs leading-tight">
+                    • {con}
+                  </li>
                 ))}
               </ul>
             </div>
           </div>
-          <p className="text-xs sm:text-sm text-blue-400 font-medium">{review.verdict}</p>
+          <p className="mt-4 text-xs font-medium text-slate-400 sm:text-sm">
+            {review.verdict}
+          </p>
         </div>
       )}
     />

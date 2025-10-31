@@ -169,11 +169,44 @@ export interface CCData {
 }
 
 /**
- * Extended AI usage data supporting multiple sources (Claude Code, Codex, etc.).
+ * AI provider identifier types supported by agent-exporter.
+ *
+ * @remarks
+ * Maps to agent-exporter's provider system:
+ * - 'claudeCode': Claude Code (formerly ccusage)
+ * - 'codex': OpenAI Codex
+ * - 'opencode': OpenCode
+ * - 'qwen': Qwen models
+ * - 'gemini': Google Gemini
+ *
+ * @public
+ */
+export type AIProvider = 'claudeCode' | 'codex' | 'opencode' | 'qwen' | 'gemini'
+
+/**
+ * Provider-specific usage data structure.
+ *
+ * @remarks
+ * Contains daily usage history and totals for a single AI provider.
+ *
+ * @public
+ */
+export interface ProviderData {
+  /** Array of daily usage data, typically sorted chronologically */
+  daily: DailyData[]
+  /** Aggregated totals across all daily data */
+  totals: Totals
+}
+
+/**
+ * Extended AI usage data supporting multiple sources via agent-exporter.
  *
  * @remarks
  * Used for dashboards that display multiple AI tool usages side-by-side.
- * Each tool can have its own daily history and totals.
+ * Each provider can have its own daily history and totals.
+ * All providers are optional to support partial data sets.
+ *
+ * Data sourced from agent-exporter tool which syncs from multiple AI providers.
  *
  * @example
  * ```ts
@@ -186,6 +219,10 @@ export interface CCData {
  *   codex: {
  *     daily: [...],
  *     totals: { ... }
+ *   },
+ *   gemini: {
+ *     daily: [...],
+ *     totals: { ... }
  *   }
  * }
  * ```
@@ -195,16 +232,16 @@ export interface CCData {
 export interface ExtendedCCData {
   /** Combined totals across all sources (optional) */
   totals?: Totals
-  /** Claude Code usage data */
-  claudeCode?: {
-    daily: DailyData[]
-    totals: Totals
-  }
-  /** Codex usage data */
-  codex?: {
-    daily: DailyData[]
-    totals: Totals
-  }
+  /** Claude Code usage data (Anthropic models) */
+  claudeCode?: ProviderData
+  /** Codex usage data (OpenAI models) */
+  codex?: ProviderData
+  /** OpenCode usage data */
+  opencode?: ProviderData
+  /** Qwen usage data (Alibaba models) */
+  qwen?: ProviderData
+  /** Gemini usage data (Google models) */
+  gemini?: ProviderData
 }
 
 /**

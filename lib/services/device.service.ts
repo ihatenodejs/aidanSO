@@ -1,6 +1,6 @@
 import type { DeviceSpec, DeviceType, DeviceWithMetrics } from '@/lib/types'
 import type { SortOrder } from '@/lib/types/service'
-import { devices as deviceData } from '@/lib/devices/data'
+import { devices as deviceData } from '@/lib/config/devices/pages'
 
 /**
  * Statistics and aggregated metrics for the device portfolio.
@@ -108,7 +108,8 @@ export class DeviceService {
     if (device.type === 'mobile') {
       if (device.status?.toLowerCase().includes('daily')) return 'Daily Driver'
       if (device.status?.toLowerCase().includes('beta')) return 'Beta Testing'
-      if (device.status?.toLowerCase().includes('experiment')) return 'Experimental'
+      if (device.status?.toLowerCase().includes('experiment'))
+        return 'Experimental'
       return 'Mobile Device'
     }
     if (device.type === 'dap') {
@@ -172,7 +173,7 @@ export class DeviceService {
    * ```
    */
   static getAllDevicesEnriched(): DeviceWithMetrics[] {
-    return this.getAllDevices().map(device => this.enrichDevice(device))
+    return this.getAllDevices().map((device) => this.enrichDevice(device))
   }
 
   /**
@@ -219,22 +220,22 @@ export class DeviceService {
     let filtered = this.getAllDevices()
 
     if (filters.type) {
-      filtered = filtered.filter(d => d.type === filters.type)
+      filtered = filtered.filter((d) => d.type === filters.type)
     }
 
     if (filters.manufacturer) {
-      filtered = filtered.filter(d => d.manufacturer === filters.manufacturer)
+      filtered = filtered.filter((d) => d.manufacturer === filters.manufacturer)
     }
 
     if (filters.status) {
-      filtered = filtered.filter(d => d.status === filters.status)
+      filtered = filtered.filter((d) => d.status === filters.status)
     }
 
     if (filters.releaseYear) {
-      filtered = filtered.filter(d => d.releaseYear === filters.releaseYear)
+      filtered = filtered.filter((d) => d.releaseYear === filters.releaseYear)
     }
 
-    return filtered.map(d => this.enrichDevice(d))
+    return filtered.map((d) => this.enrichDevice(d))
   }
 
   /**
@@ -373,18 +374,20 @@ export class DeviceService {
    * ```
    */
   static getRelatedDevices(device: DeviceSpec): DeviceWithMetrics[] {
-    const sameType = this.filterDevices({ type: device.type })
-      .filter(d => d.slug !== device.slug)
+    const sameType = this.filterDevices({ type: device.type }).filter(
+      (d) => d.slug !== device.slug
+    )
 
     const sameManufacturer = device.manufacturer
-      ? this.filterDevices({ manufacturer: device.manufacturer })
-          .filter(d => d.slug !== device.slug)
+      ? this.filterDevices({ manufacturer: device.manufacturer }).filter(
+          (d) => d.slug !== device.slug
+        )
       : []
 
     const combined = new Map<string, DeviceWithMetrics>()
 
-    sameType.forEach(d => combined.set(d.slug, d))
-    sameManufacturer.forEach(d => combined.set(d.slug, d))
+    sameType.forEach((d) => combined.set(d.slug, d))
+    sameManufacturer.forEach((d) => combined.set(d.slug, d))
 
     return Array.from(combined.values()).slice(0, 3)
   }
@@ -438,15 +441,19 @@ export class DeviceService {
 
     return {
       total: enriched.length,
-      mobile: enriched.filter(d => d.type === 'mobile').length,
-      dap: enriched.filter(d => d.type === 'dap').length,
-      byManufacturer: enriched.reduce((acc, d) => {
-        if (d.manufacturer) {
-          acc[d.manufacturer] = (acc[d.manufacturer] || 0) + 1
-        }
-        return acc
-      }, {} as Record<string, number>),
-      averageAge: enriched.reduce((sum, d) => sum + d.ageInYears, 0) / enriched.length,
+      mobile: enriched.filter((d) => d.type === 'mobile').length,
+      dap: enriched.filter((d) => d.type === 'dap').length,
+      byManufacturer: enriched.reduce(
+        (acc, d) => {
+          if (d.manufacturer) {
+            acc[d.manufacturer] = (acc[d.manufacturer] || 0) + 1
+          }
+          return acc
+        },
+        {} as Record<string, number>
+      ),
+      averageAge:
+        enriched.reduce((sum, d) => sum + d.ageInYears, 0) / enriched.length,
       newestDevice: this.sortDevices(enriched, 'releaseYear', 'desc')[0],
       oldestDevice: this.sortDevices(enriched, 'releaseYear', 'asc')[0]
     }

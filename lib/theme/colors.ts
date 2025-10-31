@@ -43,7 +43,7 @@ export const gray = {
   /** Near-black - Background gradient end - #111827 */
   900: '#111827',
   /** Deepest black - #030712 */
-  950: '#030712',
+  950: '#030712'
 } as const
 
 /**
@@ -80,7 +80,7 @@ export const backgrounds = {
   /** Solid card background (gray-800) - #1f2937 */
   cardSolid: '#1f2937',
   /** Hover state background (gray-700 with opacity) - rgba(55, 65, 81, 0.6) */
-  hover: 'rgba(55, 65, 81, 0.6)',
+  hover: 'rgba(55, 65, 81, 0.6)'
 } as const
 
 /**
@@ -115,7 +115,7 @@ export const borders = {
   /** Subtle border with low opacity - rgba(75, 85, 99, 0.3) */
   subtle: 'rgba(75, 85, 99, 0.3)',
   /** Muted border with medium opacity - rgba(75, 85, 99, 0.5) */
-  muted: 'rgba(75, 85, 99, 0.5)',
+  muted: 'rgba(75, 85, 99, 0.5)'
 } as const
 
 /**
@@ -155,7 +155,7 @@ export const text = {
   /** Disabled text color - Inactive elements (gray-500) - #6b7280 */
   disabled: '#6b7280',
   /** Inverse text color - For light backgrounds (gray-900) - #111827 */
-  inverse: '#111827',
+  inverse: '#111827'
 } as const
 
 /**
@@ -217,14 +217,18 @@ export const accents = {
 
   /** Success state color (green) - #10b981 */
   success: '#10b981',
+  /** Success state background tint (green/10) - rgba(16, 185, 129, 0.1) */
+  successBg: 'rgba(16, 185, 129, 0.1)',
   /** Warning state color (amber) - #f59e0b */
   warning: '#f59e0b',
   /** Warning badge background (warning/10) - rgba(245, 158, 11, 0.1) */
   warningBg: 'rgba(245, 158, 11, 0.1)',
   /** Error state color (red) - #ef4444 */
   error: '#ef4444',
+  /** Error state background tint (red/10) - rgba(239, 68, 68, 0.1) */
+  errorBg: 'rgba(239, 68, 68, 0.1)',
   /** Info state color (blue) - #3b82f6 */
-  info: '#3b82f6',
+  info: '#3b82f6'
 } as const
 
 /**
@@ -257,7 +261,7 @@ export const effectColors = {
   /** Intense text glow (100% opacity) - rgba(255, 255, 255, 1) */
   textGlowIntense: 'rgba(255, 255, 255, 1)',
   /** Card box shadow color - rgba(0, 0, 0, 0.2) */
-  shadowCard: 'rgba(0, 0, 0, 0.2)',
+  shadowCard: 'rgba(0, 0, 0, 0.2)'
 } as const
 
 /**
@@ -291,7 +295,7 @@ export const colors = {
   borders,
   text,
   accents,
-  effectColors,
+  effectColors
 } as const
 
 /**

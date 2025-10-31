@@ -1,75 +1,117 @@
-"use client"
+'use client'
 
-import { ResponsiveContainer, ComposedChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, Line } from 'recharts'
-import { DailyData, TimeRangeKey } from '@/lib/types'
-import { buildTokenCompositionData, formatAxisLabel, formatTooltipDate } from './utils'
+import {
+  ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  Tooltip
+} from 'recharts'
+import { DailyData } from '@/lib/types'
 import type { ToolTheme } from '@/app/ai/theme'
 
-const formatWithUnit = (value: number): string => {
-  if (value >= 1000) {
-    return `${(value / 1000).toFixed(1)}M`
-  } else if (value >= 1) {
-    return `${value.toFixed(value >= 100 ? 0 : 1)}K`
+const formatTooltipValue = (value: number): string => {
+  if (value >= 1000000) {
+    return `${(value / 1000000).toFixed(2)}B tokens`
+  } else if (value >= 1000) {
+    return `${(value / 1000).toFixed(2)}M tokens`
   } else {
-    return value.toFixed(2)
+    return `${value.toFixed(0)}K tokens`
   }
 }
 
-const formatTooltipValue = (value: number, dataKey: string | undefined): string => {
-  if (dataKey === 'cacheTokens') {
-    if (value >= 1000) {
-      return `${(value / 1000).toFixed(2)}B tokens`
-    } else if (value >= 1) {
-      return `${value.toFixed(2)}M tokens`
-    } else {
-      return `${(value * 1000).toFixed(0)}K tokens`
+const buildRadarData = (daily: DailyData[]) => {
+  const totals = daily.reduce(
+    (acc, day) => ({
+      inputTokens: acc.inputTokens + day.inputTokens,
+      outputTokens: acc.outputTokens + day.outputTokens,
+      cacheCreationTokens: acc.cacheCreationTokens + day.cacheCreationTokens,
+      cacheReadTokens: acc.cacheReadTokens + day.cacheReadTokens
+    }),
+    {
+      inputTokens: 0,
+      outputTokens: 0,
+      cacheCreationTokens: 0,
+      cacheReadTokens: 0
     }
-  } else {
-    if (value >= 1000) {
-      return `${(value / 1000).toFixed(2)}M tokens`
-    } else if (value >= 1) {
-      return `${value.toFixed(1)}K tokens`
-    } else {
-      return `${(value * 1000).toFixed(0)} tokens`
+  )
+
+  return [
+    {
+      category: 'Input',
+      value: totals.inputTokens
+    },
+    {
+      category: 'Output',
+      value: totals.outputTokens
+    },
+    {
+      category: 'Cache Write',
+      value: totals.cacheCreationTokens
+    },
+    {
+      category: 'Cache Read',
+      value: totals.cacheReadTokens
     }
-  }
+  ]
 }
 
 interface TokenCompositionProps {
   daily: DailyData[]
   theme: ToolTheme
-  timeRange: TimeRangeKey
 }
 
-export default function TokenComposition({ daily, theme, timeRange }: TokenCompositionProps) {
-  const tokenCompositionData = buildTokenCompositionData(daily)
+export default function TokenComposition({
+  daily,
+  theme
+}: TokenCompositionProps) {
+  const radarData = buildRadarData(daily)
+
   return (
-    <section className="p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300 sm:col-span-2">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-200">Token Composition</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <ComposedChart data={tokenCompositionData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-          <XAxis
-            dataKey="date"
-            stroke="#9ca3af"
-            tickFormatter={(value) => formatAxisLabel(String(value), timeRange)}
-            interval={timeRange === '7d' ? 0 : undefined}
-            tickMargin={12}
-            minTickGap={12}
-          />
-          <YAxis stroke="#9ca3af" tickFormatter={formatWithUnit} />
-          <Tooltip
-            contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151' }}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            formatter={(value: number, _name: string, props: any) => formatTooltipValue(value, props?.dataKey)}
-            labelFormatter={(value: string) => formatTooltipDate(String(value))}
-          />
-          <Legend />
-          <Bar dataKey="inputTokens" stackId="a" fill={theme.chart.barPrimary} name="Input" />
-          <Bar dataKey="outputTokens" stackId="a" fill={theme.chart.barSecondary} name="Output" />
-          <Line type="monotone" dataKey="cacheTokens" stroke={theme.chart.line} name="Cache" strokeWidth={2} />
-        </ComposedChart>
-      </ResponsiveContainer>
+    <section className="rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600 sm:p-6 lg:p-8">
+      <h2 className="mb-4 text-xl font-semibold text-gray-200 sm:text-2xl">
+        Token Composition
+      </h2>
+      <div className="h-[250px] sm:h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <RadarChart data={radarData}>
+            <PolarGrid stroke="#374151" />
+            <PolarAngleAxis dataKey="category" stroke="#9ca3af" />
+            <PolarRadiusAxis stroke="#9ca3af" angle={90} tick={false} />
+            <Radar
+              name="Token Distribution"
+              dataKey="value"
+              stroke={theme.chart.line}
+              fill={theme.chart.barPrimary}
+              fillOpacity={0.7}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                border: '1px solid #374151',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)',
+                fontSize: '14px'
+              }}
+              labelStyle={{
+                color: '#e5e7eb',
+                fontWeight: '600',
+                marginBottom: '4px'
+              }}
+              itemStyle={{
+                color: '#9ca3af',
+                padding: '2px 0'
+              }}
+              formatter={(value: number) => formatTooltipValue(value)}
+              cursor={{ fill: 'rgba(156, 163, 175, 0.1)' }}
+              wrapperStyle={{ pointerEvents: 'none' }}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+      </div>
     </section>
   )
 }

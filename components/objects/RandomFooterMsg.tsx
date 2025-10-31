@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Link from 'next/link'
 import { footerMessages } from './footerMessages'
@@ -18,7 +18,9 @@ const getMessageByIndex = (index: number | undefined) => {
     return fallbackMessage
   }
 
-  const safeIndex = ((Math.floor(index) % footerMessages.length) + footerMessages.length) % footerMessages.length
+  const safeIndex =
+    ((Math.floor(index) % footerMessages.length) + footerMessages.length) %
+    footerMessages.length
   return footerMessages[safeIndex] ?? fallbackMessage
 }
 
@@ -36,7 +38,7 @@ export default function RandomFooterMsg({ index }: RandomFooterMsgProps) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="hover:text-white transition-colors mb-2 sm:mb-0"
+      className="mb-2 transition-colors hover:text-white sm:mb-0"
     >
       <div className="flex items-center justify-center">
         <Icon className="text-md mr-2" />

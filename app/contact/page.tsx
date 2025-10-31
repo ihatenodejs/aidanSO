@@ -1,9 +1,10 @@
-"use client"
+'use client'
 
 import Button from '@/components/objects/Button'
 import PageHeader from '@/components/objects/PageHeader'
-import { Phone, Smartphone, Mail } from 'lucide-react'
-import { SiGithub, SiForgejo, SiTelegram } from 'react-icons/si'
+import PageShell from '@/components/layout/PageShell'
+import { getContactLinks } from '@/lib/config/contact'
+import { Phone } from 'lucide-react'
 
 interface ContactSection {
   title: string
@@ -21,45 +22,44 @@ export default function Contact() {
     }
   ]
 
-  const contactButtons = [
-    { label: "ihatenodejs", href: "https://github.com/ihatenodejs", icon: SiGithub },
-    { label: "aidan", href: "https://git.p0ntus.com/aidan", icon: SiForgejo },
-    { label: "p0ntu5", href: "https://t.me/p0ntu5", icon: SiTelegram },
-    { label: "+1 857-295-2295", href: "tel:+18572952295", icon: Smartphone },
-    { label: "aidan@p0ntus.com", href: "mailto:aidan@p0ntus.com", icon: Mail }
-  ]
+  const contactLinks = getContactLinks()
 
   return (
-    <div className="grow container mx-auto px-4 py-12">
-        <div className="max-w-2xl mx-auto text-center">
-          <PageHeader
-            icon={<Phone size={60} />}
-            title="Contact"
-          />
-          <div className="flex flex-col gap-8 mt-8">
-            <div className="flex flex-wrap justify-center gap-3">
-              {contactButtons.map((button) => (
-                <Button
-                  key={button.label}
-                  href={button.href}
-                  target="_blank"
-                  variant="rounded"
-                  icon={<button.icon />}
-                >
-                  {button.label}
-                </Button>
-              ))}
-            </div>
-            {sections.map((section) => (
-              <div key={section.title} className="flex flex-col gap-4">
-                <h2 className="text-2xl font-semibold text-gray-200">{section.title}</h2>
-                {section.texts.map((text, index) => (
-                  <p key={index} className="text-gray-300">{text}</p>
-                ))}
-              </div>
-            ))}
-          </div>
+    <PageShell variant="centered" maxWidth="2xl" innerClassName="text-center">
+      <PageHeader icon={<Phone size={60} />} title="Contact" />
+
+      <div className="flex flex-wrap justify-center gap-3">
+        {contactLinks.map((contact) => {
+          const Icon = contact.icon
+          const target =
+            contact.target ?? (contact.external ? '_blank' : undefined)
+
+          return (
+            <Button
+              key={contact.id}
+              href={contact.href}
+              target={target}
+              variant="rounded"
+              icon={<Icon size={18} />}
+            >
+              {contact.label}
+            </Button>
+          )
+        })}
+      </div>
+
+      {sections.map((section) => (
+        <div key={section.title} className="flex flex-col gap-4">
+          <h2 className="text-2xl font-semibold text-gray-200">
+            {section.title}
+          </h2>
+          {section.texts.map((text, index) => (
+            <p key={index} className="text-gray-300">
+              {text}
+            </p>
+          ))}
         </div>
-    </div>
+      ))}
+    </PageShell>
   )
 }

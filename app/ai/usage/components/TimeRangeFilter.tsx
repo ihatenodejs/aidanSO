@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import type { ToolTheme } from '@/app/ai/theme'
 import type { TimeRangeKey } from '@/lib/types'
@@ -10,7 +10,7 @@ const TIME_RANGE_OPTIONS = [
   { id: '3m', label: '3mo' },
   { id: '6m', label: '6mo' },
   { id: '1y', label: '1y' },
-  { id: 'all', label: 'All' },
+  { id: 'all', label: 'All' }
 ] as const satisfies ReadonlyArray<SegmentedOption<TimeRangeKey>>
 
 type TimeRangeOptionId = (typeof TIME_RANGE_OPTIONS)[number]['id']
@@ -28,12 +28,14 @@ export default function TimeRangeFilter({
   onChange,
   theme,
   disabled = false,
-  className,
+  className
 }: TimeRangeFilterProps) {
-  const options = TIME_RANGE_OPTIONS.map<SegmentedOption<TimeRangeOptionId>>(option => ({
-    ...option,
-    accentColor: theme.accent,
-  }))
+  const options = TIME_RANGE_OPTIONS.map<SegmentedOption<TimeRangeOptionId>>(
+    (option) => ({
+      ...option,
+      accentColor: theme.accent
+    })
+  )
 
   return (
     <SegmentedControl

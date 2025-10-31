@@ -12,6 +12,7 @@
 import type { ComponentType, Dispatch, SetStateAction } from 'react'
 import type { IconType } from 'react-icons'
 import type { LucideIcon } from 'lucide-react'
+import type { Renewal } from './project'
 
 /**
  * Domain status indicating current usage state.
@@ -48,7 +49,12 @@ export type DomainStatus = 'active' | 'parked' | 'reserved'
  *
  * @public
  */
-export type DomainCategory = 'personal' | 'service' | 'project' | 'fun' | 'legacy'
+export type DomainCategory =
+  | 'personal'
+  | 'service'
+  | 'project'
+  | 'fun'
+  | 'legacy'
 
 /**
  * Supported domain registrar identifiers.
@@ -60,7 +66,11 @@ export type DomainCategory = 'personal' | 'service' | 'project' | 'fun' | 'legac
  *
  * @public
  */
-export type DomainRegistrarId = 'Spaceship' | 'Namecheap' | 'Name.com' | 'Dynadot'
+export type DomainRegistrarId =
+  | 'Spaceship'
+  | 'Namecheap'
+  | 'Name.com'
+  | 'Dynadot'
 
 /**
  * Sort options for domain lists.
@@ -87,27 +97,6 @@ export type DomainSortOption = 'name' | 'expiration' | 'ownership' | 'registrar'
 export type DomainTimelineEventType = 'registration' | 'renewal'
 
 /**
- * Domain renewal record tracking renewal history.
- *
- * @example
- * ```ts
- * const renewal: Renewal = {
- *   date: '2024-01-15',
- *   years: 2
- * }
- * ```
- *
- * @public
- */
-export interface Renewal {
-  /** ISO date string of renewal (YYYY-MM-DD format) */
-  date: string
-
-  /** Number of years renewed */
-  years: number
-}
-
-/**
  * Registrar configuration for UI display.
  *
  * @example
@@ -128,7 +117,7 @@ export interface RegistrarConfig {
   name: string
 
   /** Icon component (from react-icons or custom) */
-  icon: IconType | ComponentType<{className?: string}>
+  icon: IconType | ComponentType<{ className?: string }>
 
   /** Brand color for visual identification */
   color: string

@@ -22,20 +22,12 @@ interface CardGridProps {
  * </CardGrid>
  * ```
  */
-export function CardGrid({
-  children,
-  cols = '3',
-  className
-}: CardGridProps) {
+export function CardGrid({ children, cols = '3', className }: CardGridProps) {
   const gridClasses = {
     '2': 'grid grid-cols-1 md:grid-cols-2 gap-4 p-4',
     '3': 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4',
     '4': 'grid grid-cols-2 md:grid-cols-4 gap-4'
   }
 
-  return (
-    <div className={cn(gridClasses[cols], className)}>
-      {children}
-    </div>
-  )
+  return <div className={cn(gridClasses[cols], className)}>{children}</div>
 }

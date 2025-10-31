@@ -76,7 +76,7 @@ import { surfaces } from './surfaces'
 export const theme = {
   colors,
   effects,
-  surfaces,
+  surfaces
 } as const
 
 /**
@@ -172,7 +172,9 @@ export function cn(...classes: (string | undefined | null | false)[]): string {
  * @category Theme
  * @public
  */
-export function getCardStyle(variant: keyof typeof surfaces.card = 'default'): string {
+export function getCardStyle(
+  variant: keyof typeof surfaces.card = 'default'
+): string {
   return surfaces.card[variant]
 }
 
@@ -209,7 +211,9 @@ export function getCardStyle(variant: keyof typeof surfaces.card = 'default'): s
  * @category Theme
  * @public
  */
-export function getSectionStyle(variant: keyof typeof surfaces.section = 'default'): string {
+export function getSectionStyle(
+  variant: keyof typeof surfaces.section = 'default'
+): string {
   return surfaces.section[variant]
 }
 
@@ -248,6 +252,8 @@ export function getSectionStyle(variant: keyof typeof surfaces.section = 'defaul
  * @category Theme
  * @public
  */
-export function getButtonStyle(variant: keyof typeof surfaces.button = 'nav'): string {
+export function getButtonStyle(
+  variant: keyof typeof surfaces.button = 'nav'
+): string {
   return surfaces.button[variant]
 }

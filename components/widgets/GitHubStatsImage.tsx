@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Image from 'next/image'
 import { useState } from 'react'
@@ -10,10 +10,12 @@ interface GitHubStatsImageProps {
 export default function GitHubStatsImage({ username }: GitHubStatsImageProps) {
   const [imageError, setImageError] = useState(false)
 
-  if (imageError) { return null }
+  if (imageError) {
+    return null
+  }
 
   return (
-    <div className="flex flex-col justify-center items-center w-full mt-4 gap-4">
+    <div className="mt-4 flex w-full flex-col items-center justify-center gap-4">
       <Image
         src={`https://github-readme-stats.vercel.app/api?username=${username}&theme=dark&show_icons=true&hide_border=true&count_private=true`}
         alt={`${username}'s Stats`}
@@ -23,7 +25,7 @@ export default function GitHubStatsImage({ username }: GitHubStatsImageProps) {
         loading="eager"
         priority
         unoptimized
-        className="max-w-full h-auto"
+        className="h-auto max-w-full"
       />
       <Image
         src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&theme=dark&show_icons=true&hide_border=true&layout=compact`}
@@ -34,7 +36,7 @@ export default function GitHubStatsImage({ username }: GitHubStatsImageProps) {
         loading="eager"
         priority
         unoptimized
-        className="max-w-full h-auto"
+        className="h-auto max-w-full"
       />
     </div>
   )

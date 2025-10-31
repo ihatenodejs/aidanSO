@@ -1,32 +1,30 @@
-# aidxnCC
+# aidanSO
 
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
-aidxnCC is the third version of my personal website.
+aidanSO is the third version of my personal website, built with Next.js and Tailwind CSS.
 
-It's built with Next.js and Tailwind CSS. aidxnCC will always be a work in progress, though completely functional.
+It was previously known as aidxnCC, though due to a better domain name being avaliable, I have renamed this project to aidanSO to match the new domain name, [aidan.so](https://aidan.so).
 
 ## Deploy with Docker
 
-Docker is the easiest way to deploy aidxnCC. There are two example `docker-compose.yml` files for you to use.
-
-1. `docker-compose.yml` - Default, exposed on port 3000
-2. `docker-compose.nginx.yml` - Helpful for NGINX Proxy Manager usage w/ Docker networks
+Docker is the easiest way to deploy aidanSO. You can use the `docker-compose.yml.example` file for this.
 
 Just create a `.env` file with the below variables, run `docker compose -d --build`, and you'll be all set.
 
 ## Environment Variables
 
-| Variable               | Required? | Description                                                                                              |
-|------------------------|-----------|----------------------------------------------------------------------------------------------------------|
-| `LASTFM_API_KEY`       | Yes       | Get this from your Last.fm [API account](https://www.last.fm/api/account/create)                         |
-| `LISTENBRAINZ_TOKEN`   | No        | Get this from your ListenBrainz [user settings](https://listenbrainz.org/settings/)                      |
-| `GITHUB_PROJECTS_USER` | No        | GitHub username to display in the footer projects list (defaults to `ihatenodejs`)                       |
-| `GITHUB_USERNAME`      | No        | Fallback GitHub username if `GITHUB_PROJECTS_USER` is not set                                            |
-| `GITHUB_PROJECTS_PAT`  | No        | GitHub personal access token used to increase API limits for the footer projects list                    |
-| `GITHUB_PAT`           | No        | Fallback GitHub personal access token if `GITHUB_PROJECTS_PAT` is not set                                |
-| `PORT`                 | No        | Server port (defaults to `3000`)                                                                         |
-| `NODE_ENV`             | No        | Environment mode (`production` or `development`, automatically set by deployment platform)               |
+| Variable                         | Required? | Description                                                                                |
+| -------------------------------- | --------- | ------------------------------------------------------------------------------------------ |
+| `LASTFM_API_KEY`                 | Yes       | Get this from your Last.fm [API account](https://www.last.fm/api/account/create)           |
+| `LISTENBRAINZ_TOKEN`             | No        | Get this from your ListenBrainz [user settings](https://listenbrainz.org/settings/)        |
+| `GITHUB_PROJECTS_USER`           | No        | GitHub username to display in the footer projects list (defaults to `ihatenodejs`)         |
+| `GITHUB_USERNAME`                | No        | Fallback GitHub username if `GITHUB_PROJECTS_USER` is not set                              |
+| `GITHUB_PROJECTS_PAT`            | No        | GitHub personal access token used to increase API limits for the footer projects list      |
+| `GITHUB_PAT`                     | No        | Fallback GitHub personal access token if `GITHUB_PROJECTS_PAT` is not set                  |
+| `PORT`                           | No        | Server port (defaults to `3000`)                                                           |
+| `NODE_ENV`                       | No        | Environment mode (`production` or `development`, automatically set by deployment platform) |
+| `NEXT_PUBLIC_DEFAULT_TIME_RANGE` | No        | Default time range for AI usage page (defaults to `3m`)                                    |
 
 ## MusicBrainz
 

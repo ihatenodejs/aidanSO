@@ -39,4 +39,3 @@ export interface HeatmapDay {
   day: number
   formattedDate: string
 }
-

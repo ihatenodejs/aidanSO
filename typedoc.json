@@ -5,7 +5,8 @@
     "lib/utils",
     "lib/types",
     "lib/theme",
-    "lib/github.ts"
+    "lib/github.ts",
+    "server.ts"
   ],
   "entryPointStrategy": "expand",
   "out": "public/docs/html",
@@ -20,11 +21,5 @@
   "searchInComments": true,
   "categorizeByGroup": true,
   "defaultCategory": "Other",
-  "categoryOrder": [
-    "Services",
-    "Utils",
-    "Types",
-    "Theme",
-    "*"
-  ]
+  "categoryOrder": ["Services", "Utils", "Types", "Theme", "*"]
 }

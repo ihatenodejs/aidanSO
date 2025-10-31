@@ -19,19 +19,59 @@ interface TypeLinkProps {
  * - Union types: string | number
  * - Complex types: Record<string, Domain>
  */
-export default function TypeLink({ type, className, availableTypeIds }: TypeLinkProps) {
+export default function TypeLink({
+  type,
+  className,
+  availableTypeIds
+}: TypeLinkProps) {
   const parseTypeString = (typeStr: string): React.ReactNode[] => {
     const parts: React.ReactNode[] = []
     let currentIndex = 0
 
     const typeNamePattern = /\b([A-Z][a-zA-Z0-9]*)\b/g
     const builtInTypes = new Set([
-      'string', 'number', 'boolean', 'void', 'null', 'undefined', 'any', 'unknown',
-      'never', 'object', 'symbol', 'bigint', 'Array', 'Promise', 'Record', 'Partial',
-      'Required', 'Readonly', 'Pick', 'Omit', 'Exclude', 'Extract', 'NonNullable',
-      'ReturnType', 'InstanceType', 'ThisType', 'Parameters', 'ConstructorParameters',
-      'Date', 'Error', 'RegExp', 'Map', 'Set', 'WeakMap', 'WeakSet', 'Function',
-      'ReadonlyArray', 'String', 'Number', 'Boolean', 'Symbol', 'Object'
+      'string',
+      'number',
+      'boolean',
+      'void',
+      'null',
+      'undefined',
+      'any',
+      'unknown',
+      'never',
+      'object',
+      'symbol',
+      'bigint',
+      'Array',
+      'Promise',
+      'Record',
+      'Partial',
+      'Required',
+      'Readonly',
+      'Pick',
+      'Omit',
+      'Exclude',
+      'Extract',
+      'NonNullable',
+      'ReturnType',
+      'InstanceType',
+      'ThisType',
+      'Parameters',
+      'ConstructorParameters',
+      'Date',
+      'Error',
+      'RegExp',
+      'Map',
+      'Set',
+      'WeakMap',
+      'WeakSet',
+      'Function',
+      'ReadonlyArray',
+      'String',
+      'Number',
+      'Boolean',
+      'Symbol',
+      'Object'
     ])
 
     let match: RegExpExecArray | null
@@ -50,11 +90,7 @@ export default function TypeLink({ type, className, availableTypeIds }: TypeLink
       }
 
       if (builtInTypes.has(typeName)) {
-        parts.push(
-          <span key={`builtin-${matchStart}`}>
-            {typeName}
-          </span>
-        )
+        parts.push(<span key={`builtin-${matchStart}`}>{typeName}</span>)
       } else {
         // Check if this type exists in the documentation
         const typeExists = availableTypeIds?.has(typeName) ?? false
@@ -71,18 +107,28 @@ export default function TypeLink({ type, className, availableTypeIds }: TypeLink
                 if (element) {
                   element.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
-                  element.classList.add('ring-2', 'ring-blue-400', 'ring-offset-2', 'ring-offset-gray-900')
+                  element.classList.add(
+                    'ring-2',
+                    'ring-blue-400',
+                    'ring-offset-2',
+                    'ring-offset-gray-900'
+                  )
                   setTimeout(() => {
-                    element.classList.remove('ring-2', 'ring-blue-400', 'ring-offset-2', 'ring-offset-gray-900')
+                    element.classList.remove(
+                      'ring-2',
+                      'ring-blue-400',
+                      'ring-offset-2',
+                      'ring-offset-gray-900'
+                    )
                   }, 2000)
                 }
               }}
               className={cn(
-                'hover:underline cursor-pointer',
+                'cursor-pointer hover:underline',
                 effects.transitions.colors
               )}
               style={{
-                color: colors.accents.link,
+                color: colors.accents.link
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = colors.accents.linkHover
@@ -96,11 +142,7 @@ export default function TypeLink({ type, className, availableTypeIds }: TypeLink
           )
         } else {
           // Type doesn't exist in docs, render as plain text
-          parts.push(
-            <span key={`text-${matchStart}`}>
-              {typeName}
-            </span>
-          )
+          parts.push(<span key={`text-${matchStart}`}>{typeName}</span>)
         }
       }
 
@@ -119,8 +161,6 @@ export default function TypeLink({ type, className, availableTypeIds }: TypeLink
   }
 
   return (
-    <span className={cn('font-mono', className)}>
-      {parseTypeString(type)}
-    </span>
+    <span className={cn('font-mono', className)}>{parseTypeString(type)}</span>
   )
 }

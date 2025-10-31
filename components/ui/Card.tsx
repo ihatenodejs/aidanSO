@@ -11,6 +11,7 @@ interface CardProps {
   className?: string
   spanCols?: number
   onClick?: () => void
+  id?: string
 }
 
 /**
@@ -42,7 +43,8 @@ export function Card({
   variant = 'default',
   className,
   spanCols,
-  onClick
+  onClick,
+  id
 }: CardProps) {
   let variantClass: string
 
@@ -58,13 +60,12 @@ export function Card({
 
   return (
     <div
+      id={id}
       className={cn(variantClass, colSpanClass, className)}
       onClick={onClick}
     >
       {title && (
-        <h2 className="text-2xl font-semibold mb-4 text-gray-200">
-          {title}
-        </h2>
+        <h2 className="mb-4 text-2xl font-semibold text-gray-200">{title}</h2>
       )}
       {children}
     </div>

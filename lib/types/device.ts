@@ -173,6 +173,9 @@ export interface DeviceSectionRow {
 
   /** Optional additional note */
   note?: string
+
+  /** Optional filter value for search/filtering (e.g., "15" for "Android 15") */
+  filterValue?: string
 }
 
 /**

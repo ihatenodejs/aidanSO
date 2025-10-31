@@ -143,7 +143,8 @@ export class Validator {
    * @public
    */
   static isValidDomain(domain: string): boolean {
-    const domainRegex = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i
+    const domainRegex =
+      /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i
     return domainRegex.test(domain)
   }
 
@@ -205,7 +206,7 @@ export class Validator {
     keys: (keyof T)[]
   ): obj is T {
     if (typeof obj !== 'object' || obj === null) return false
-    return keys.every(key => key in obj)
+    return keys.every((key) => key in obj)
   }
 
   /**
@@ -294,7 +295,10 @@ export class Validator {
    *
    * @public
    */
-  static isArray<T>(value: unknown, itemValidator?: (item: unknown) => item is T): value is T[] {
+  static isArray<T>(
+    value: unknown,
+    itemValidator?: (item: unknown) => item is T
+  ): value is T[] {
     if (!Array.isArray(value)) return false
     if (!itemValidator) return true
     return value.every(itemValidator)

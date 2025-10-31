@@ -5,7 +5,7 @@ import {
   DailyDataWithTrend,
   ModelUsage,
   TokenTypeUsage,
-  TimeRangeKey,
+  TimeRangeKey
 } from '@/lib/types'
 
 /**
@@ -123,19 +123,43 @@ export interface AIStatsResult {
  */
 export class AIService {
   private static readonly MODEL_LABELS: Record<string, string> = {
+    // Claude models (Anthropic)
     'claude-sonnet-4-20250514': 'Claude Sonnet 4',
     'claude-sonnet-4-5-20250929': 'Claude Sonnet 4.5',
+    'claude-sonnet-4.5': 'Claude Sonnet 4.5',
+    'claude-haiku-4-5-20251001': 'Claude Haiku 4.5',
+    'claude-haiku-4.5': 'Claude Haiku 4.5',
     'claude-opus-4-1-20250805': 'Claude Opus 4.1',
+    // OpenAI models
     'gpt-5': 'GPT-5',
     'gpt-5-codex': 'GPT-5 Codex',
+    // Gemini models (Google)
+    'gemini-2.5-pro': 'Gemini 2.5 Pro',
+    'gemini-2.5-pro-preview-06-05': 'Gemini 2.5 Pro Preview (2025-06-05)',
+    'gemini-2.5-flash': 'Gemini 2.5 Flash',
+    'gemma-3-27b': 'Gemma 3 27B',
+    // Qwen models (Alibaba)
+    'qwen3-235b-a22b': 'Qwen 3 235B',
+    'qwen3-max-preview': 'Qwen 3 Max Preview',
+    'qwen2.5-coder-32b': 'Qwen 2.5 Coder 32B',
+    'qwen/qwen3-coder-30b': 'Qwen Coder 30B',
+    'coder-model': 'Qwen Coder',
+    // Z.AI models
+    'glm-4.5': 'GLM 4.5',
+    'glm-4.5-air': 'GLM 4.5 Air',
+    // Ghost models
+    'big-pickle': 'Big Pickle'
   }
 
-  private static readonly RANGE_CONFIG: Record<Exclude<TimeRangeKey, 'all'>, { days?: number; months?: number }> = {
+  private static readonly RANGE_CONFIG: Record<
+    Exclude<TimeRangeKey, 'all'>,
+    { days?: number; months?: number }
+  > = {
     '7d': { days: 7 },
     '1m': { months: 1 },
     '3m': { months: 3 },
     '6m': { months: 6 },
-    '1y': { months: 12 },
+    '1y': { months: 12 }
   }
 
   /**
@@ -170,9 +194,9 @@ export class AIService {
   static computeStreak(daily: DailyData[]): number {
     if (!daily.length) return 0
 
-    const datesSet = new Set(daily.map(d => d.date))
+    const datesSet = new Set(daily.map((d) => d.date))
     const latest = daily
-      .map(d => new Date(d.date + 'T00:00:00Z'))
+      .map((d) => new Date(d.date + 'T00:00:00Z'))
       .reduce((a, b) => (a > b ? a : b))
 
     const toKey = (d: Date) => {
@@ -186,7 +210,9 @@ export class AIService {
     for (
       let d = new Date(latest.getTime());
       ;
-      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - 1))
+      d = new Date(
+        Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - 1)
+      )
     ) {
       const key = toKey(d)
       if (datesSet.has(key)) count++
@@ -224,7 +250,9 @@ export class AIService {
    * @internal
    */
   private static startOfDay(date: Date): Date {
-    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()))
+    return new Date(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+    )
   }
 
   /**
@@ -248,9 +276,16 @@ export class AIService {
    */
   private static subtractUtcMonths(date: Date, months: number): Date {
     const targetMonthIndex = date.getUTCMonth() - months
-    const anchor = new Date(Date.UTC(date.getUTCFullYear(), targetMonthIndex, 1))
-    const endOfAnchorMonth = new Date(Date.UTC(anchor.getUTCFullYear(), anchor.getUTCMonth() + 1, 0))
-    const clampedDay = Math.min(date.getUTCDate(), endOfAnchorMonth.getUTCDate())
+    const anchor = new Date(
+      Date.UTC(date.getUTCFullYear(), targetMonthIndex, 1)
+    )
+    const endOfAnchorMonth = new Date(
+      Date.UTC(anchor.getUTCFullYear(), anchor.getUTCMonth() + 1, 0)
+    )
+    const clampedDay = Math.min(
+      date.getUTCDate(),
+      endOfAnchorMonth.getUTCDate()
+    )
     anchor.setUTCDate(clampedDay)
     return this.startOfDay(anchor)
   }
@@ -272,7 +307,7 @@ export class AIService {
       totalTokens: 0,
       totalCost: 0,
       modelsUsed: [],
-      modelBreakdowns: [],
+      modelBreakdowns: []
     }
   }
 
@@ -294,7 +329,13 @@ export class AIService {
     for (
       let cursor = new Date(start.getTime());
       cursor <= end;
-      cursor = new Date(Date.UTC(cursor.getUTCFullYear(), cursor.getUTCMonth(), cursor.getUTCDate() + 1))
+      cursor = new Date(
+        Date.UTC(
+          cursor.getUTCFullYear(),
+          cursor.getUTCMonth(),
+          cursor.getUTCDate() + 1
+        )
+      )
     ) {
       const key = this.toDateKey(cursor)
       series.push(byDate.get(key) ?? this.emptyDay(key))
@@ -320,8 +361,10 @@ export class AIService {
 
     const sorted = [...daily].sort((a, b) => a.date.localeCompare(b.date))
     const start = this.startOfDay(new Date(sorted[0].date + 'T00:00:00Z'))
-    const end = this.startOfDay(new Date(sorted[sorted.length - 1].date + 'T00:00:00Z'))
-    const byDate = new Map(sorted.map(d => [d.date, d] as const))
+    const end = this.startOfDay(
+      new Date(sorted[sorted.length - 1].date + 'T00:00:00Z')
+    )
+    const byDate = new Map(sorted.map((d) => [d.date, d] as const))
 
     return this.buildFilledRange(start, end, byDate)
   }
@@ -341,11 +384,11 @@ export class AIService {
    * ```
    */
   static buildTokenCompositionData(daily: DailyData[]) {
-    return daily.map(day => ({
+    return daily.map((day) => ({
       date: day.date,
       inputTokens: day.inputTokens / 1000, // Convert to K
       outputTokens: day.outputTokens / 1000, // Convert to K
-      cacheTokens: (day.cacheCreationTokens + day.cacheReadTokens) / 1000000, // Convert to M
+      cacheTokens: (day.cacheCreationTokens + day.cacheReadTokens) / 1000000 // Convert to M
     }))
   }
 
@@ -369,19 +412,20 @@ export class AIService {
    */
   static buildDailyTrendData(daily: DailyData[]): DailyDataWithTrend[] {
     const filled = this.computeFilledDailyRange(daily)
-    const rows = filled.map(day => ({
+    const rows = filled.map((day) => ({
       ...day,
       costTrend: null as number | null,
       tokensTrend: null as number | null,
       inputTokensNormalized: day.inputTokens / 1000,
       outputTokensNormalized: day.outputTokens / 1000,
-      cacheTokensNormalized: (day.cacheCreationTokens + day.cacheReadTokens) / 1000000,
+      cacheTokensNormalized:
+        (day.cacheCreationTokens + day.cacheReadTokens) / 1000000
     }))
 
     const applyTrend = (
       startIndex: number,
-      valueAccessor: (row: typeof rows[number]) => number,
-      assign: (row: typeof rows[number], value: number | null) => void,
+      valueAccessor: (row: (typeof rows)[number]) => number,
+      assign: (row: (typeof rows)[number], value: number | null) => void
     ) => {
       if (startIndex === -1 || startIndex >= rows.length) {
         return
@@ -421,16 +465,24 @@ export class AIService {
       })
     }
 
-    const firstCostIndex = rows.findIndex(row => row.totalCost > 0)
-    const firstTokenIndex = rows.findIndex(row => row.totalTokens > 0)
+    const firstCostIndex = rows.findIndex((row) => row.totalCost > 0)
+    const firstTokenIndex = rows.findIndex((row) => row.totalTokens > 0)
 
-    applyTrend(firstCostIndex, row => row.totalCost, (row, value) => {
-      row.costTrend = value
-    })
+    applyTrend(
+      firstCostIndex,
+      (row) => row.totalCost,
+      (row, value) => {
+        row.costTrend = value
+      }
+    )
 
-    applyTrend(firstTokenIndex, row => row.totalTokens / 1000000, (row, value) => {
-      row.tokensTrend = value
-    })
+    applyTrend(
+      firstTokenIndex,
+      (row) => row.totalTokens / 1000000,
+      (row, value) => {
+        row.tokensTrend = value
+      }
+    )
 
     return rows
   }
@@ -468,13 +520,15 @@ export class AIService {
    */
   static prepareHeatmapData(daily: DailyData[]): (HeatmapDay | null)[][] {
     const dayMap = new Map<string, DailyData>()
-    daily.forEach(day => {
+    daily.forEach((day) => {
       dayMap.set(day.date, day)
     })
 
     const today = new Date()
     const startOfYear = new Date(Date.UTC(today.getUTCFullYear(), 0, 1))
-    const endDate = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()))
+    const endDate = new Date(
+      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+    )
 
     const weeks: (HeatmapDay | null)[][] = []
     let currentWeek: (HeatmapDay | null)[] = []
@@ -486,7 +540,9 @@ export class AIService {
     for (
       let d = new Date(startDate);
       d <= endDate;
-      d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1))
+      d = new Date(
+        Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1)
+      )
     ) {
       if (d < startOfYear) {
         currentWeek.push(null)
@@ -505,7 +561,12 @@ export class AIService {
         tokens: dayData ? dayData.totalTokens : 0,
         cost: dayData ? dayData.totalCost : 0,
         day: d.getUTCDay(),
-        formattedDate: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+        formattedDate: d.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          timeZone: 'UTC'
+        })
       })
 
       if (d.getUTCDay() === 6 || d.getTime() === endDate.getTime()) {
@@ -578,9 +639,14 @@ export class AIService {
       return palette.empty
     }
 
-    const steps = palette.steps.length ? palette.steps : ['#4a3328', '#6b4530', '#8d5738', '#c15f3c']
+    const steps = palette.steps.length
+      ? palette.steps
+      : ['#4a3328', '#6b4530', '#8d5738', '#c15f3c']
     const clampedRatio = Math.min(Math.max(ratio, 0), 1)
-    const index = Math.min(Math.floor(clampedRatio * steps.length), steps.length - 1)
+    const index = Math.min(
+      Math.floor(clampedRatio * steps.length),
+      steps.length - 1
+    )
 
     return steps[index]
   }
@@ -614,9 +680,11 @@ export class AIService {
    */
   static buildModelUsageData(daily: DailyData[]): ModelUsage[] {
     const raw = daily.reduce((acc, day) => {
-      day.modelBreakdowns.forEach(model => {
+      if (!day.modelBreakdowns) return acc
+
+      day.modelBreakdowns.forEach((model) => {
         const label = this.getModelLabel(model.modelName)
-        const existing = acc.find(m => m.name === label)
+        const existing = acc.find((m) => m.name === label)
         if (existing) {
           existing.value += model.cost
         } else {
@@ -629,7 +697,7 @@ export class AIService {
     const sorted = raw.sort((a, b) => b.value - a.value)
     const total = sorted.reduce((sum, m) => sum + m.value, 0)
 
-    return sorted.map(m => ({
+    return sorted.map((m) => ({
       ...m,
       percentage: total > 0 ? (m.value / total) * 100 : 0
     }))
@@ -671,12 +739,12 @@ export class AIService {
       { name: 'Input', value: totals.inputTokens },
       { name: 'Output', value: totals.outputTokens },
       { name: 'Cache Creation', value: totals.cacheCreationTokens },
-      { name: 'Cache Read', value: totals.cacheReadTokens },
+      { name: 'Cache Read', value: totals.cacheReadTokens }
     ]
 
     const total = data.reduce((sum, t) => sum + t.value, 0)
 
-    return data.map(t => ({
+    return data.map((t) => ({
       ...t,
       percentage: total > 0 ? (t.value / total) * 100 : 0
     }))
@@ -731,7 +799,7 @@ export class AIService {
   static filterDailyByRange(
     daily: DailyData[],
     range: TimeRangeKey,
-    options: { endDate?: Date } = {},
+    options: { endDate?: Date } = {}
   ): DailyData[] {
     if (!daily.length) return []
 
@@ -741,20 +809,20 @@ export class AIService {
     if (options.endDate) {
       effectiveEnd = this.startOfDay(options.endDate)
     } else {
-      const lastNonEmptyDay = sorted.filter(d => d.totalCost > 0).pop()
+      const lastNonEmptyDay = sorted.filter((d) => d.totalCost > 0).pop()
       const lastDate = lastNonEmptyDay?.date || sorted[sorted.length - 1]?.date
       if (!lastDate) return []
       effectiveEnd = this.startOfDay(new Date(lastDate + 'T00:00:00Z'))
     }
 
-    const trimmed = sorted.filter(day => {
+    const trimmed = sorted.filter((day) => {
       const current = new Date(day.date + 'T00:00:00Z')
       return current <= effectiveEnd
     })
 
     if (!trimmed.length) return []
 
-    const byDate = new Map(trimmed.map(day => [day.date, day] as const))
+    const byDate = new Map(trimmed.map((day) => [day.date, day] as const))
     const earliest = this.startOfDay(new Date(trimmed[0].date + 'T00:00:00Z'))
 
     if (range === 'all') {
@@ -768,11 +836,13 @@ export class AIService {
 
     let start: Date
     if (config.days) {
-      start = new Date(Date.UTC(
-        effectiveEnd.getUTCFullYear(),
-        effectiveEnd.getUTCMonth(),
-        effectiveEnd.getUTCDate() - (config.days - 1)
-      ))
+      start = new Date(
+        Date.UTC(
+          effectiveEnd.getUTCFullYear(),
+          effectiveEnd.getUTCMonth(),
+          effectiveEnd.getUTCDate() - (config.days - 1)
+        )
+      )
     } else {
       start = this.subtractUtcMonths(effectiveEnd, config.months ?? 0)
     }
@@ -813,21 +883,24 @@ export class AIService {
    * ```
    */
   static computeTotalsFromDaily(daily: DailyData[]): CCData['totals'] {
-    return daily.reduce<CCData['totals']>((acc, day) => ({
-      inputTokens: acc.inputTokens + day.inputTokens,
-      outputTokens: acc.outputTokens + day.outputTokens,
-      cacheCreationTokens: acc.cacheCreationTokens + day.cacheCreationTokens,
-      cacheReadTokens: acc.cacheReadTokens + day.cacheReadTokens,
-      totalCost: acc.totalCost + day.totalCost,
-      totalTokens: acc.totalTokens + day.totalTokens,
-    }), {
-      inputTokens: 0,
-      outputTokens: 0,
-      cacheCreationTokens: 0,
-      cacheReadTokens: 0,
-      totalCost: 0,
-      totalTokens: 0,
-    })
+    return daily.reduce<CCData['totals']>(
+      (acc, day) => ({
+        inputTokens: acc.inputTokens + day.inputTokens,
+        outputTokens: acc.outputTokens + day.outputTokens,
+        cacheCreationTokens: acc.cacheCreationTokens + day.cacheCreationTokens,
+        cacheReadTokens: acc.cacheReadTokens + day.cacheReadTokens,
+        totalCost: acc.totalCost + day.totalCost,
+        totalTokens: acc.totalTokens + day.totalTokens
+      }),
+      {
+        inputTokens: 0,
+        outputTokens: 0,
+        cacheCreationTokens: 0,
+        cacheReadTokens: 0,
+        totalCost: 0,
+        totalTokens: 0
+      }
+    )
   }
 
   /**
@@ -881,9 +954,8 @@ export class AIService {
    */
   static getAIStats(data: CCData): AIStatsResult {
     const streak = this.computeStreak(data.daily)
-    const dailyAverage = data.daily.length > 0
-      ? data.totals.totalCost / data.daily.length
-      : 0
+    const dailyAverage =
+      data.daily.length > 0 ? data.totals.totalCost / data.daily.length : 0
 
     const last7Days = data.daily.slice(-7)
     const last7DaysCost = last7Days.reduce((sum, d) => sum + d.totalCost, 0)
@@ -891,7 +963,10 @@ export class AIService {
 
     const last30Days = data.daily.slice(-30)
     const last30DaysCost = last30Days.reduce((sum, d) => sum + d.totalCost, 0)
-    const last30DaysTokens = last30Days.reduce((sum, d) => sum + d.totalTokens, 0)
+    const last30DaysTokens = last30Days.reduce(
+      (sum, d) => sum + d.totalTokens,
+      0
+    )
 
     return {
       streak,
@@ -902,12 +977,14 @@ export class AIService {
       last7Days: {
         cost: last7DaysCost,
         tokens: last7DaysTokens,
-        dailyAverage: last7Days.length > 0 ? last7DaysCost / last7Days.length : 0
+        dailyAverage:
+          last7Days.length > 0 ? last7DaysCost / last7Days.length : 0
       },
       last30Days: {
         cost: last30DaysCost,
         tokens: last30DaysTokens,
-        dailyAverage: last30Days.length > 0 ? last30DaysCost / last30Days.length : 0
+        dailyAverage:
+          last30Days.length > 0 ? last30DaysCost / last30Days.length : 0
       },
       tokenBreakdown: {
         input: data.totals.inputTokens,

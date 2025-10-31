@@ -41,7 +41,7 @@ export const textShadows = {
   glowIntense: '0 0 20px rgba(255, 255, 255, 1)',
 
   /** Subtle glow (50% opacity) - use for secondary text that needs slight emphasis */
-  subtle: '0 0 10px rgba(255, 255, 255, 0.5)',
+  subtle: '0 0 10px rgba(255, 255, 255, 0.5)'
 } as const
 
 /**
@@ -90,7 +90,7 @@ export const boxShadows = {
   button: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
 
   /** Button shadow for hover state - increased shadow for interactivity feedback */
-  buttonHover: '0 6px 8px -1px rgba(0, 0, 0, 0.15)',
+  buttonHover: '0 6px 8px -1px rgba(0, 0, 0, 0.15)'
 } as const
 
 /**
@@ -124,16 +124,19 @@ export const boxShadows = {
  */
 export const gradients = {
   /** Page background gradient from gray-800 to gray-900 - use for main page containers */
-  pageBackground: 'linear-gradient(180deg, rgb(31, 41, 55) 0%, rgb(17, 24, 39) 100%)',
+  pageBackground:
+    'linear-gradient(180deg, rgb(31, 41, 55) 0%, rgb(17, 24, 39) 100%)',
 
   /** Music player widget gradient with 4-stop gradient - use for music player components */
-  musicPlayer: 'linear-gradient(to bottom, #4b5563 0%, #374151 30%, #1f2937 70%, #111827 100%)',
+  musicPlayer:
+    'linear-gradient(to bottom, #4b5563 0%, #374151 30%, #1f2937 70%, #111827 100%)',
 
   /** Player button gradients - use for music control buttons */
   playerButton: {
     /** Light button gradient with subtle 3D effect - use for play/pause buttons */
-    light: 'linear-gradient(180deg, #f9fafb 0%, #e5e7eb 49%, #6b7280 51%, #d1d5db 100%)',
-  },
+    light:
+      'linear-gradient(180deg, #f9fafb 0%, #e5e7eb 49%, #6b7280 51%, #d1d5db 100%)'
+  }
 } as const
 
 /**
@@ -198,7 +201,7 @@ export const transitions = {
   easeInOut: 'ease-in-out',
 
   /** Standard ease timing function - slight acceleration for natural motion */
-  ease: 'ease',
+  ease: 'ease'
 } as const
 
 /**
@@ -243,7 +246,7 @@ export const backdrops = {
   blurMedium: 'backdrop-blur-md',
 
   /** Large blur (24px) - use for strong separation and emphasis */
-  blurLarge: 'backdrop-blur-lg',
+  blurLarge: 'backdrop-blur-lg'
 } as const
 
 /**
@@ -283,7 +286,7 @@ export const effects = {
   boxShadows,
   gradients,
   transitions,
-  backdrops,
+  backdrops
 } as const
 
 /**

@@ -29,10 +29,16 @@
  */
 export const card = {
   /** Standard card with bold border and hover effect - use for general content containers */
-  default: 'border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300',
+  default:
+    'border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300',
 
   /** Domain-specific card with glassmorphism effect - used in domain portfolio grid */
-  domain: 'bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-gray-700 transition-all hover:shadow-xl hover:shadow-black/20',
+  domain:
+    'bg-gray-900/50 backdrop-blur-sm border border-gray-800 rounded-xl hover:border-gray-700 transition-all hover:shadow-xl hover:shadow-black/20',
+
+  /** Status monitor card with subtle hover border - used on system status page */
+  status:
+    'rounded-xl border border-gray-800 transition-colors duration-300 hover:border-gray-600',
 
   /** AI analytics card with padding and hover states - used for usage statistics */
   ai: 'p-6 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300',
@@ -41,7 +47,7 @@ export const card = {
   featured: 'p-6 sm:p-8 border-2 border-[#c15f3c] rounded-lg bg-orange-500/5',
 
   /** Minimal card with thin border only - use for nested or subtle containers */
-  simple: 'border border-gray-700 rounded-lg',
+  simple: 'border border-gray-700 rounded-lg'
 } as const
 
 /**
@@ -76,13 +82,15 @@ export const card = {
  */
 export const section = {
   /** Standard section with responsive padding, border, and hover effect - use for main content areas */
-  default: 'p-4 sm:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300',
+  default:
+    'p-4 sm:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300',
 
   /** Compact section with reduced padding - use for sidebar or constrained layouts */
-  compact: 'p-4 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300',
+  compact:
+    'p-4 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300',
 
   /** Plain section with padding only (no border) - use for nested content areas */
-  plain: 'p-4 sm:p-8',
+  plain: 'p-4 sm:p-8'
 } as const
 
 /**
@@ -123,7 +131,7 @@ export const panel = {
   overlay: 'bg-gray-800/95 backdrop-blur-sm border border-gray-700/50',
 
   /** Sidebar panel with right border - use for navigation sidebars */
-  sidebar: 'bg-gray-900/50 backdrop-blur-sm border-r border-gray-800',
+  sidebar: 'bg-gray-900/50 backdrop-blur-sm border-r border-gray-800'
 } as const
 
 /**
@@ -165,7 +173,8 @@ export const button = {
   nav: 'text-gray-300 hover:text-white hover:bg-gray-700 rounded-md px-3 py-2 transition-all duration-300',
 
   /** Dropdown menu item with translucent hover - use for menu items in dropdowns */
-  dropdownItem: 'text-gray-300 hover:text-white hover:bg-gray-700/30 rounded-md transition-all duration-300',
+  dropdownItem:
+    'text-gray-300 hover:text-white hover:bg-gray-700/30 rounded-md transition-all duration-300',
 
   /** Active state styling - combine with nav for current page indication */
   active: 'text-white bg-gray-700/50',
@@ -174,7 +183,8 @@ export const button = {
   icon: 'inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-800 text-gray-300',
 
   /** Primary CTA button with shadow and lift effect - use for main call-to-action elements */
-  primary: 'bg-gray-800 text-white font-bold py-2 px-4 rounded-sm shadow-md transition-all duration-300 ease-in-out hover:bg-gray-700 hover:shadow-lg hover:-translate-y-0.5',
+  primary:
+    'bg-gray-800 text-white font-bold py-2 px-4 rounded-sm shadow-md transition-all duration-300 ease-in-out hover:bg-gray-700 hover:shadow-lg hover:-translate-y-0.5'
 } as const
 
 /**
@@ -211,16 +221,20 @@ export const badge = {
   muted: 'px-2 py-1 bg-gray-800 rounded text-xs text-gray-400',
 
   /** Accent badge with orange theme colors - use for featured or highlighted items */
-  accent: 'px-2 py-1 bg-orange-500/20 border border-orange-500/30 rounded text-xs text-orange-300',
+  accent:
+    'px-2 py-1 bg-orange-500/20 border border-orange-500/30 rounded text-xs text-orange-300',
 
   /** Success badge with green colors - use for active, completed, or positive status */
-  success: 'px-2 py-1 bg-green-500/20 border border-green-500/30 rounded text-xs text-green-300',
+  success:
+    'px-2 py-1 bg-green-500/20 border border-green-500/30 rounded text-xs text-green-300',
 
   /** Warning badge with yellow colors - use for pending, caution, or attention states */
-  warning: 'px-2 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded text-xs text-yellow-300',
+  warning:
+    'px-2 py-1 bg-yellow-500/20 border border-yellow-500/30 rounded text-xs text-yellow-300',
 
   /** Error badge with red colors - use for errors, failures, or critical states */
-  error: 'px-2 py-1 bg-red-500/20 border border-red-500/30 rounded text-xs text-red-300',
+  error:
+    'px-2 py-1 bg-red-500/20 border border-red-500/30 rounded text-xs text-red-300'
 } as const
 
 /**
@@ -271,7 +285,7 @@ export const spacing = {
   grid: 'gap-4 sm:gap-6',
 
   /** Content flow vertical spacing - use for text content and article layouts */
-  content: 'space-y-4',
+  content: 'space-y-4'
 } as const
 
 /**
@@ -317,7 +331,7 @@ export const layout = {
   grid3col: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4',
 
   /** 4-column responsive grid - 2 cols mobile, 4 cols tablet+ */
-  grid4col: 'grid grid-cols-2 md:grid-cols-4 gap-4',
+  grid4col: 'grid grid-cols-2 md:grid-cols-4 gap-4'
 } as const
 
 /**
@@ -359,7 +373,7 @@ export const surfaces = {
   button,
   badge,
   spacing,
-  layout,
+  layout
 } as const
 
 /**

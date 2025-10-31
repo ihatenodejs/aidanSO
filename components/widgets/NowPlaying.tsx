@@ -1,18 +1,26 @@
-"use client"
+'use client'
 
-import type React from "react"
-import { useEffect, useState } from "react"
-import { Loader2, AlertCircle } from "lucide-react"
-import { PiMusicNotesFill } from "react-icons/pi";
-import { FaBluetoothB } from "react-icons/fa6";
-import { IoBatteryFullSharp } from "react-icons/io5"
-import { IoIosPlay } from "react-icons/io"
-import { TbDiscOff } from "react-icons/tb"
-import { Progress } from "@/components/ui/progress"
-import Link from "@/components/objects/Link"
-import ScrollTxt from "@/components/objects/MusicText"
-import { connectSocket, disconnectSocket } from "@/lib/socket"
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import { Loader2, AlertCircle } from 'lucide-react'
+import { PiMusicNotesFill } from 'react-icons/pi'
+import { FaBluetoothB } from 'react-icons/fa6'
+import { IoBatteryFullSharp } from 'react-icons/io5'
+import { IoIosPlay } from 'react-icons/io'
+import { TbDiscOff } from 'react-icons/tb'
+import { Progress } from '@/components/ui/progress'
+import Link from '@/components/objects/Link'
+import ScrollTxt from '@/components/objects/MusicText'
+import { connectSocket, disconnectSocket } from '@/lib/socket'
 import { effects } from '@/lib/theme/effects'
+
+const formatTime = (date: Date) => {
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  })
+}
 
 interface LastFmResponse {
   album?: {
@@ -37,8 +45,10 @@ interface NowPlayingData {
 }
 
 const NowPlaying: React.FC = () => {
-  const [nowPlaying, setNowPlaying] = useState<NowPlayingData>({ status: 'loading' })
-  const [currentTime, setCurrentTime] = useState(new Date())
+  const [nowPlaying, setNowPlaying] = useState<NowPlayingData>({
+    status: 'loading'
+  })
+  const [currentTime, setCurrentTime] = useState('--:--')
   const [volume, setVolume] = useState(25)
   const [screenOn, setScreenOn] = useState(true)
   const [progressSteps, setProgressSteps] = useState({ current: 0, total: 3 })
@@ -58,7 +68,7 @@ const NowPlaying: React.FC = () => {
 
     socket.on('nowPlaying', (data: NowPlayingData) => {
       console.log('Received now playing data:', data)
-      setNowPlaying(prevState => ({
+      setNowPlaying((prevState) => ({
         ...prevState,
         ...data
       }))
@@ -87,29 +97,28 @@ const NowPlaying: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date())
-    }, 1000)
+    const updateTime = () => {
+      setCurrentTime(formatTime(new Date()))
+    }
+
+    updateTime()
+    const timer = setInterval(updateTime, 1000)
     return () => clearInterval(timer)
   }, [])
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    })
-  }
 
   const renderScreenContent = () => {
     if (nowPlaying.status === 'loading') {
       return (
-        <div className="flex flex-col items-center justify-center h-full">
-          <Loader2 className="animate-spin text-white mb-4" size={32} />
-          <div className="text-white text-xs text-center px-4">
+        <div className="flex h-full flex-col items-center justify-center">
+          <Loader2 className="mb-4 animate-spin text-white" size={32} />
+          <div className="px-4 text-center text-xs text-white">
             <div className="mb-2">{nowPlaying.message || 'Connecting...'}</div>
             <Progress
-              value={progressSteps.total > 0 ? (progressSteps.current * 100) / progressSteps.total : 0} 
+              value={
+                progressSteps.total > 0
+                  ? (progressSteps.current * 100) / progressSteps.total
+                  : 0
+              }
               className="h-1"
             />
           </div>
@@ -119,9 +128,9 @@ const NowPlaying: React.FC = () => {
 
     if (nowPlaying.status === 'error') {
       return (
-        <div className="flex flex-col items-center justify-center h-full">
-          <AlertCircle className="text-red-500 mb-4" size={32} />
-          <div className="text-red-500 text-xs text-center px-4">
+        <div className="flex h-full flex-col items-center justify-center">
+          <AlertCircle className="mb-4 text-red-500" size={32} />
+          <div className="px-4 text-center text-xs text-red-500">
             {nowPlaying.message || 'Error loading data'}
           </div>
         </div>
@@ -130,13 +139,21 @@ const NowPlaying: React.FC = () => {
 
     if (!nowPlaying.track_name) {
       return (
-        <div className="flex flex-col items-center justify-center h-full">
-          <TbDiscOff className="text-gray-400 mb-4" size={32} />
-          <div className="text-gray-400 text-xs text-center px-4">
+        <div className="flex h-full flex-col items-center justify-center">
+          <TbDiscOff className="mb-4 text-gray-400" size={32} />
+          <div className="px-4 text-center text-xs text-gray-400">
             Nothing playing
           </div>
-          <div className="text-gray-500 text-xs text-center px-4 mt-2">
-            Check my <Link href="https://listenbrainz.org/user/p0ntus" target="_blank" rel="noopener noreferrer" className="text-blue-400">ListenBrainz</Link>
+          <div className="mt-2 px-4 text-center text-xs text-gray-500">
+            Check my{' '}
+            <Link
+              href="https://listenbrainz.org/user/p0ntus"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400"
+            >
+              ListenBrainz
+            </Link>
           </div>
         </div>
       )
@@ -146,33 +163,52 @@ const NowPlaying: React.FC = () => {
     return (
       <>
         <a
-          href={nowPlaying.mbid ? `https://musicbrainz.org/release/${nowPlaying.mbid}` : `https://listenbrainz.org/user/p0ntus`}
+          href={
+            nowPlaying.mbid
+              ? `https://musicbrainz.org/release/${nowPlaying.mbid}`
+              : `https://listenbrainz.org/user/p0ntus`
+          }
           target="_blank"
           rel="noopener noreferrer"
-          className="border-b border-gray-700 px-2 py-0 block" style={{background: effects.gradients.musicPlayer}}
+          className="block border-b border-gray-700 px-2 py-0"
+          style={{ background: effects.gradients.musicPlayer }}
         >
-          <div className="text-center leading-none pb-1">
-            <ScrollTxt text={nowPlaying.artist_name?.toUpperCase() || ''} type="artist" className="-mt-0.5" />
-            <ScrollTxt text={nowPlaying.track_name || ''} type="track" className="-mt-0.5" />
-            {nowPlaying.release_name && <ScrollTxt text={nowPlaying.release_name} type="release" className="-mt-1.5" />}
+          <div className="pb-1 text-center leading-none">
+            <ScrollTxt
+              text={nowPlaying.artist_name?.toUpperCase() || ''}
+              type="artist"
+              className="-mt-0.5"
+            />
+            <ScrollTxt
+              text={nowPlaying.track_name || ''}
+              type="track"
+              className="-mt-0.5"
+            />
+            {nowPlaying.release_name && (
+              <ScrollTxt
+                text={nowPlaying.release_name}
+                type="release"
+                className="-mt-1.5"
+              />
+            )}
           </div>
         </a>
         {/* Album art */}
-        <div className="relative w-full aspect-square">
+        <div className="relative aspect-square w-full">
           {nowPlaying.status === 'partial' && !nowPlaying.coverArt ? (
-            <div className="w-full h-full bg-gray-700 flex flex-col items-center justify-center">
-              <Loader2 className="animate-spin text-gray-400 mb-2" size={32} />
-              <div className="text-gray-400 text-xs">Fetching Album Art</div>
+            <div className="flex h-full w-full flex-col items-center justify-center bg-gray-700">
+              <Loader2 className="mb-2 animate-spin text-gray-400" size={32} />
+              <div className="text-xs text-gray-400">Fetching Album Art</div>
             </div>
           ) : nowPlaying.coverArt ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={nowPlaying.coverArt}
               alt={nowPlaying.track_name || 'Album cover'}
-              className="w-full h-full object-cover"
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-gray-700 flex items-center justify-center">
+            <div className="flex h-full w-full items-center justify-center bg-gray-700">
               <PiMusicNotesFill size={74} className="text-gray-400" />
             </div>
           )}
@@ -182,106 +218,213 @@ const NowPlaying: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center items-center">
-      <div className={`relative w-52 bg-[#D4C29A] rounded-xs border border-[#BFAF8A] z-10 ${nowPlaying.release_name ? "h-[24.1rem]" : "h-[23.6rem]"}`}>
+    <div className="flex items-center justify-center">
+      <div
+        className={`relative z-10 w-52 rounded-xs border border-[#BFAF8A] bg-[#D4C29A] ${nowPlaying.release_name ? 'h-[24.1rem]' : 'h-[23.6rem]'}`}
+      >
         {/* Volume buttons */}
-        <div className="absolute -left-[2.55px] top-8 rounded-l w-[1.75px] flex flex-col z-0">
-          <div className="h-8 bg-[#BFAF8A] border-b border-[#A09070] rounded-l cursor-pointer" onClick={() => setVolume(v => Math.min(100, v + 5))}></div> {/* up */}
-          <div className="h-12 bg-[#A09070] translate-x-[0.65px] -my-[0.85px]"></div> {/* play/pause */}
-          <div className="h-8 bg-[#BFAF8A] border-t border-[#A09070] rounded-l cursor-pointer" onClick={() => setVolume(v => Math.max(0, v - 5))}></div> {/* down */}
+        <div className="absolute top-8 -left-[2.55px] z-0 flex w-[1.75px] flex-col rounded-l">
+          <div
+            className="h-8 cursor-pointer rounded-l border-b border-[#A09070] bg-[#BFAF8A]"
+            onClick={() => setVolume((v) => Math.min(100, v + 5))}
+          ></div>{' '}
+          {/* up */}
+          <div className="-my-[0.85px] h-12 translate-x-[0.65px] bg-[#A09070]"></div>{' '}
+          {/* play/pause */}
+          <div
+            className="h-8 cursor-pointer rounded-l border-t border-[#A09070] bg-[#BFAF8A]"
+            onClick={() => setVolume((v) => Math.max(0, v - 5))}
+          ></div>{' '}
+          {/* down */}
         </div>
         {/* Top power button */}
-        <div className="absolute right-1 -top-[3px] w-9 h-[3px] bg-[#BFAF8A] rounded-t-2xl cursor-pointer" onClick={() => setScreenOn(prev => !prev)}></div>
+        <div
+          className="absolute -top-[3px] right-1 h-[3px] w-9 cursor-pointer rounded-t-2xl bg-[#BFAF8A]"
+          onClick={() => setScreenOn((prev) => !prev)}
+        ></div>
         {/* White bezel (fuses screen+home btn) */}
-        <div className="absolute inset-2 bg-white rounded-sm overflow-hidden flex flex-col">
-        {/* Virtual screen */}
-        <div className="mx-2 mt-2 flex-1 bg-black overflow-hidden flex flex-col">
-          {screenOn && (
-            <div className="border-b border-gray-700" style={{background: effects.gradients.musicPlayer}}>
-              <div className="relative flex items-center pr-1 py-0.5">
-                <FaBluetoothB size={14} className="text-gray-400" />
-                <div className="absolute left-1/2 transform -translate-x-1/2 text-white text-xs font-medium">{formatTime(currentTime)}</div>
-                <div className="flex items-center gap-0.5 ml-auto ">
-                  <IoIosPlay size={14} className="text-white" />
-                  <IoBatteryFullSharp size={18} className="text-white" />
+        <div className="absolute inset-2 flex flex-col overflow-hidden rounded-sm bg-white">
+          {/* Virtual screen */}
+          <div className="mx-2 mt-2 flex flex-1 flex-col overflow-hidden bg-black">
+            {screenOn && (
+              <div
+                className="border-b border-gray-700"
+                style={{ background: effects.gradients.musicPlayer }}
+              >
+                <div className="relative flex items-center py-0.5 pr-1">
+                  <FaBluetoothB size={14} className="text-gray-400" />
+                  <div className="absolute left-1/2 -translate-x-1/2 transform text-xs font-medium text-white">
+                    {currentTime}
+                  </div>
+                  <div className="ml-auto flex items-center gap-0.5">
+                    <IoIosPlay size={14} className="text-white" />
+                    <IoBatteryFullSharp size={18} className="text-white" />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {screenOn ? renderScreenContent() : (
-            <div className="w-full h-full bg-black"></div>
-          )}
-          {/* Player controls and seekbar */}
-          {screenOn && nowPlaying.track_name && (
-            <div className={`${nowPlaying.release_name ? "pb-3" : "pb-[12.5px]"} flex flex-col items-center`} style={{background: effects.gradients.musicPlayer}}>
-              <div className="flex justify-center items-center gap-0 px-2">
-              <button className="hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter hover:brightness-110 transition-all duration-200 p-1 rounded-full overflow-hidden">
-                <svg width="38" height="34" viewBox="0 0 24 20" className="drop-shadow-sm">
-                  <defs>
-                    <linearGradient id="skipBackGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#f9fafb" />
-                      <stop offset="49%" stopColor="#e5e7eb" />
-                      <stop offset="51%" stopColor="#6b7280" />
-                      <stop offset="100%" stopColor="#d1d5db" />
-                    </linearGradient>
-                  </defs>
-                  <rect x="2" y="4" width="2" height="12" fill="url(#skipBackGradient)" />
-                  <polygon points="12,4 6,10 12,16" fill="url(#skipBackGradient)" />
-                  <polygon points="20,4 12,10 20,16" fill="url(#skipBackGradient)" />
-                </svg>
-              </button>
-              <div className="w-[1px] h-6 bg-gray-800 mx-0.5"></div>
-              <button className="hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter hover:brightness-110 transition-all duration-200 p-1 rounded-full overflow-hidden">
-                <svg width="38" height="38" viewBox="0 0 24 24" className="drop-shadow-sm">
-                  <defs>
-                    <linearGradient id="pauseGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#f9fafb" />
-                      <stop offset="49%" stopColor="#e5e7eb" />
-                      <stop offset="51%" stopColor="#6b7280" />
-                      <stop offset="100%" stopColor="#d1d5db" />
-                    </linearGradient>
-                  </defs>
-                  <rect x="6" y="4" width="4" height="16" fill="url(#pauseGradient)" />
-                  <rect x="14" y="4" width="4" height="16" fill="url(#pauseGradient)" />
-                </svg>
-              </button>
-              <div className="w-[1px] h-6 bg-gray-800 mx-1"></div>
-              <button className="hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter hover:brightness-110 transition-all duration-200 p-1 rounded-full overflow-hidden">
-                <svg width="38" height="34" viewBox="0 0 24 20" className="drop-shadow-sm">
-                  <defs>
-                    <linearGradient id="skipForwardGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#f9fafb" />
-                      <stop offset="49%" stopColor="#e5e7eb" />
-                      <stop offset="51%" stopColor="#6b7280" />
-                      <stop offset="100%" stopColor="#d1d5db" />
-                    </linearGradient>
-                  </defs>
-                  <polygon points="2,4 9,10 2,16" fill="url(#skipForwardGradient)" />
-                  <polygon points="9,4 17,10 9,16" fill="url(#skipForwardGradient)" />
-                  <rect x="18" y="4" width="2" height="12" fill="url(#skipForwardGradient)" />
-                </svg>
-              </button>
-              </div>
-              <div className="relative w-full flex justify-center mt-1">
-                <div className="w-38 h-2 bg-gray-800 rounded-full relative">
-                  <div className="absolute inset-0 bg-gradient-to-b from-white to-gray-600 rounded-full" style={{width: `${volume}%`}} />
-                  <div
-                    className="absolute top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 bg-gradient-to-b from-gray-200 via-gray-300 to-gray-500 rounded-full border border-gray-400 shadow-inner" style={{
-                    left: `calc(${volume}% - 8px)`,
-                    backgroundImage: 'radial-gradient(circle at 30% 30%, #f0f0f0 0%, #c0c0c0 60%, #808080 100%), repeating-conic-gradient(#f9fafb 0deg 45deg, #9ca3af 45deg 90deg)',
-                    backgroundBlendMode: 'overlay',
-                    boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 2px rgba(255,255,255,0.5)'
-                  }}></div>
-                  <input type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(Number(e.target.value))} className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" />
+            )}
+            {screenOn ? (
+              renderScreenContent()
+            ) : (
+              <div className="h-full w-full bg-black"></div>
+            )}
+            {/* Player controls and seekbar */}
+            {screenOn && nowPlaying.track_name && (
+              <div
+                className={`${nowPlaying.release_name ? 'pb-3' : 'pb-[12.5px]'} flex flex-col items-center`}
+                style={{ background: effects.gradients.musicPlayer }}
+              >
+                <div className="flex items-center justify-center gap-0 px-2">
+                  <button className="overflow-hidden rounded-full p-1 transition-all duration-200 hover:brightness-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter">
+                    <svg
+                      width="38"
+                      height="34"
+                      viewBox="0 0 24 20"
+                      className="drop-shadow-sm"
+                    >
+                      <defs>
+                        <linearGradient
+                          id="skipBackGradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="0%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="#f9fafb" />
+                          <stop offset="49%" stopColor="#e5e7eb" />
+                          <stop offset="51%" stopColor="#6b7280" />
+                          <stop offset="100%" stopColor="#d1d5db" />
+                        </linearGradient>
+                      </defs>
+                      <rect
+                        x="2"
+                        y="4"
+                        width="2"
+                        height="12"
+                        fill="url(#skipBackGradient)"
+                      />
+                      <polygon
+                        points="12,4 6,10 12,16"
+                        fill="url(#skipBackGradient)"
+                      />
+                      <polygon
+                        points="20,4 12,10 20,16"
+                        fill="url(#skipBackGradient)"
+                      />
+                    </svg>
+                  </button>
+                  <div className="mx-0.5 h-6 w-[1px] bg-gray-800"></div>
+                  <button className="overflow-hidden rounded-full p-1 transition-all duration-200 hover:brightness-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter">
+                    <svg
+                      width="38"
+                      height="38"
+                      viewBox="0 0 24 24"
+                      className="drop-shadow-sm"
+                    >
+                      <defs>
+                        <linearGradient
+                          id="pauseGradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="0%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="#f9fafb" />
+                          <stop offset="49%" stopColor="#e5e7eb" />
+                          <stop offset="51%" stopColor="#6b7280" />
+                          <stop offset="100%" stopColor="#d1d5db" />
+                        </linearGradient>
+                      </defs>
+                      <rect
+                        x="6"
+                        y="4"
+                        width="4"
+                        height="16"
+                        fill="url(#pauseGradient)"
+                      />
+                      <rect
+                        x="14"
+                        y="4"
+                        width="4"
+                        height="16"
+                        fill="url(#pauseGradient)"
+                      />
+                    </svg>
+                  </button>
+                  <div className="mx-1 h-6 w-[1px] bg-gray-800"></div>
+                  <button className="overflow-hidden rounded-full p-1 transition-all duration-200 hover:brightness-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter">
+                    <svg
+                      width="38"
+                      height="34"
+                      viewBox="0 0 24 20"
+                      className="drop-shadow-sm"
+                    >
+                      <defs>
+                        <linearGradient
+                          id="skipForwardGradient"
+                          x1="0%"
+                          y1="0%"
+                          x2="0%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="#f9fafb" />
+                          <stop offset="49%" stopColor="#e5e7eb" />
+                          <stop offset="51%" stopColor="#6b7280" />
+                          <stop offset="100%" stopColor="#d1d5db" />
+                        </linearGradient>
+                      </defs>
+                      <polygon
+                        points="2,4 9,10 2,16"
+                        fill="url(#skipForwardGradient)"
+                      />
+                      <polygon
+                        points="9,4 17,10 9,16"
+                        fill="url(#skipForwardGradient)"
+                      />
+                      <rect
+                        x="18"
+                        y="4"
+                        width="2"
+                        height="12"
+                        fill="url(#skipForwardGradient)"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <div className="relative mt-1 flex w-full justify-center">
+                  <div className="relative h-2 w-38 rounded-full bg-gray-800">
+                    <div
+                      className="absolute inset-0 rounded-full bg-gradient-to-b from-white to-gray-600"
+                      style={{ width: `${volume}%` }}
+                    />
+                    <div
+                      className="absolute top-1/2 h-3.5 w-3.5 -translate-y-1/2 transform rounded-full border border-gray-400 bg-gradient-to-b from-gray-200 via-gray-300 to-gray-500 shadow-inner"
+                      style={{
+                        left: `calc(${volume}% - 8px)`,
+                        backgroundImage:
+                          'radial-gradient(circle at 30% 30%, #f0f0f0 0%, #c0c0c0 60%, #808080 100%), repeating-conic-gradient(#f9fafb 0deg 45deg, #9ca3af 45deg 90deg)',
+                        backgroundBlendMode: 'overlay',
+                        boxShadow:
+                          'inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 2px rgba(255,255,255,0.5)'
+                      }}
+                    ></div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={volume}
+                      onChange={(e) => setVolume(Number(e.target.value))}
+                      className="absolute top-0 left-0 h-full w-full cursor-pointer opacity-0"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
           {/* Home button */}
           <div className="flex justify-center py-2">
-            <div className="w-8 h-8 bg-white rounded-full border border-gray-300 shadow flex items-center justify-center">
-              <div className="w-4 h-4 border-1 border-[#D4C29A] rounded-full"></div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white shadow">
+              <div className="h-4 w-4 rounded-full border-1 border-[#D4C29A]"></div>
             </div>
           </div>
         </div>

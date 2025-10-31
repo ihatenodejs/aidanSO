@@ -1,29 +1,29 @@
-"use client"
+'use client'
 
-import { useEffect } from "react";
+import { useEffect } from 'react'
 
 export default function AnimatedTitle() {
   useEffect(() => {
-    const title = 'aidan.so';
-    let index = 1;
-    let forward = true;
+    const title = 'aidan.so'
+    let index = 1
+    let forward = true
     const interval = setInterval(() => {
-      document.title = title.substring(0, index);
+      document.title = title.substring(0, index)
       if (forward) {
-        index++;
+        index++
         if (index > title.length) {
-          forward = false;
-          index = title.length - 1;
+          forward = false
+          index = title.length - 1
         }
       } else {
-        index--;
+        index--
         if (index < 1) {
-          forward = true;
-          index = 1;
+          forward = true
+          index = 1
         }
       }
-    }, 500);
-    return () => clearInterval(interval);
-  }, []);
-  return null;
+    }, 500)
+    return () => clearInterval(interval)
+  }, [])
+  return null
 }

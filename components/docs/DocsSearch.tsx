@@ -15,7 +15,7 @@ interface DocsSearchProps {
 export default function DocsSearch({
   items,
   onSearch,
-  className,
+  className
 }: DocsSearchProps) {
   const [query, setQuery] = useState('')
   const [isFocused, setIsFocused] = useState(false)
@@ -59,7 +59,9 @@ export default function DocsSearch({
           effects.transitions.colors
         )}
         style={{
-          borderColor: isFocused ? colors.borders.hover : colors.borders.default,
+          borderColor: isFocused
+            ? colors.borders.hover
+            : colors.borders.default,
           backgroundColor: colors.backgrounds.card
         }}
         onMouseEnter={(e) => {
@@ -118,7 +120,7 @@ export default function DocsSearch({
           <kbd
             className={cn(
               'absolute right-3',
-              'rounded border px-2 py-1 text-xs font-mono'
+              'rounded border px-2 py-1 font-mono text-xs'
             )}
             style={{
               borderColor: colors.borders.default,
@@ -132,10 +134,7 @@ export default function DocsSearch({
       </div>
 
       {query && (
-        <div
-          className="mt-2 text-xs"
-          style={{ color: colors.text.disabled }}
-        >
+        <div className="mt-2 text-xs" style={{ color: colors.text.disabled }}>
           {items.length} result{items.length !== 1 ? 's' : ''} found
         </div>
       )}

@@ -101,7 +101,7 @@ export function searchDocs(
   return results
     .map((item) => ({
       item,
-      score: calculateSearchScore(item, searchTerms),
+      score: calculateSearchScore(item, searchTerms)
     }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score)
@@ -193,7 +193,7 @@ export function searchAPIs(
   return endpoints
     .map((endpoint) => ({
       endpoint,
-      score: calculateAPIScore(endpoint, searchTerms),
+      score: calculateAPIScore(endpoint, searchTerms)
     }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score)
@@ -203,7 +203,10 @@ export function searchAPIs(
 /**
  * Calculate search score for API endpoint
  */
-function calculateAPIScore(endpoint: APIEndpoint, searchTerms: string[]): number {
+function calculateAPIScore(
+  endpoint: APIEndpoint,
+  searchTerms: string[]
+): number {
   let score = 0
   const path = endpoint.path.toLowerCase()
   const description = endpoint.description.toLowerCase()

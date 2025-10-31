@@ -13,8 +13,6 @@ export function Surface({
   className
 }: SurfaceProps) {
   return (
-    <div className={cn(surfaces.panel[variant], className)}>
-      {children}
-    </div>
+    <div className={cn(surfaces.panel[variant], className)}>{children}</div>
   )
 }

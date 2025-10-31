@@ -1,5 +1,6 @@
 import { CCData, DailyData, HeatmapDay, TimeRangeKey } from '@/lib/types'
 import { AIService } from '@/lib/services'
+import { Formatter } from '@/lib/utils/formatting'
 import type { HeatmapPalette } from '@/app/ai/theme'
 
 export const getModelLabel = (modelName: string): string => {
@@ -7,7 +8,7 @@ export const getModelLabel = (modelName: string): string => {
 }
 
 export const formatCurrency = (value: number) => `$${value.toFixed(2)}`
-export const formatTokens = (value: number) => `${value.toFixed(1)}M`
+export const formatTokens = (value: number) => Formatter.tokens(value)
 
 export const computeStreak = (daily: DailyData[]): number => {
   return AIService.computeStreak(daily)
@@ -23,7 +24,7 @@ export const computeFilledDailyRange = (daily: DailyData[]): DailyData[] => {
 
 export const buildDailyTrendData = (daily: DailyData[]) => {
   const trendData = AIService.buildDailyTrendData(daily)
-  return trendData.map(day => ({
+  return trendData.map((day) => ({
     date: day.date,
     cost: day.totalCost,
     tokens: day.totalTokens / 1000000,
@@ -31,15 +32,21 @@ export const buildDailyTrendData = (daily: DailyData[]) => {
     outputTokens: day.outputTokensNormalized,
     cacheTokens: day.cacheTokensNormalized,
     costTrend: day.costTrend,
-    tokensTrend: day.tokensTrend,
+    tokensTrend: day.tokensTrend
   }))
 }
 
-export const prepareHeatmapData = (daily: DailyData[]): (HeatmapDay | null)[][] => {
+export const prepareHeatmapData = (
+  daily: DailyData[]
+): (HeatmapDay | null)[][] => {
   return AIService.prepareHeatmapData(daily)
 }
 
-export const getHeatmapColor = (maxCost: number, value: number, palette: HeatmapPalette) => {
+export const getHeatmapColor = (
+  maxCost: number,
+  value: number,
+  palette: HeatmapPalette
+) => {
   return AIService.getHeatmapColor(maxCost, value, palette)
 }
 
@@ -67,53 +74,50 @@ export const computeTotalsFromDaily = (daily: DailyData[]) => {
   return AIService.computeTotalsFromDaily(daily)
 }
 
-const toUtcDate = (isoDate: string) => new Date(`${isoDate}T00:00:00Z`)
+const toLocalDate = (isoDate: string) => new Date(`${isoDate}T00:00:00`)
 
 export const formatTooltipDate = (isoDate: string): string => {
-  const date = toUtcDate(isoDate)
+  const date = toLocalDate(isoDate)
   if (Number.isNaN(date.getTime())) return isoDate
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString(undefined, {
     weekday: 'long',
     month: 'short',
     day: 'numeric',
-    year: 'numeric',
-    timeZone: 'UTC',
+    year: 'numeric'
   })
 }
 
-export const formatAxisLabel = (isoDate: string, range: TimeRangeKey): string => {
-  const date = toUtcDate(isoDate)
+export const formatAxisLabel = (
+  isoDate: string,
+  range: TimeRangeKey
+): string => {
+  const date = toLocalDate(isoDate)
   if (Number.isNaN(date.getTime())) return isoDate
 
   switch (range) {
     case '7d':
-      return date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        timeZone: 'UTC',
+      return date.toLocaleDateString(undefined, {
+        weekday: 'long'
       })
     case '1m':
     case '3m':
-      return date.toLocaleDateString('en-US', {
+      return date.toLocaleDateString(undefined, {
         month: 'short',
-        day: 'numeric',
-        timeZone: 'UTC',
+        day: 'numeric'
       })
     case '6m':
-      return date.toLocaleDateString('en-US', {
-        month: 'short',
-        timeZone: 'UTC',
+      return date.toLocaleDateString(undefined, {
+        month: 'short'
       })
     case '1y':
-      return date.toLocaleDateString('en-US', {
+      return date.toLocaleDateString(undefined, {
         month: 'short',
-        year: 'numeric',
-        timeZone: 'UTC',
+        year: 'numeric'
       })
     default:
-      return date.toLocaleDateString('en-US', {
+      return date.toLocaleDateString(undefined, {
         month: 'short',
-        day: 'numeric',
-        timeZone: 'UTC',
+        day: 'numeric'
       })
   }
 }

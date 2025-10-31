@@ -141,7 +141,17 @@ export type DocKind =
   | 'property'
   | 'enum'
 
-export type DocCategory = 'Services' | 'Utils' | 'Types' | 'Theme' | 'Devices' | 'Domains' | 'Docs' | 'API' | 'Other'
+export type DocCategory =
+  | 'Services'
+  | 'Utils'
+  | 'Types'
+  | 'Theme'
+  | 'Devices'
+  | 'Domains'
+  | 'Configuration'
+  | 'Docs'
+  | 'API'
+  | 'Other'
 
 export interface DocParameter {
   name: string

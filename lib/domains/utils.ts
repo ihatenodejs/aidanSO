@@ -394,7 +394,10 @@ export function getDaysUntilExpiration(domain: Domain): number {
  * @category Domains
  * @public
  */
-export function isExpiringSoon(domain: Domain, thresholdDays: number = 90): boolean {
+export function isExpiringSoon(
+  domain: Domain,
+  thresholdDays: number = 90
+): boolean {
   return getDaysUntilExpiration(domain) <= thresholdDays
 }
 

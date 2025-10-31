@@ -44,10 +44,40 @@ interface NowPlayingData {
 export class NowPlayingService {
   private readonly io: SocketServer
   private readonly lastFmApiKey: string | undefined
+  private cache: { data: NowPlayingData; timestamp: number } | null = null
+  private readonly CACHE_TTL = 20000 // 20 seconds cache
+  private readonly FETCH_TIMEOUT = 8000 // 8 seconds timeout
+  private pendingRequest: Promise<void> | null = null
 
   constructor(io: SocketServer) {
     this.io = io
     this.lastFmApiKey = process.env.LASTFM_API_KEY
+  }
+
+  /**
+   * Fetch with timeout wrapper
+   */
+  private async fetchWithTimeout(
+    url: string,
+    options?: RequestInit
+  ): Promise<Response> {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), this.FETCH_TIMEOUT)
+
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal
+      })
+      clearTimeout(timeout)
+      return response
+    } catch (error) {
+      clearTimeout(timeout)
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Request timeout')
+      }
+      throw error
+    }
   }
 
   async fetchNowPlaying(socketId: string) {
@@ -55,10 +85,40 @@ export class NowPlayingService {
       this.io.to(socketId).emit('nowPlaying', data)
     }
 
+    // Check cache first
+    if (this.cache && Date.now() - this.cache.timestamp < this.CACHE_TTL) {
+      emit(this.cache.data)
+      return
+    }
+
+    // Request deduplication: if a request is already in progress, wait for it
+    if (this.pendingRequest) {
+      await this.pendingRequest
+      // After the pending request completes, send the cached result
+      if (this.cache) {
+        emit(this.cache.data)
+      }
+      return
+    }
+
+    // Start new request
+    this.pendingRequest = this.performFetch(socketId)
+    try {
+      await this.pendingRequest
+    } finally {
+      this.pendingRequest = null
+    }
+  }
+
+  private async performFetch(socketId: string) {
+    const emit = (data: Partial<NowPlayingData>) => {
+      this.io.to(socketId).emit('nowPlaying', data)
+    }
+
     try {
       emit({ status: 'loading', message: 'Fetching from ListenBrainz...' })
 
-      const listenBrainzResponse = await fetch(
+      const listenBrainzResponse = await this.fetchWithTimeout(
         'https://api.listenbrainz.org/1/user/p0ntus/playing-now',
         {
           headers: process.env.LISTENBRAINZ_TOKEN
@@ -78,10 +138,12 @@ export class NowPlayingService {
       const listenBrainzData = await listenBrainzResponse.json()
 
       if (listenBrainzData.payload.count === 0) {
-        emit({
+        const result: NowPlayingData = {
           status: 'complete',
           message: 'No track currently playing'
-        })
+        }
+        this.cache = { data: result, timestamp: Date.now() }
+        emit(result)
         return
       }
 
@@ -170,7 +232,7 @@ export class NowPlayingService {
           })
 
           try {
-            const coverArtResponse = await fetch(
+            const coverArtResponse = await this.fetchWithTimeout(
               `https://coverartarchive.org/release/${trackMetadata.additional_info.release_mbid}/front`
             )
 
@@ -193,7 +255,7 @@ export class NowPlayingService {
           })
 
           try {
-            const mbSearchResponse = await fetch(
+            const mbSearchResponse = await this.fetchWithTimeout(
               `https://musicbrainz.org/ws/2/release/?query=artist:${encodeURIComponent(
                 trackMetadata.artist_name
               )}%20AND%20release:${encodeURIComponent(trackMetadata.release_name)}&fmt=json&limit=1`
@@ -206,7 +268,7 @@ export class NowPlayingService {
                 const releaseMbid = mbData.releases[0].id
 
                 try {
-                  const coverArtResponse = await fetch(
+                  const coverArtResponse = await this.fetchWithTimeout(
                     `https://coverartarchive.org/release/${releaseMbid}/front`
                   )
 
@@ -227,7 +289,7 @@ export class NowPlayingService {
         }
       }
 
-      emit({
+      const result: NowPlayingData = {
         status: 'complete',
         track_name: trackMetadata.track_name,
         artist_name: trackMetadata.artist_name,
@@ -236,14 +298,19 @@ export class NowPlayingService {
         coverArt: finalCoverArt || null,
         lastFmData: lastFmData || undefined,
         message: 'Complete'
-      })
+      }
+
+      // Cache successful result
+      this.cache = { data: result, timestamp: Date.now() }
+      emit(result)
     } catch (error) {
-      console.error('[!] Error in fetchNowPlaying:', error)
-      emit({
+      console.error('[!] Error in performFetch:', error)
+      const errorResult: NowPlayingData = {
         status: 'error',
         message:
           error instanceof Error ? error.message : 'Unknown error occurred'
-      })
+      }
+      emit(errorResult)
     }
   }
 
@@ -253,7 +320,7 @@ export class NowPlayingService {
     if (!this.lastFmApiKey) return null
 
     try {
-      const response = await fetch(
+      const response = await this.fetchWithTimeout(
         `https://ws.audioscrobbler.com/2.0/?method=track.getInfoByMbid&mbid=${mbid}&api_key=${this.lastFmApiKey}&format=json`
       )
 
@@ -283,7 +350,7 @@ export class NowPlayingService {
         autocorrect: '1'
       })
 
-      const response = await fetch(
+      const response = await this.fetchWithTimeout(
         `https://ws.audioscrobbler.com/2.0/?${params}`
       )
 

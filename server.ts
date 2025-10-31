@@ -16,11 +16,11 @@ import { Server } from 'socket.io'
 import { NowPlayingService } from './lib/now-playing-server'
 
 const dev = process.env.NODE_ENV !== 'production'
-const hostname = 'localhost'
+const hostname = dev ? 'localhost' : (process.env.HOSTNAME || '0.0.0.0')
 const initialPort = parseInt(process.env.PORT || '3000', 10)
 const maxPortAttempts = 10
 
-const app = next({ dev, hostname, port: initialPort })
+const app = next({ dev, hostname })
 const handler = app.getRequestHandler()
 
 /**
@@ -59,10 +59,44 @@ function startServer(port: number, attempt: number = 0): void {
     })
   }
 
-  const io = new Server(httpServer)
+  const io = new Server(httpServer, {
+    cors: {
+      origin: dev
+        ? ['http://localhost:3000', 'http://localhost:3001']
+        : (process.env.CORS_ORIGIN || '*'),
+      methods: ['GET', 'POST'],
+      credentials: true
+    },
+    maxHttpBufferSize: 1e6, // 1MB
+    pingTimeout: 60000, // 60s
+    pingInterval: 25000, // 25s
+    transports: ['websocket', 'polling'],
+    allowEIO3: true,
+    connectTimeout: 45000
+  })
+
   const refreshIntervals = new Map<string, NodeJS.Timeout>()
+  const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 
   const nowPlayingService = new NowPlayingService(io)
+
+  // Rate limiting helper (10 requests per minute per socket)
+  const checkRateLimit = (socketId: string): boolean => {
+    const now = Date.now()
+    const limit = rateLimitMap.get(socketId)
+
+    if (!limit || now > limit.resetTime) {
+      rateLimitMap.set(socketId, { count: 1, resetTime: now + 60000 })
+      return true
+    }
+
+    if (limit.count >= 10) {
+      return false
+    }
+
+    limit.count++
+    return true
+  }
 
   io.on('connection', (socket) => {
     console.log('[WS] Client connected:', socket.id)
@@ -76,6 +110,14 @@ function startServer(port: number, attempt: number = 0): void {
     }
 
     socket.on('requestNowPlaying', async () => {
+      if (!checkRateLimit(socket.id)) {
+        socket.emit('nowPlaying', {
+          status: 'error',
+          message: 'Rate limit exceeded. Please wait before requesting again.'
+        })
+        return
+      }
+
       await nowPlayingService.fetchNowPlaying(socket.id)
     })
 
@@ -91,6 +133,7 @@ function startServer(port: number, attempt: number = 0): void {
 
     socket.once('disconnect', () => {
       stopAutoRefresh()
+      rateLimitMap.delete(socket.id)
       console.log('[WS] Client disconnected:', socket.id)
     })
   })

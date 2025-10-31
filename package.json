@@ -14,6 +14,7 @@
     "format:check": "prettier --check .",
     "test": "bun test",
     "scan": "bash -lc 'trap \"kill 0\" EXIT; bun run server.ts & bunx react-scan@latest localhost:3000'",
+    "best-practices": "bun tools/best-practices.ts",
     "check:best": "bun tools/best-practices.ts",
     "sync:usage": "bun tools/sync-usage.ts"
   },

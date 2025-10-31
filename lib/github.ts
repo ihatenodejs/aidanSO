@@ -49,6 +49,48 @@ const REPO_LIMIT = 4
 /** Cache revalidation time in seconds (1 hour) */
 const REVALIDATE_SECONDS = 60 * 60
 
+/** Default timeout for outbound fetch requests (in milliseconds) */
+const FETCH_TIMEOUT_MS = 5000
+
+type ExtendedRequestInit = RequestInit & {
+  next?: {
+    revalidate?: number
+    tags?: string[]
+  }
+}
+
+/**
+ * Perform a fetch that automatically aborts after the provided timeout.
+ *
+ * @param input - Request input
+ * @param init - Request options
+ * @param timeoutMs - Timeout in milliseconds before aborting
+ */
+async function fetchWithTimeout(
+  input: RequestInfo | URL,
+  init: ExtendedRequestInit = {},
+  timeoutMs: number = FETCH_TIMEOUT_MS
+): Promise<Response> {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: controller.signal
+    })
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error(
+        `Request timed out after ${timeoutMs}ms${typeof input === 'string' ? ` (${input})` : ''}`
+      )
+    }
+    throw error
+  } finally {
+    clearTimeout(timeoutId)
+  }
+}
+
 /** GitHub API repository response structure */
 interface GitHubRepoApi {
   id: number
@@ -205,7 +247,7 @@ const fetchRecentRepos = async (
   url.searchParams.set('per_page', REPO_LIMIT.toString())
 
   try {
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       headers: buildGitHubHeaders(),
       next: {
         revalidate: REVALIDATE_SECONDS,
@@ -301,7 +343,7 @@ const fetchGitHubRepoMetrics = async (
   repo: string
 ): Promise<RepoMetrics | null> => {
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `https://api.github.com/repos/${owner}/${repo}`,
       {
         headers: buildGitHubHeaders(),
@@ -366,7 +408,7 @@ const fetchForgejoRepoMetrics = async (
   try {
     const apiUrl = `https://${forgejoBaseUrl}/api/v1/repos/${owner}/${repo}`
 
-    const response = await fetch(apiUrl, {
+    const response = await fetchWithTimeout(apiUrl, {
       headers: {
         Accept: 'application/json',
         'User-Agent': 'aidan.so'

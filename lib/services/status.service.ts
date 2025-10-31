@@ -51,7 +51,7 @@ type ServiceCheckResult = {
 
 export class StatusService {
   /** Timeout for HTTP requests in milliseconds */
-  private static readonly REQUEST_TIMEOUT = 10000
+  private static readonly REQUEST_TIMEOUT = 5000
 
   /**
    * Checks the operational status of a single service URL.
@@ -119,12 +119,12 @@ export class StatusService {
 
     await attemptRequest('HEAD')
 
-    const lastResponse = responses.length
-      ? responses[responses.length - 1]
-      : null
+    const lastHeadResponse = [...responses]
+      .reverse()
+      .find((entry) => entry.method === 'HEAD')
     const shouldFallbackToGet =
-      !lastResponse ||
-      !StatusService.isOperationalStatus(lastResponse.response.status)
+      lastHeadResponse !== undefined &&
+      !StatusService.isOperationalStatus(lastHeadResponse.response.status)
 
     if (shouldFallbackToGet) {
       await attemptRequest('GET')

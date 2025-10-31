@@ -8,9 +8,7 @@ import RandomFooterMsg from '../../objects/RandomFooterMsg'
 
 import { getContactLinks } from '@/lib/config/contact'
 import { getDonationGroups } from '@/lib/config/donations'
-import { getSystemHealthConfig } from '@/lib/config/status'
 import { getRecentGitHubRepos } from '@/lib/github'
-import { StatusService } from '@/lib/services'
 import { colors, surfaces } from '@/lib/theme'
 import type {
   FooterMenuRenderContext,
@@ -27,6 +25,7 @@ import {
   FOOTER_ROLES,
   footerNavigationLinks
 } from '../../../lib/config/footer'
+import SystemStatusClient from './SystemStatusClient'
 import type { FooterProps } from './types'
 
 interface FooterLinkProps {
@@ -103,57 +102,6 @@ const getRoleByIndex = (index: number | undefined): string => {
     FOOTER_ROLES.length
   return (
     FOOTER_ROLES[safeIndex] ?? FOOTER_ROLES[0] ?? 'Chief Synergy Evangelist'
-  )
-}
-
-/**
- * System Status Indicator Component
- *
- * @remarks
- * Displays real-time system health status in the footer.
- * Shows "All Systems Operational" when all services are up,
- * or an alert when there are issues.
- *
- * Links to the /status page for detailed information.
- */
-async function SystemStatus() {
-  let healthConfig: ReturnType<typeof getSystemHealthConfig> | null = null
-
-  try {
-    const report = await StatusService.checkAllServices()
-    healthConfig = getSystemHealthConfig(report.overallHealth)
-  } catch (error) {
-    // Fail gracefully - don't show status if check fails
-    console.error('Failed to check system status:', error)
-    return null
-  }
-
-  if (!healthConfig) {
-    return null
-  }
-
-  const statusTextColor =
-    healthConfig.tone === 'positive'
-      ? colors.text.disabled
-      : healthConfig.tone === 'warning'
-        ? colors.accents.warning
-        : colors.accents.error
-
-  return (
-    <div className="flex items-center justify-center space-x-4 text-sm sm:justify-end">
-      <Link
-        href="/status"
-        className="flex items-center transition-opacity hover:opacity-80"
-      >
-        <span
-          className={cn(
-            'mr-2 h-2 w-2 animate-pulse rounded-full',
-            healthConfig.indicatorClass
-          )}
-        />
-        <span style={{ color: statusTextColor }}>{healthConfig.label}</span>
-      </Link>
-    </div>
   )
 }
 
@@ -331,7 +279,7 @@ export default async function Footer({
               <RandomFooterMsg index={footerMessageIndex} />
             </div>
 
-            <SystemStatus />
+            <SystemStatusClient />
           </div>
         </div>
       </div>

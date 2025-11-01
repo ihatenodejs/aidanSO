@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { SiClaude, SiOpenai } from 'react-icons/si'
+import { PROVIDER_CONFIGS } from '@/lib/config/ai-providers'
 import { toolThemes, type ToolTheme, type ProviderId } from '@/app/ai/theme'
 
 interface PageHeaderProps {
@@ -16,43 +16,53 @@ export default function PageHeader({
   const iconSize = 48
 
   const renderIcons = (): React.JSX.Element => {
-    if (selectedProvider === 'claudeCode') {
-      return <SiClaude size={iconSize} style={{ color: theme.accent }} />
-    } else if (selectedProvider === 'codex') {
+    if (selectedProvider !== 'all') {
+      const config = PROVIDER_CONFIGS[selectedProvider]
+      const Icon = config.icon
+
+      if (!Icon) {
+        return <div style={{ width: iconSize, height: iconSize }} />
+      }
+
       return (
-        <SiOpenai
-          size={iconSize}
-          style={{ color: theme.accent }}
-          className="drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]"
-        />
-      )
-    } else {
-      return (
-        <div className="flex justify-center gap-3 sm:gap-4">
-          <SiClaude
-            size={iconSize}
-            style={{ color: toolThemes.claudeCode.accent }}
-          />
-          <SiOpenai
-            size={iconSize}
-            style={{ color: toolThemes.codex.accent }}
-            className="drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]"
-          />
+        <div style={{ color: theme.accent, fontSize: iconSize }}>
+          <Icon className="drop-shadow-[0_0_12px_rgba(255,255,255,0.15)]" />
         </div>
       )
     }
+
+    return (
+      <div className="flex justify-center gap-3 sm:gap-4">
+        {(['claudeCode', 'codex', 'opencode', 'qwen', 'gemini'] as const).map(
+          (providerId) => {
+            const config = PROVIDER_CONFIGS[providerId]
+            const Icon = config.icon
+            const providerTheme = toolThemes[providerId]
+
+            if (!Icon) return null
+
+            return (
+              <div
+                key={providerId}
+                style={{ color: providerTheme.accent, fontSize: iconSize }}
+              >
+                <Icon className="drop-shadow-[0_0_12px_rgba(255,255,255,0.1)]" />
+              </div>
+            )
+          }
+        )}
+      </div>
+    )
   }
 
   const getTitle = (): string => {
-    if (selectedProvider === 'claudeCode') return 'Claude Code Usage'
-    if (selectedProvider === 'codex') return 'Codex Usage'
-    return 'AI Usage'
+    if (selectedProvider === 'all') return 'AI Usage'
+    return `${PROVIDER_CONFIGS[selectedProvider].displayName} Usage`
   }
 
   const getSubtitle = (): string => {
-    if (selectedProvider === 'claudeCode') return 'Track my Claude Code usage'
-    if (selectedProvider === 'codex') return 'Track my Codex usage'
-    return 'Track my AI usage across providers'
+    if (selectedProvider === 'all') return 'Track my AI usage across providers'
+    return `Track my ${PROVIDER_CONFIGS[selectedProvider].displayName} usage`
   }
 
   return (

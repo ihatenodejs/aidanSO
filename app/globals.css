@@ -74,6 +74,17 @@
   }
 }
 
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hover\:glow {
   transition: text-shadow 0.3s ease;
   text-shadow: 0 0 0px rgba(255, 255, 255, 0);

@@ -43,7 +43,12 @@ export default function TokenType({ totals, theme }: TokenTypeProps) {
     const percentage = dataPoint?.percentage ?? 0
 
     return (
-      <div className="rounded-md border border-gray-700 bg-gray-900/80 px-3 py-2 text-sm text-gray-100">
+      <div
+        className="rounded-md border border-gray-700 bg-gray-900/95 px-3 py-2 text-sm text-gray-100 shadow-lg backdrop-blur-sm"
+        style={{
+          animation: 'tooltipFadeIn 200ms ease-out'
+        }}
+      >
         <p className="font-medium">
           {dataPoint?.name ?? firstEntry?.name ?? 'Token Type'}
         </p>

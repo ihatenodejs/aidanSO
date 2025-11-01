@@ -1,9 +1,19 @@
 'use client'
 
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts'
+import type { TooltipProps } from 'recharts'
+import type {
+  Payload,
+  ValueType,
+  NameType
+} from 'recharts/types/component/DefaultTooltipContent'
 import { DailyData } from '@/lib/types'
 import { buildModelUsageData, formatCurrency } from './utils'
 import type { ToolTheme } from '@/app/ai/theme'
+
+type ModelTooltipProps = TooltipProps<ValueType, NameType> & {
+  payload?: Payload<ValueType, NameType>[]
+}
 
 interface ModelUsageCardProps {
   daily: DailyData[]
@@ -18,6 +28,34 @@ export default function ModelUsageCard({
 }: ModelUsageCardProps) {
   const modelUsageData = buildModelUsageData(daily)
   const palette = theme.chart.pie
+
+  const renderTooltip = ({ active, payload }: ModelTooltipProps) => {
+    if (!active || !payload?.length) return null
+
+    const [firstEntry] = payload
+    const dataPoint = (firstEntry?.payload ?? null) as
+      | (typeof modelUsageData)[number]
+      | null
+    const rawValue = Number(firstEntry?.value ?? 0)
+    const formattedCost = formatCurrency(rawValue)
+    const percentage = dataPoint?.percentage ?? 0
+    const modelName = dataPoint?.name ?? 'Unknown Model'
+
+    return (
+      <div
+        className="rounded-md border border-gray-700 bg-gray-900/95 px-3 py-2 text-sm text-gray-100 shadow-lg backdrop-blur-sm"
+        style={{
+          animation: 'tooltipFadeIn 200ms ease-out'
+        }}
+      >
+        <p className="font-medium">{modelName}</p>
+        <p className="text-xs text-gray-400">
+          {percentage.toFixed(1)}% · {formattedCost}
+        </p>
+      </div>
+    )
+  }
+
   return (
     <section className="col-span-2 rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600 sm:p-6 lg:col-span-1 lg:p-8">
       <h2 className="mb-4 text-xl font-semibold text-gray-200 sm:text-2xl">
@@ -36,6 +74,7 @@ export default function ModelUsageCard({
                 fill="#8884d8"
                 paddingAngle={2}
                 dataKey="value"
+                isAnimationActive={false}
               >
                 {modelUsageData.map((_entry, index) => (
                   <Cell
@@ -44,22 +83,7 @@ export default function ModelUsageCard({
                   />
                 ))}
               </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#1f2937',
-                  border: '1px solid #374151',
-                  borderRadius: '8px'
-                }}
-                formatter={(value: number, _name, props) => {
-                  const percentage = props?.payload?.percentage ?? 0
-                  return [
-                    `${formatCurrency(Number(value))} · ${percentage.toFixed(1)}%`,
-                    'Cost'
-                  ]
-                }}
-                labelStyle={{ color: '#fff' }}
-                itemStyle={{ color: '#fff' }}
-              />
+              <Tooltip content={renderTooltip} animationDuration={0} />
             </PieChart>
           </ResponsiveContainer>
         </div>

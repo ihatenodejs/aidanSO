@@ -2,7 +2,7 @@
  * Theme system entry point providing centralized access to design tokens.
  *
  * @remarks
- * This module serves as the main entry point for the aidxnCC theme system,
+ * This module serves as the main entry point for the aidanSO theme system,
  * providing a unified interface for colors, visual effects, and surface styling.
  * All theme tokens are designed to work seamlessly with Tailwind CSS v4.
  *

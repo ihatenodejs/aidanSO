@@ -77,7 +77,7 @@ export default function TypeDoc({
           </div>
           {item.source && (
             <a
-              href={`https://github.com/ihatenodejs/aidxnCC/blob/main/${item.source.file}#L${item.source.line}`}
+              href={`https://github.com/ihatenodejs/aidanSO/blob/main/${item.source.file}#L${item.source.line}`}
               target="_blank"
               rel="noopener noreferrer"
               className={cn(

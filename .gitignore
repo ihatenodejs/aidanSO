@@ -49,3 +49,6 @@ bun.lockb
 
 # webstorm
 .idea/
+
+# docs
+public/docs

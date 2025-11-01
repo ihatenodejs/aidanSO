@@ -1,14 +1,14 @@
-"use client"
+'use client'
 
-import { useEffect, useState } from "react"
-import { connectSocket } from "@/lib/socket"
+import { useEffect, useState } from 'react'
+import { connectSocket } from '@/lib/socket'
 
 const LiveIndicator = () => {
   const [connected, setConnected] = useState(false)
 
   useEffect(() => {
     const socket = connectSocket()
-    
+
     socket.on('connect', () => {
       setConnected(true)
     })
@@ -24,10 +24,12 @@ const LiveIndicator = () => {
   }, [])
 
   return (
-    <div className="flex items-center gap-1 bg-black bg-opacity-50 rounded-full px-2 py-1">
-      <div className={`w-1 h-1 rounded-full ${connected ? "bg-red-400 animate-pulse" : "bg-gray-400"}`}></div>
-      <div className="text-white text-xs">
-        {connected ? "LIVE" : "Connecting..."}
+    <div className="bg-opacity-50 flex items-center gap-1 rounded-full bg-black px-2 py-1">
+      <div
+        className={`h-1 w-1 rounded-full ${connected ? 'animate-pulse bg-red-400' : 'bg-gray-400'}`}
+      ></div>
+      <div className="text-xs text-white">
+        {connected ? 'LIVE' : 'Connecting...'}
       </div>
     </div>
   )

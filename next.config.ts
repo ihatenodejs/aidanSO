@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   output: 'standalone',
@@ -8,17 +8,17 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'p0ntus.com',
         port: '',
-        pathname: '/**',
+        pathname: '/**'
       },
       {
         protocol: 'https',
         hostname: 'github-readme-stats.vercel.app',
         port: '',
-        pathname: '/**',
-      },
+        pathname: '/**'
+      }
     ],
-    dangerouslyAllowSVG: true,
-  },
-};
+    dangerouslyAllowSVG: true
+  }
+}
 
-export default nextConfig;
+export default nextConfig

@@ -1,12 +1,11 @@
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react'
 
 const LoadingSpinner: React.FC = () => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <Loader2 className="w-12 h-12 text-white animate-spin" />
+    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
+      <Loader2 className="h-12 w-12 animate-spin text-white" />
     </div>
-  );
-};
+  )
+}
 
-export default LoadingSpinner;
-
+export default LoadingSpinner

@@ -1,5 +1,5 @@
 services:
-  aidxncc:
+  aidanso:
     build: .
     ports:
       - 3000:3000

@@ -3,64 +3,70 @@ import type { MetadataRoute } from 'next'
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: 'https://aidxn.cc',
+      url: 'https://aidan.so',
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 1.0,
+      priority: 1.0
     },
     {
-      url: 'https://aidxn.cc/about',
+      url: 'https://aidan.so/about',
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.8,
+      priority: 0.8
     },
     {
-      url: 'https://aidxn.cc/ai',
+      url: 'https://aidan.so/ai',
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.9,
+      priority: 0.9
     },
     {
-      url: 'https://aidxn.cc/ai/claude',
+      url: 'https://aidan.so/ai/usage',
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 0.9,
+      priority: 0.9
     },
     {
-      url: 'https://aidxn.cc/contact',
+      url: 'https://aidan.so/contact',
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.8
     },
     {
-      url: 'https://aidxn.cc/domains',
+      url: 'https://aidan.so/domains',
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.8
     },
     {
-      url: 'https://aidxn.cc/device/cheetah',
+      url: 'https://aidan.so/device/cheetah',
       lastModified: new Date(),
       changeFrequency: 'weekly' /* yes, i really re-flash roms this often */,
-      priority: 0.8,
+      priority: 0.8
     },
     {
-      url: 'https://aidxn.cc/device/bonito',
+      url: 'https://aidan.so/device/bonito',
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.8,
+      priority: 0.8
     },
     {
-      url: 'https://aidxn.cc/device/komodo',
+      url: 'https://aidan.so/device/komodo',
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.8,
+      priority: 0.8
     },
     {
-      url: 'https://aidxn.cc/manifesto',
+      url: 'https://aidan.so/device/jm21',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8
+    },
+    {
+      url: 'https://aidan.so/manifesto',
       lastModified: new Date(),
       changeFrequency: 'yearly',
-      priority: 0.7,
-    },
+      priority: 0.7
+    }
   ]
 }

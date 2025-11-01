@@ -1,5 +1,5 @@
-import { Star } from 'lucide-react'
 import { TbTool } from 'react-icons/tb'
+import PaginatedCardList from '@/components/ui/PaginatedCardList'
 import type { AIReview } from '../types'
 
 interface FavoriteToolsProps {
@@ -8,51 +8,56 @@ interface FavoriteToolsProps {
 
 export default function FavoriteTools({ reviews }: FavoriteToolsProps) {
   return (
-    <section className="p-4 sm:p-8 border-2 border-gray-700 rounded-lg hover:border-gray-600 transition-colors duration-300">
-      <div className="flex flex-row justify-between">
-        <h2 className="text-2xl font-semibold mb-6 text-gray-200 flex items-center gap-2">
-          <TbTool size={24} />
-          Favorite Tools
-        </h2>
-        <p className="text-muted-foreground italic text-sm">Based on personal preference</p>
-      </div>
-      <div className="space-y-4">
-        {reviews.map((review, index) => (
-          <div key={index} className="p-4 bg-gray-800/50 rounded-lg">
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-gray-200">{review.tool}</h3>
-              <div className="flex gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={14}
-                    className={i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-600'}
-                  />
-                ))}
-              </div>
+    <PaginatedCardList
+      items={reviews}
+      title="Favorite Tools"
+      icon={<TbTool size={24} />}
+      subtitle="Based on personal preference"
+      itemsPerPage={3}
+      getItemKey={(review) => review.tool}
+      renderItem={(review) => (
+        <div className="rounded-lg bg-gray-800/50 p-3 sm:p-4">
+          <div className="mb-2 flex items-center justify-between gap-2 sm:mb-3">
+            <h3 className="flex-1 truncate text-sm font-semibold text-gray-200 sm:text-base">
+              {review.tool}
+            </h3>
+            <div className="flex shrink-0 items-center gap-1 rounded-md border border-yellow-400/20 bg-yellow-400/10 px-2 py-0.5 sm:px-3 sm:py-1">
+              <span className="sm:text-md text-base font-bold text-yellow-400">
+                {review.rating.toFixed(1)}
+              </span>
             </div>
-            <div className="grid grid-cols-2 gap-2 mb-2 text-sm">
-              <div>
-                <p className="text-green-400 font-medium mb-1">Pros:</p>
-                <ul className="text-gray-300 space-y-1">
-                  {review.pros.map((pro, i) => (
-                    <li key={i} className="text-xs">• {pro}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="text-red-400 font-medium mb-1">Cons:</p>
-                <ul className="text-gray-300 space-y-1">
-                  {review.cons.map((con, i) => (
-                    <li key={i} className="text-xs">• {con}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <p className="text-sm text-blue-400 font-medium">{review.verdict}</p>
           </div>
-        ))}
-      </div>
-    </section>
+          <div className="mb-2 grid grid-cols-2 gap-2 text-xs sm:text-sm">
+            <div>
+              <p className="mb-1 text-xs font-medium text-green-400/65 sm:text-sm">
+                Pros:
+              </p>
+              <ul className="space-y-0.5 text-gray-300 sm:space-y-1">
+                {review.pros.map((pro, i) => (
+                  <li key={i} className="text-xs leading-tight">
+                    • {pro}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="mb-1 text-xs font-medium text-red-400/65 sm:text-sm">
+                Cons:
+              </p>
+              <ul className="space-y-0.5 text-gray-300 sm:space-y-1">
+                {review.cons.map((con, i) => (
+                  <li key={i} className="text-xs leading-tight">
+                    • {con}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p className="mt-4 text-xs font-medium text-slate-400 sm:text-sm">
+            {review.verdict}
+          </p>
+        </div>
+      )}
+    />
   )
 }

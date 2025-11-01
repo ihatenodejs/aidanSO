@@ -1,0 +1,94 @@
+'use client'
+
+import Image from 'next/image'
+import Link from '@/components/objects/Link'
+import { DeviceService } from '@/lib/services'
+import { Smartphone } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+/**
+ * Widget for displaying devices on the home page.
+ * Shows a truncated list of devices with images and basic details.
+ */
+export default function DeviceShowcase() {
+  const devices = DeviceService.getAllDevicesEnriched()
+
+  const displayDevices = devices
+    .sort((a, b) => {
+      if (
+        a.status?.toLowerCase().includes('daily') &&
+        !b.status?.toLowerCase().includes('daily')
+      )
+        return -1
+      if (
+        !a.status?.toLowerCase().includes('daily') &&
+        b.status?.toLowerCase().includes('daily')
+      )
+        return 1
+
+      return (b.releaseYear || 0) - (a.releaseYear || 0)
+    })
+    .slice(0, 3)
+
+  return (
+    <div className="flex h-full flex-col">
+      <div className="mb-4 flex items-center gap-2">
+        <Smartphone className="h-5 w-5 text-gray-300" />
+        <h3 className="text-lg font-semibold text-gray-200">My Devices</h3>
+      </div>
+
+      <div className="flex flex-1 flex-col gap-4">
+        {displayDevices.map((device) => (
+          <Link
+            key={device.slug}
+            href={`/device/${device.slug}`}
+            variant="muted"
+            className={cn(
+              'group relative flex items-center gap-3 rounded-md border border-gray-700 bg-gray-900/30 p-3',
+              'transition-all duration-200 hover:border-gray-600 hover:bg-gray-800/40 hover:no-underline'
+            )}
+          >
+            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md bg-gray-800">
+              <Image
+                src={device.heroImage.src}
+                alt={device.heroImage.alt}
+                fill
+                className="object-contain p-1"
+              />
+            </div>
+
+            <div className="flex min-w-0 flex-1 flex-col">
+              <h4 className="truncate text-sm font-medium text-gray-100 group-hover:text-blue-400">
+                {device.shortName || device.name}
+              </h4>
+              {device.status && (
+                <p className="truncate text-xs text-gray-400">
+                  {device.status}
+                </p>
+              )}
+              {device.manufacturer && (
+                <p className="truncate text-xs text-gray-500">
+                  {device.manufacturer}
+                </p>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {devices.length > 3 && (
+        <div className="mt-4 border-t border-gray-700 pt-4">
+          <div className="flex items-center justify-between text-sm text-gray-400">
+            <span>
+              + {devices.length - 3} more device
+              {devices.length - 3 !== 1 ? 's' : ''}
+            </span>
+            <Link href="/about#devices" className="font-medium">
+              View More
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

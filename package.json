@@ -1,48 +1,67 @@
 {
-  "name": "aidxncc",
-  "version": "0.1.0",
+  "name": "aidanso",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "bun run server.ts",
     "build": "next build",
     "start": "NODE_ENV=production bun run server.ts",
-    "lint": "next lint"
+    "docs:generate": "typedoc",
+    "docs:watch": "typedoc --watch",
+    "typecheck": "bunx tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "bun test",
+    "scan": "bash -lc 'trap \"kill 0\" EXIT; bun run server.ts & bunx react-scan@latest localhost:3000'",
+    "best-practices": "bun tools/best-practices.ts",
+    "best-practices:ci": "bun tools/best-practices.ts --skip=page-load-performance",
+    "check:best": "bun tools/best-practices.ts",
+    "sync:usage": "bun tools/sync-usage.ts"
   },
   "dependencies": {
+    "@lobehub/icons": "^2.43.1",
     "@radix-ui/react-progress": "^1.1.7",
-    "class-variance-authority": "^0.7.1",
+    "@types/bun": "^1.3.1",
     "clsx": "^2.1.1",
+    "eslint-config-prettier": "^10.1.8",
     "geist": "^1.5.1",
-    "i18next": "^24.2.3",
-    "i18next-browser-languagedetector": "^8.2.0",
-    "lucide-react": "^0.485.0",
-    "next": "^15.5.3",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-i18next": "^15.7.3",
+    "lucide-react": "^0.552.0",
+    "next": "16.0.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
     "react-icons": "^5.5.0",
-    "recharts": "^3.2.0",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.0",
+    "recharts": "^3.3.0",
+    "remark-gfm": "^4.0.1",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
-    "tw-animate-css": "^1.3.8"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@tailwindcss/postcss": "^4.1.13",
-    "@types/node": "^24.4.0",
-    "@types/react": "^19.1.13",
-    "@types/react-dom": "^19.1.9",
-    "eslint": "^9.35.0",
-    "eslint-config-next": "15.1.3",
+    "@tailwindcss/postcss": "^4.1.16",
+    "@types/node": "^24.9.2",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "^16.0.1",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.13",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.1",
+    "tailwindcss": "^4.1.16",
+    "typedoc": "^0.28.14",
+    "typescript": "^5.9.3"
   },
   "trustedDependencies": [
     "sharp",
     "unrs-resolver"
-  ]
+  ],
+  "overrides": {
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2"
+  }
 }

@@ -3,9 +3,9 @@ import type { MetadataRoute } from 'next'
 export const robots: MetadataRoute.Robots = {
   rules: {
     userAgent: '*',
-    allow: '/',
+    allow: '/'
   },
-  sitemap: 'https://aidxn.cc/sitemap.xml',
+  sitemap: 'https://aidan.so/sitemap.xml'
 }
 
 export default function handler(): MetadataRoute.Robots {

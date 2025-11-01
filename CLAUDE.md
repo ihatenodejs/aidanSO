@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-This file provides comprehensive guidance to Claude Code (claude.ai/code) when working with the aidxnCC codebase.
+This file provides comprehensive guidance to Claude Code (claude.ai/code) when working with the aidanSO codebase.
 
 ## Project Overview
 
-**aidxnCC** is a personal portfolio and services website built with Next.js 15, featuring real-time music tracking, domain management, device showcases, and AI usage analytics.
+**aidanSO** (formerly aidxnCC) is a personal portfolio and services website built with Next.js 15, featuring real-time music tracking, domain management, device showcases, and AI usage analytics. The project is deployed at [aidan.so](https://aidan.so).
 
 ### Tech Stack
 
@@ -27,11 +27,29 @@ bun run dev
 bun run build
 bun run start
 
-# Linting
-bun run lint
+# Code Quality
+bun run lint              # Run ESLint
+bun run typecheck         # Type checking without emitting files
+bun run format            # Format code with Prettier
+bun run format:check      # Check formatting without changes
+bun run test              # Run tests
+bun run best-practices    # Run best practices checks
+bun run best-practices:ci # Run best practices (skips page-load-performance)
+
+# Analysis & Monitoring
+bun run scan              # Run React Scan for performance analysis
+bun run docs:generate     # Generate TypeDoc documentation
+bun run docs:watch        # Watch and regenerate docs on changes
+
+# AI Usage Data
+bun run sync:usage        # Sync AI usage data from agent-exporter
 ```
 
-Do not run a development server unless you are specifically asked to. There are better methods to check for issues with your modifications, such as checking the IDE issues or using the lint script.
+**Important**: Do not run a development server unless specifically asked. Use better methods to check for issues:
+
+- `bun run typecheck` - Check TypeScript types
+- `bun run lint` - Check code quality
+- IDE diagnostics via `mcp__ide__getDiagnostics`
 
 ## Project Architecture
 
@@ -232,6 +250,49 @@ import type {
 'border-gray-600' // Hover borders
 ```
 
+## Custom Server Architecture
+
+The application uses a **custom Bun server** (`server.ts`) instead of the default Next.js server to enable Socket.io for real-time features.
+
+### Key Features
+
+1. **Automatic Port Resolution**: If port 3000 is in use, automatically tries 3001, 3002, etc. (up to 10 attempts)
+2. **Socket.io Integration**: Real-time WebSocket communication for now-playing music updates
+3. **Rate Limiting**: 10 requests per minute per socket to prevent abuse
+4. **Auto-refresh**: Optional 30-second auto-refresh for now-playing data
+5. **CORS Configuration**: Development-friendly CORS (localhost:3000, localhost:3001) with production override
+
+### Server Lifecycle
+
+```typescript
+// server.ts handles:
+1. Next.js app initialization
+2. HTTP server creation
+3. Socket.io setup with rate limiting
+4. WebSocket upgrade handling (HMR in dev)
+5. Port conflict resolution
+```
+
+### Socket.io Events
+
+```typescript
+// Client → Server
+'requestNowPlaying' // Manually request now-playing data (rate-limited)
+'startAutoRefresh' // Start 30s auto-refresh interval
+
+// Server → Client
+'nowPlaying' // Emit now-playing data or error
+```
+
+### NowPlayingService
+
+Located at `lib/now-playing-server.ts`, handles:
+
+- Last.fm API integration
+- ListenBrainz fallback
+- MusicBrainz cover art fetching
+- Response caching and error handling
+
 ## API & Data Fetching Patterns
 
 ### Server Components (Preferred)
@@ -251,19 +312,60 @@ async function Page() {
 import { io } from 'socket.io-client'
 
 const socket = io()
-socket.on('event', (data) => {
-  // Handle real-time updates
+
+// Request now-playing data
+socket.emit('requestNowPlaying')
+
+// Start auto-refresh (30s intervals)
+socket.emit('startAutoRefresh')
+
+// Listen for updates
+socket.on('nowPlaying', (data) => {
+  if (data.status === 'success') {
+    // Handle track data
+  } else {
+    // Handle error or rate limit
+  }
 })
 ```
 
 ## Environment Variables
 
+### Required Variables
+
 ```env
 # Music Features (Required)
-LASTFM_API_KEY=your_api_key
+LASTFM_API_KEY=your_api_key    # Get from Last.fm API account
+```
 
-# Music Features (Optional)
-LISTENBRAINZ_TOKEN=your_token
+### Optional Variables
+
+```env
+# Music Features
+LISTENBRAINZ_TOKEN=your_token  # Get from ListenBrainz user settings
+
+# GitHub Integration (for footer projects list)
+GITHUB_PROJECTS_USER=username  # GitHub username to display projects (defaults to 'ihatenodejs')
+GITHUB_USERNAME=username       # Fallback if GITHUB_PROJECTS_USER not set
+GITHUB_PROJECTS_PAT=token      # Personal access token for higher API limits
+GITHUB_PAT=token               # Fallback if GITHUB_PROJECTS_PAT not set
+
+# Server Configuration
+PORT=3000                      # Server port (defaults to 3000, auto-increments if in use)
+HOSTNAME=0.0.0.0              # Server hostname (defaults to localhost in dev, 0.0.0.0 in prod)
+NODE_ENV=production           # Environment mode (automatically set by deployment platform)
+CORS_ORIGIN=*                 # CORS origin for Socket.io (defaults to * in production)
+
+# Application Defaults
+NEXT_PUBLIC_DEFAULT_TIME_RANGE=3m  # Default time range for AI usage page (3m = 3 months)
+```
+
+### Docker Deployment
+
+Use the `docker-compose.yml.example` file as a template. Create a `.env` file with required variables and run:
+
+```bash
+docker compose up -d --build
 ```
 
 ## Important Conventions
@@ -329,6 +431,59 @@ function ClientComponent({ initialData }) {
 - Implement proper loading states
 - Utilize Next.js Image component for images
 - Leverage ISR for static pages with periodic updates
+
+## Best Practices Tool
+
+The project includes a custom best-practices validation tool (`tools/best-practices.ts`) that runs automated checks for code quality and standards.
+
+### Available Checks
+
+1. **page-load-performance**: Measures page load times to ensure performance goals are met
+2. **cc-model-labels**: Validates that all AI models in `public/data/cc.json` have human-readable labels
+3. **ai-config-validator**: Validates AI configuration data structure and integrity
+
+### Usage
+
+```bash
+# Run all checks
+bun run best-practices
+
+# List available checks
+bun run best-practices --list
+
+# Run specific checks only
+bun run best-practices --only=cc-model-labels,ai-config-validator
+
+# Skip specific checks (useful in CI)
+bun run best-practices --skip=page-load-performance
+bun run best-practices:ci  # Shorthand for skipping page-load-performance
+
+# Get machine-readable JSON output
+bun run best-practices --json
+
+# Show help
+bun run best-practices --help
+```
+
+### Creating Custom Checks
+
+To add new checks, create a module in `tools/best-practices/modules/` that exports a `CheckDefinition`:
+
+```typescript
+import type { CheckDefinition } from '../types'
+
+export default {
+  id: 'my-check',
+  name: 'My Custom Check',
+  description: 'Description of what this check validates',
+  async run(context): Promise<CheckResult> {
+    // Implement check logic
+    return { pass: true }
+  }
+} satisfies CheckDefinition
+```
+
+The tool automatically discovers and loads all checks from the modules directory.
 
 ## Common Patterns & Best Practices
 

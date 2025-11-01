@@ -25,7 +25,9 @@ describe('parseCliArguments', () => {
       '--list',
       '--json',
       '--only=alpha,beta',
-      '--only=gamma'
+      '--only=gamma',
+      '--skip=delta,epsilon',
+      '--skip=zeta'
     ])
 
     expect(result.helpRequested).toBeFalse()
@@ -36,6 +38,11 @@ describe('parseCliArguments', () => {
       'alpha',
       'beta',
       'gamma'
+    ])
+    expect(Array.from(result.options.skippedChecks)).toEqual([
+      'delta',
+      'epsilon',
+      'zeta'
     ])
   })
 
@@ -87,7 +94,7 @@ describe('check resolution', () => {
   ]
 
   it('returns all checks when none are specified', () => {
-    const checks = resolveChecksToRun(new Set(), registry)
+    const checks = resolveChecksToRun(new Set(), new Set(), registry)
     expect(checks).toHaveLength(2)
     expect(checks[0].id).toBe('first')
     expect(checks[1].id).toBe('second')
@@ -101,11 +108,31 @@ describe('check resolution', () => {
     try {
       const checks = resolveChecksToRun(
         new Set(['second', 'unknown']),
+        new Set(),
         registry
       )
       expect(checks).toHaveLength(1)
       expect(checks[0].id).toBe('second')
       expect(errorSpy).toHaveBeenCalledWith('Unknown check id: unknown')
+    } finally {
+      console.error = originalError
+    }
+  })
+
+  it('skips requested checks and reports unknown skip ids', () => {
+    const errorSpy = mock(() => {})
+    const originalError = console.error
+
+    console.error = errorSpy
+    try {
+      const checks = resolveChecksToRun(
+        new Set(),
+        new Set(['first', 'missing']),
+        registry
+      )
+      expect(checks).toHaveLength(1)
+      expect(checks[0].id).toBe('second')
+      expect(errorSpy).toHaveBeenCalledWith('Unknown check id to skip: missing')
     } finally {
       console.error = originalError
     }

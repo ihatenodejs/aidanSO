@@ -16,7 +16,7 @@ import { Server } from 'socket.io'
 import { NowPlayingService } from './lib/now-playing-server'
 
 const dev = process.env.NODE_ENV !== 'production'
-const hostname = dev ? 'localhost' : (process.env.HOSTNAME || '0.0.0.0')
+const hostname = dev ? 'localhost' : process.env.HOSTNAME || '0.0.0.0'
 const initialPort = parseInt(process.env.PORT || '3000', 10)
 const maxPortAttempts = 10
 
@@ -63,7 +63,7 @@ function startServer(port: number, attempt: number = 0): void {
     cors: {
       origin: dev
         ? ['http://localhost:3000', 'http://localhost:3001']
-        : (process.env.CORS_ORIGIN || '*'),
+        : process.env.CORS_ORIGIN || '*',
       methods: ['GET', 'POST'],
       credentials: true
     },

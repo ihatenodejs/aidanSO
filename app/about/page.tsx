@@ -9,6 +9,8 @@ import { CardGrid } from '@/components/ui/CardGrid'
 import { SiGoogle } from 'react-icons/si'
 import { TbUser } from 'react-icons/tb'
 import { getFeaturedReposWithMetrics } from '@/lib/github'
+import { DeviceService } from '@/lib/services'
+import { getDeviceOSInfo, getDeviceRootInfo } from '@/lib/utils/device-text'
 
 const getGitHubUsername = () => {
   return (
@@ -26,6 +28,19 @@ interface ContentSection {
 export default async function About() {
   const featuredProjects = await getFeaturedReposWithMetrics()
   const githubUsername = getGitHubUsername()
+
+  // Fetch device data for dynamic content injection
+  const komodo = DeviceService.getDeviceBySlug('komodo')
+  const cheetah = DeviceService.getDeviceBySlug('cheetah')
+  const bonito = DeviceService.getDeviceBySlug('bonito')
+
+  // Extract OS and root information
+  const komodoOS = getDeviceOSInfo(komodo)
+  const komodoRoot = getDeviceRootInfo(komodo)
+  const cheetahOS = getDeviceOSInfo(cheetah)
+  const cheetahRoot = getDeviceRootInfo(cheetah)
+  const bonitoOS = getDeviceOSInfo(bonito)
+  const bonitoRoot = getDeviceRootInfo(bonito)
 
   const sections: ContentSection[] = [
     {
@@ -47,8 +62,8 @@ export default async function About() {
             provider for privacy-focused individuals.
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
-            You will also come to find that I have an addiction to Docker!
-            Almost every project I&apos;ve made is able to be run in Docker.
+            Almost all of my projects are able to run in Docker, which is my
+            preferred deployment method.
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
             Me and my developer friends operate an organization called{' '}
@@ -59,16 +74,21 @@ export default async function About() {
             <Link href="https://t.me/KowalskiNodeBot">@KowalskiNodeBot</Link>.
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
-            I have learned system administration from the past three years of
-            learning Linux for practical use and fun. I currently operate four
-            servers running in the cloud, ran out of Canada, Germany, and the
-            United States.
+            I learned system administration from the past three years of
+            learning Linux for practical use and fun. I currently operate a
+            dedicated server in Germany, for use as a mailserver and other
+            self-hosted services. It runs the full{' '}
+            <Link href="https://p0ntus.com/">p0ntus</Link> stack.
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
             I own a channel called{' '}
             <Link href="https://t.me/PontusHub">PontusHub</Link> on Telegram,
             where I post updates about my projects, along with commentary and
-            info about my projects related to the Android rooting community.
+            info about my projects related to the Android rooting community. You
+            can find us mainly on Matrix as:{' '}
+            <Link href="https://matrix.to/#/#pontushub:dontbeevil.lol">
+              #pontushub:dontbeevil.lol
+            </Link>
           </p>
         </>
       )
@@ -128,34 +148,51 @@ export default async function About() {
           </h3>
           <p className="mt-2 leading-relaxed text-gray-300">
             I use a Google Pixel 9 Pro XL (komodo) as my daily driver. It runs{' '}
-            <Link href="https://developer.android.com/about/versions/16/get">
-              Android 16
-            </Link>{' '}
-            and is proudly rooted with{' '}
-            <Link href="https://github.com/KernelSU-Next/KernelSU-Next">
-              KernelSU-Next
-            </Link>
+            {komodoOS?.href ? (
+              <Link href={komodoOS.href}>{komodoOS.name}</Link>
+            ) : (
+              komodoOS?.name || 'Android 16'
+            )}{' '}
+            and is rooted with{' '}
+            {komodoRoot?.href ? (
+              <Link href={komodoRoot.href}>{komodoRoot.method}</Link>
+            ) : (
+              komodoRoot?.method || 'KernelSU-Next'
+            )}
             .
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
             My previous phone, the Google Pixel 7 Pro (cheetah), is still in use
             as my secondary WiFi-only device. It runs{' '}
-            <Link href="https://developer.android.com/about/versions/16/get">
-              Android 16
-            </Link>{' '}
-            and is proudly rooted with{' '}
-            <Link href="https://github.com/KernelSU-Next/KernelSU-Next">
-              KernelSU-Next
-            </Link>
+            {cheetahOS?.href ? (
+              <Link href={cheetahOS.href}>{cheetahOS.name}</Link>
+            ) : (
+              cheetahOS?.name || 'GrapheneOS'
+            )}
+            {cheetahRoot?.href && (
+              <>
+                {' '}
+                and is rooted with{' '}
+                <Link href={cheetahRoot.href}>{cheetahRoot.method}</Link>
+              </>
+            )}
             .
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
             I also have a Google Pixel 3a XL (bonito) which I use as a tertiary
             device. It runs{' '}
-            <Link href="https://wiki.lineageos.org/devices/bonito/">
-              LineageOS 22.2
-            </Link>{' '}
-            and is rooted with Magisk.
+            {bonitoOS?.href ? (
+              <Link href={bonitoOS.href}>{bonitoOS.name}</Link>
+            ) : (
+              bonitoOS?.name || 'Pixel Experience'
+            )}{' '}
+            and is rooted with{' '}
+            {bonitoRoot?.href ? (
+              <Link href={bonitoRoot.href}>{bonitoRoot.method}</Link>
+            ) : (
+              bonitoRoot?.method || 'Magisk'
+            )}
+            .
           </p>
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Button href="/device/komodo" icon={<SiGoogle />}>
@@ -181,7 +218,7 @@ export default async function About() {
               OpenCore
             </Link>
             ) as my &quot;side piece,&quot; if you will. I&apos;ve had it for
-            about a year now, and it&apos;s been a great experience.
+            about a year now, though the screen has since broken.
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
             I also own two MacBook Airs (2015 and 2013 base models) and an HP
@@ -198,10 +235,10 @@ export default async function About() {
       content: (
         <>
           <p className="mt-2 leading-relaxed text-gray-300">
-            Most of my repositories have migrated to{' '}
-            <Link href="https://git.p0ntus.com/">p0ntus git</Link>. My username
-            is <Link href="https://git.p0ntus.com/aidan/">aidan</Link>. You can
-            find me on GitHub as{' '}
+            I can be found on{' '}
+            <Link href="https://git.p0ntus.com/">p0ntus git</Link> as{' '}
+            <Link href="https://git.p0ntus.com/aidan/">aidan</Link>. You also
+            can find me on GitHub as{' '}
             <Link href={`https://github.com/${githubUsername}/`}>
               {githubUsername}
             </Link>
@@ -216,8 +253,8 @@ export default async function About() {
       content: (
         <>
           <p className="mt-2 leading-relaxed text-gray-300">
-            Here&apos;s just four of my top projects. Star and fork counts are
-            fetched in real-time from both GitHub and Forgejo APIs.
+            Here&apos;s are four of my favorite projects. Star and fork counts
+            are fetched in real-time from both GitHub and Forgejo APIs.
           </p>
           <FeaturedRepos projects={featuredProjects} className="mt-4" />
         </>

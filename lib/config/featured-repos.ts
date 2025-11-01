@@ -5,6 +5,8 @@ export interface FeaturedRepoConfig {
   description: string
   platform: 'github' | 'forgejo'
   forgejoUrl?: string // Base URL for Forgejo instance
+  url?: string // Optional website URL
+  npm?: string // Optional NPM package name
 }
 
 export const featuredRepos: FeaturedRepoConfig[] = [
@@ -20,23 +22,24 @@ export const featuredRepos: FeaturedRepoConfig[] = [
     id: 2,
     owner: 'abocn',
     repo: 'TelegramBot',
-    description: 'Landing page for p0ntus mail',
-    platform: 'github'
+    description: 'An extendable Telegram bot written in TypeScript.',
+    platform: 'github',
+    url: 'https://kowalski.social'
   },
   {
     id: 3,
     owner: 'abocn',
     repo: 'modules',
     description: 'A Magisk/KernelSU module repository',
-    platform: 'github'
+    platform: 'github',
+    url: 'https://modules.lol'
   },
   {
     id: 4,
-    owner: 'pontus',
-    repo: 'pontus-front',
-    description:
-      'The frontend and API for p0ntus, my free privacy-focused service provider',
-    platform: 'forgejo',
-    forgejoUrl: 'git.p0ntus.com'
+    owner: 'ihatenodejs',
+    repo: 'agent-exporter',
+    description: 'Export usage statistics from various agents.',
+    platform: 'github',
+    npm: 'agent-exporter'
   }
 ]

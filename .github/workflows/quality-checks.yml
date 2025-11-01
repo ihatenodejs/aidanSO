@@ -20,13 +20,13 @@ jobs:
         run: bun install
 
       - name: Run Prettier check
-        run: bun run lint:prettier
+        run: bun run format:check
 
       - name: Run ESLint
-        run: bunx eslint .
+        run: bun run lint
 
       - name: Type check
-        run: bunx tsc --noEmit
+        run: bun run typecheck
 
       - name: Run best practice checks
-        run: bun run check:best
+        run: bun run best-practices:ci

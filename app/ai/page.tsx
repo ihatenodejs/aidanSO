@@ -38,7 +38,7 @@ export default function AI() {
         <PageHeader
           icon={<Brain size={60} />}
           title="AI"
-          subtitle="My journey with using LLMs"
+          subtitle="My opinions and experience concerning LLMs"
         />
       </div>
 

@@ -13,7 +13,8 @@ import {
   FileText,
   ChartLine,
   BriefcaseBusiness,
-  Activity
+  Activity,
+  Bot
 } from 'lucide-react'
 import { TbUser } from 'react-icons/tb'
 import KowalskiIcon from '@/components/icons/KowalskiIcon'
@@ -97,6 +98,13 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
                   label: 'modules',
                   href: 'https://modules.lol/',
                   icon: Package,
+                  external: true
+                },
+                {
+                  type: 'link',
+                  label: 'agent-exporter',
+                  href: 'https://npmjs.com/package/agent-exporter',
+                  icon: Bot,
                   external: true
                 },
                 {

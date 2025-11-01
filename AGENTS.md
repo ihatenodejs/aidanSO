@@ -2,50 +2,53 @@
 
 ## Project Structure & Module Organization
 
-- `app/` — Next.js App Router (route folders with `page.tsx`, `layout.tsx`, API under `app/api/**/route.ts`).
-- `components/` — Reusable UI; React components in PascalCase (e.g., `Header.tsx`, `widgets/`).
-- `lib/` — Shared utilities and server logic (e.g., `now-playing-server.ts`, `socket.ts`).
-- `public/` — Static assets and data (e.g., `public/data/cc.json`).
-- `tools/` — Dev scripts (e.g., `tools/ccombine.ts`).
-- `server.ts` — Custom Next server + Socket.IO.
-- Config: `next.config.ts`, `tailwind.config.ts`, `eslint.config.mjs`.
+- `app/` is the Next.js App Router. Route groups (`ai/`, `status/`, `device/`, `docs/`, etc.) bundle their own `page.tsx`, `layout.tsx`, and API handlers under `app/api/**/route.ts`.
+- `components/` holds reusable React 19 UI, organized by domain (e.g., `components/device`, `components/navigation/footer`). Stick to PascalCase filenames.
+- `lib/` centralizes configuration, shared services (e.g., `now-playing-server.ts`, `services/DeviceService`), themes, and utilities (`lib/utils.ts` exports the Tailwind-aware `cn` helper).
+- Tests currently live alongside features (`app/ai/usage/__tests__`, `components/navigation/footer/__tests__`, `tools/__tests__`); copy that pattern for new coverage.
+- `tools/` contains Bun-powered CLIs such as `best-practices.ts` and `sync-usage.ts`. `server.ts` bootstraps the custom Next + Socket.IO server with port fallback logic.
+- Static assets and data live in `public/`, including `public/data/cc.json` consumed by the AI usage pages.
 
 ## Build, Test, and Development Commands
 
-- Install deps: `bun install`
-- Dev server: `bun run dev` (http://localhost:3000)
-- Build production: `bun run build`
-- Start production: `bun run start`
-- Lint: `bun run lint`
-- Docker (local): `docker compose up --build`
-- Tooling example: `bunx tsx tools/ccombine.ts <new-cc.json> --base public/data/cc.json --out public/data/cc.json`
+- `bun install` installs dependencies; prefer Bun 1.3+.
+- `bun run dev` starts the custom server at http://localhost:3000 (auto-increments the port if occupied).
+- `bun run lint` runs ESLint with the Next.js presets; fix errors before committing.
+- `bun run typecheck` performs a no-emit TypeScript pass.
+- `bun run test` executes the Bun test runner (current suites cover tooling, footer config, and AI usage schema).
+- `bun run best-practices` runs the optional developer checklist from `tools/best-practices`.
+- `bun run start` serves the production bundle using `NODE_ENV=production`.
+- `bun run build` relies on Next.js Turbopack. In the agent sandbox it fails while binding helper processes, so request the user to run this command locally when a build is needed.
+- `docker compose up --build` reproduces the production stack; ensure `.env` variables are present first.
 
 ## Coding Style & Naming Conventions
 
-- Language: TypeScript, React 19, Next.js 15 (App Router).
-- Style: follow ESLint `next/core-web-vitals` + `next/typescript`; run `bun run lint` before PRs.
-- Indentation: 2 spaces; include semicolons; prefer `const`/`let` over `var`.
-- Naming: components in PascalCase (`MyWidget.tsx`); modules/utilities in kebab- or lowerCamel-case (`now-playing-server.ts`); routes use Next defaults (`page.tsx`, `route.ts`).
-- Styling: Tailwind CSS; prefer utility classes over inline styles.
+- TypeScript + Next.js 16 + React 19; use functional components and keep client hooks behind `'use client'` boundaries.
+- Follow 2-space indentation, include semicolons, and favor `const`/`let` over `var`.
+- Components use PascalCase; utilities use lowerCamelCase or kebab-case; Next route segments follow framework conventions.
+- Tailwind CSS is the styling baseline. Compose utility classes via `cn()` or tokens from `lib/theme` instead of inline styles.
+- Keep lint and formatting clean. `bun run format` applies Prettier (with Tailwind plugin) across the repo.
 
 ## Testing Guidelines
 
-- No formal test suite yet. If adding tests, prefer:
-  - Unit/components: Vitest + React Testing Library (`*.test.ts(x)` colocated or in `__tests__/`).
-  - E2E: Playwright.
-- Add a `test` script (e.g., `bun test`) and keep tests fast and deterministic.
+- Use the Bun test runner (`bun run test`). Existing suites target schema validation, footer config, and tooling; colocate new tests as `*.test.ts(x)` near the code or under `__tests__/`.
+- Keep tests deterministic—mock network calls to services like ListenBrainz or GitHub.
+- Document any additional test helpers or environment variables when adding coverage.
 
 ## Commit & Pull Request Guidelines
 
-- Commits: use concise, imperative messages with a conventional prefix: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `style:`, `test:`. Example: `feat(now-playing): add Socket.IO auto-refresh`.
-- PRs: include a clear description, linked issues, screenshots/GIFs for UI changes, and manual test steps. Ensure `lint` and `build` pass.
+- Write Conventional commits (`feat:`, `fix:`, `docs:`, `chore:`, etc.) in the imperative and keep changes scoped.
+- PRs need a clear summary, linked issues, manual test notes, and UI screenshots/GIFs when relevant. Mention any new scripts or configuration requirements.
+- Before requesting review, run `bun run lint`, `bun run typecheck`, and `bun run test`; ask the user to execute `bun run build` locally if verification is required.
 
-## Security & Configuration
+## Security & Configuration Tips
 
-- Use `.env.local` for secrets; do not commit keys. Required vars include `LASTFM_API_KEY`, `LISTENBRAINZ_TOKEN`.
-- Default port `3000`. Production via Docker sets `NODE_ENV=production` and disables Next telemetry.
+- Store secrets in `.env.local`; required entries include `LASTFM_API_KEY` and `LISTENBRAINZ_TOKEN`. Git-ignored credentials must never be committed.
+- Default port is 3000. Docker workflows set `NODE_ENV=production` and disable Next telemetry automatically.
+- Rotate tokens immediately if exposed and scrub them from commit history.
 
 ## Agent-Specific Notes
 
-- Scope: this AGENTS.md applies to the repository root.
-- Keep changes minimal, targeted, and consistent with existing patterns. Avoid broad refactors in feature PRs.
+- Operate from the repository root and avoid broad refactors unless asked. Mirror existing module boundaries and naming schemes.
+- Because sandboxed builds cannot bind helper ports, skip `bun run build` and coordinate with the user for production verification.
+- Halt and confirm with the user if unexpected worktree changes appear or if network access is required for a task.

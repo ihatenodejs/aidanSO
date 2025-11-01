@@ -154,6 +154,10 @@ export interface FeaturedProject {
   stars: number
   /** Current fork count */
   forks: number
+  /** Optional website URL */
+  websiteUrl?: string
+  /** Optional NPM package name */
+  npmPackage?: string
 }
 
 /**
@@ -505,7 +509,9 @@ const fetchFeaturedProjects = async (): Promise<FeaturedProject[]> => {
         platform: config.platform,
         url,
         stars: metrics?.stars ?? 0,
-        forks: metrics?.forks ?? 0
+        forks: metrics?.forks ?? 0,
+        websiteUrl: config.url,
+        npmPackage: config.npm
       }
     })
   )

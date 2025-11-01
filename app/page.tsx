@@ -5,10 +5,9 @@ import PageShell from '@/components/layout/PageShell'
 import LastPlayed from '@/components/widgets/NowPlaying'
 import LiveIndicator from '@/components/widgets/LiveIndicator'
 import DeviceShowcase from '@/components/widgets/DeviceShowcase'
+import ProfilePicture from '@/components/objects/ProfilePicture'
 import { getDonationGroups } from '@/lib/config/donations'
 import { getContactLinks } from '@/lib/config/contact'
-
-import Image from 'next/image'
 
 import { UserCircle } from 'lucide-react'
 import {
@@ -29,12 +28,12 @@ export default function Home() {
     [
       "Hey there! My name is Aidan, and I'm a systems administrator, full-stack developer, and student from the Boston area. I primarily work with Linux, Docker, Next.js, Tailwind CSS and TypeScript.",
       'My favorite projects and hobbies revolve around web development and SysAdmin. Most of my work is released into the public domain.',
-      "I'm also a huge advocate for AI and it's practical applications to programming and life itself. I am fond of open-source models the most, specifically Qwen3!",
+      "I'm also a huge advocate for AI and it's practical applications to programming and life itself. I am fond of open-weight models the most, specifically Qwen3!",
       "When I'm not programming, I can be found re-flashing my phone with a new custom ROM and jumping between projects. I tend to be quite depressed, but I make do."
     ],
     [
       "I'm at my best when I'm doing system administration and development in TypeScript. I frequently implement AI into my workflow.",
-      "I manage three servers, including a mailserver (against my better judgement). I'm also crazy enough to self-host LLMs running on CPU.",
+      'I manage a dedicated server in Germany, for use as a mailserver (against my better judgement) and other self-hosted services.',
       'My biggest project is p0ntus, a cloud services provider which I self-host and maintain. It features most services you would find from large companies like Google, although everything is free and open-source.'
     ]
   ]
@@ -46,12 +45,11 @@ export default function Home() {
   return (
     <PageShell variant="full-width">
       <div className="my-12 text-center">
-        <Image
-          src="/ihatenodejs.jpg"
+        <ProfilePicture
           alt="My Profile Picture"
-          width={150}
-          height={150}
-          className="mx-auto mb-6 rounded-full border-4 border-gray-700 transition-colors duration-300 hover:border-gray-600"
+          size={150}
+          borderWidth="4"
+          className="mx-auto mb-6"
         />
         <h1 className="glow mb-2 text-4xl font-bold text-gray-100">
           Aidan Honor

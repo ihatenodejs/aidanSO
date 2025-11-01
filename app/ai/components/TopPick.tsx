@@ -20,11 +20,11 @@ export default function TopPick() {
               style={{ color: colors.accents.ai }}
             />
             <div className="min-w-0">
-              <div className="flex flex-row items-center lg:flex-row lg:items-start">
+              <div className="flex flex-row items-center gap-2">
                 <h3 className="text-2xl font-bold text-gray-100 sm:text-3xl">
                   Claude
                 </h3>
-                <p className="ml-2 text-sm text-gray-400 sm:text-base lg:ml-0">
+                <p className="text-sm text-gray-400 sm:text-base">
                   by Anthropic
                 </p>
               </div>

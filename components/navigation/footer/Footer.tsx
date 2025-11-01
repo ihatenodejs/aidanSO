@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { TbBrandGithub, TbCopyrightOff } from 'react-icons/tb'
 
 import RandomFooterMsg from '../../objects/RandomFooterMsg'
+import ProfilePicture from '../../objects/ProfilePicture'
 
 import { getContactLinks } from '@/lib/config/contact'
 import { getDonationGroups } from '@/lib/config/donations'
@@ -174,21 +174,7 @@ export default async function Footer({
           <div className="col-span-1 md:col-span-2 lg:col-span-1">
             <div className="flex flex-col space-y-4">
               <div className="flex items-center space-x-4">
-                <div
-                  className="relative aspect-square h-16 w-16 shrink-0 overflow-hidden rounded-full ring-2"
-                  style={{
-                    backgroundColor: colors.borders.default,
-                    borderColor: colors.borders.hover
-                  }}
-                >
-                  <Image
-                    src="/ihatenodejs.jpg"
-                    alt="Aidan's Profile Picture"
-                    fill
-                    sizes="64px"
-                    className="rounded-full object-cover"
-                  />
-                </div>
+                <ProfilePicture size={64} className="shrink-0" />
                 <div className="min-w-0">
                   <h3
                     className="text-lg font-bold"

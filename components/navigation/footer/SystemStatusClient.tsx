@@ -105,7 +105,10 @@ export default function SystemStatusClient() {
         className="flex items-center transition-opacity hover:opacity-80"
       >
         <span
-          className={cn('mr-2 h-2 w-2 animate-pulse rounded-full', content.indicatorClass)}
+          className={cn(
+            'mr-2 h-2 w-2 animate-pulse rounded-full',
+            content.indicatorClass
+          )}
         />
         <span style={{ color: content.textColor }}>{content.label}</span>
       </Link>

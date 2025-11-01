@@ -12,6 +12,7 @@ interface CliOptions {
   format: CliFormat
   listOnly: boolean
   selectedChecks: Set<string>
+  skippedChecks: Set<string>
 }
 
 interface CliParseResult {
@@ -64,9 +65,19 @@ async function main() {
     return
   }
 
-  const checksToRun = resolveChecksToRun(options.selectedChecks, registry)
+  const checksToRun = resolveChecksToRun(
+    options.selectedChecks,
+    options.skippedChecks,
+    registry
+  )
   if (!checksToRun.length) {
-    console.error('No checks selected. Use --list to see available checks.')
+    if (options.selectedChecks.size) {
+      console.error('No checks selected. Use --list to see available checks.')
+    } else if (options.skippedChecks.size) {
+      console.error('All checks were skipped. Nothing to run.')
+    } else {
+      console.error('No checks available to run.')
+    }
     process.exitCode = 1
     return
   }
@@ -77,6 +88,7 @@ async function main() {
 
 export function parseCliArguments(args: readonly string[]): CliParseResult {
   const selectedChecks = new Set<string>()
+  const skippedChecks = new Set<string>()
   let listOnly = false
   let format: CliFormat = 'human'
   let helpRequested = false
@@ -96,6 +108,15 @@ export function parseCliArguments(args: readonly string[]): CliParseResult {
       for (const value of values) {
         selectedChecks.add(value)
       }
+    } else if (arg.startsWith('--skip=')) {
+      const values = arg
+        .slice('--skip='.length)
+        .split(',')
+        .map((value) => value.trim())
+        .filter(Boolean)
+      for (const value of values) {
+        skippedChecks.add(value)
+      }
     } else if (arg === '--help' || arg === '-h') {
       helpRequested = true
     } else {
@@ -104,7 +125,7 @@ export function parseCliArguments(args: readonly string[]): CliParseResult {
   }
 
   return {
-    options: { selectedChecks, listOnly, format },
+    options: { selectedChecks, skippedChecks, listOnly, format },
     errors,
     helpRequested
   }
@@ -211,22 +232,38 @@ export function isValidCheckDefinition(
 
 export function resolveChecksToRun(
   selected: Set<string>,
+  skipped: Set<string>,
   registry: CheckDefinition[]
 ): CheckDefinition[] {
-  if (!selected.size) {
-    return registry
-  }
-
   const available = new Map(registry.map((check) => [check.id, check]))
   const resolved: CheckDefinition[] = []
 
-  for (const id of selected) {
-    const check = available.get(id)
-    if (!check) {
-      console.error(`Unknown check id: ${id}`)
-      continue
+  if (!selected.size) {
+    for (const check of registry) {
+      if (!skipped.has(check.id)) {
+        resolved.push(check)
+      }
     }
-    resolved.push(check)
+  } else {
+    for (const id of selected) {
+      const check = available.get(id)
+      if (!check) {
+        console.error(`Unknown check id: ${id}`)
+        continue
+      }
+      if (skipped.has(id)) {
+        continue
+      }
+      resolved.push(check)
+    }
+  }
+
+  if (skipped.size) {
+    for (const id of skipped) {
+      if (!available.has(id)) {
+        console.error(`Unknown check id to skip: ${id}`)
+      }
+    }
   }
 
   return resolved
@@ -293,6 +330,7 @@ function printHelp() {
 Options:
   --list           List available checks
   --only=<ids>     Only run specific checks (comma separated)
+  --skip=<ids>     Skip specific checks (comma separated)
   --json           Output machine-readable JSON
   -h, --help       Show this help message
 `)

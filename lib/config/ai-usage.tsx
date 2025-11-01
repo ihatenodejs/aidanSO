@@ -3,6 +3,7 @@ import {
   GithubCopilot,
   Gemini,
   Perplexity,
+  Windsurf,
   OpenAI,
   Qwen,
   ZAI,
@@ -11,8 +12,17 @@ import {
 import type { FavoriteModel, AIReview, AITool } from '@/app/ai/types'
 import { aiToolListSchema, isInactiveTool } from '@/app/ai/types'
 import OpenCodeIcon from '@/components/icons/OpenCodeIcon'
+import AmpIcon from '@/components/icons/AmpIcon'
 
 const rawAiTools = [
+  {
+    name: 'Amp Free',
+    icon: AmpIcon,
+    description: 'Free agent with decent output',
+    status: 'occasional',
+    link: 'https://ampcode.com/',
+    price: 0
+  },
   {
     name: 'ChatGPT Business',
     icon: OpenAI,
@@ -40,10 +50,11 @@ const rawAiTools = [
     status: 'cancelled',
     reason: 'Poor quality output and a bad experience in general',
     link: 'https://z.ai/',
-    price: 3
+    price: 6,
+    discountedPrice: 3
   },
   {
-    name: 'Gemini Pro',
+    name: 'Gemini Pro/Gemini CLI',
     icon: Gemini,
     description: 'Chatting, asking questions, and image generation',
     status: 'occasional',
@@ -52,10 +63,10 @@ const rawAiTools = [
     discountedPrice: 0
   },
   {
-    name: 'Qwen Chat',
+    name: 'Qwen Chat/Qwen CLI',
     icon: Qwen,
     description: 'My favorite open source LLM for chatting',
-    status: 'occasional',
+    status: 'active',
     link: 'https://chat.qwen.ai/',
     price: 0
   },
@@ -92,6 +103,14 @@ const rawAiTools = [
     description: 'Generating boilerplate UIs',
     status: 'occasional',
     link: 'https://v0.dev/',
+    price: 0
+  },
+  {
+    name: 'Windsurf',
+    icon: Windsurf,
+    description: 'Amazing free tab completion and solid IDE',
+    status: 'active',
+    link: 'https://windsurf.com/',
     price: 0
   }
 ] as const satisfies ReadonlyArray<AITool>

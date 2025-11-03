@@ -241,11 +241,7 @@ export default function Usage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 px-4 pt-4 lg:grid-cols-2">
-        <ModelUsageCard
-          daily={filteredData.daily}
-          totalCost={filteredData.totals.totalCost}
-          theme={theme}
-        />
+        <ModelUsageCard daily={filteredData.daily} theme={theme} />
         <TokenType totals={filteredData.totals} theme={theme} />
       </div>
 

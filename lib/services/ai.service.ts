@@ -147,6 +147,7 @@ export class AIService {
     // Z.AI models
     'glm-4.5': 'GLM 4.5',
     'glm-4.5-air': 'GLM 4.5 Air',
+    'glm-4.6': 'GLM 4.6',
     // Ghost models
     'big-pickle': 'Big Pickle'
   }

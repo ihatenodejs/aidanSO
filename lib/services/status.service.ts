@@ -40,7 +40,7 @@ import type { ErrorType } from '@/lib/types'
  * @category Services
  * @public
  */
-type ServiceCheckResult = {
+export type ServiceCheckResult = {
   status: ServiceStatus
   statusCode: number | null
   responseTime: number | null

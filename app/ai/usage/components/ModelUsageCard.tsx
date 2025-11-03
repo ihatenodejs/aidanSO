@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useMemo } from 'react'
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts'
 import type { TooltipProps } from 'recharts'
 import type {
@@ -8,7 +9,12 @@ import type {
   NameType
 } from 'recharts/types/component/DefaultTooltipContent'
 import { DailyData } from '@/lib/types'
-import { buildModelUsageData, formatCurrency } from './utils'
+import {
+  buildModelUsageData,
+  buildModelUsageDataByTokens,
+  formatCurrency,
+  formatTokens
+} from './utils'
 import type { ToolTheme } from '@/app/ai/theme'
 
 type ModelTooltipProps = TooltipProps<ValueType, NameType> & {
@@ -17,16 +23,20 @@ type ModelTooltipProps = TooltipProps<ValueType, NameType> & {
 
 interface ModelUsageCardProps {
   daily: DailyData[]
-  totalCost: number
   theme: ToolTheme
 }
 
-export default function ModelUsageCard({
-  daily,
-  totalCost,
-  theme
-}: ModelUsageCardProps) {
-  const modelUsageData = buildModelUsageData(daily)
+export default function ModelUsageCard({ daily, theme }: ModelUsageCardProps) {
+  const [selectedMetric, setSelectedMetric] = useState<'cost' | 'tokens'>(
+    'cost'
+  )
+
+  const modelUsageData = useMemo(() => {
+    return selectedMetric === 'cost'
+      ? buildModelUsageData(daily)
+      : buildModelUsageDataByTokens(daily)
+  }, [daily, selectedMetric])
+
   const palette = theme.chart.pie
 
   const renderTooltip = ({ active, payload }: ModelTooltipProps) => {
@@ -37,7 +47,10 @@ export default function ModelUsageCard({
       | (typeof modelUsageData)[number]
       | null
     const rawValue = Number(firstEntry?.value ?? 0)
-    const formattedCost = formatCurrency(rawValue)
+    const formattedValue =
+      selectedMetric === 'cost'
+        ? formatCurrency(rawValue)
+        : `${formatTokens(rawValue)} tokens`
     const percentage = dataPoint?.percentage ?? 0
     const modelName = dataPoint?.name ?? 'Unknown Model'
 
@@ -50,7 +63,7 @@ export default function ModelUsageCard({
       >
         <p className="font-medium">{modelName}</p>
         <p className="text-xs text-gray-400">
-          {percentage.toFixed(1)}% · {formattedCost}
+          {percentage.toFixed(1)}% · {formattedValue}
         </p>
       </div>
     )
@@ -58,9 +71,41 @@ export default function ModelUsageCard({
 
   return (
     <section className="col-span-2 rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600 sm:p-6 lg:col-span-1 lg:p-8">
-      <h2 className="mb-4 text-xl font-semibold text-gray-200 sm:text-2xl">
-        Model Usage Distribution
-      </h2>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-gray-200 sm:text-2xl">
+          Model Usage Distribution
+        </h2>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setSelectedMetric('cost')}
+            className={`rounded px-3 py-1 text-sm transition-colors ${selectedMetric === 'cost' ? '' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+            style={
+              selectedMetric === 'cost'
+                ? {
+                    backgroundColor: theme.button.activeBackground,
+                    color: theme.button.activeText
+                  }
+                : undefined
+            }
+          >
+            Cost
+          </button>
+          <button
+            onClick={() => setSelectedMetric('tokens')}
+            className={`rounded px-3 py-1 text-sm transition-colors ${selectedMetric === 'tokens' ? '' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+            style={
+              selectedMetric === 'tokens'
+                ? {
+                    backgroundColor: theme.button.activeBackground,
+                    color: theme.button.activeText
+                  }
+                : undefined
+            }
+          >
+            Tokens
+          </button>
+        </div>
+      </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="h-[250px] lg:h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -89,10 +134,10 @@ export default function ModelUsageCard({
         </div>
         <div className="flex flex-col justify-center space-y-3">
           {modelUsageData.map((model, index) => {
-            const percentage = (
-              (model.value / Math.max(totalCost, 1)) *
-              100
-            ).toFixed(1)
+            const displayValue =
+              selectedMetric === 'cost'
+                ? `$${model.value.toFixed(2)}`
+                : formatTokens(model.value)
             return (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -105,9 +150,11 @@ export default function ModelUsageCard({
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-gray-400">{percentage}%</span>
+                  <span className="text-sm text-gray-400">
+                    {(model.percentage ?? 0).toFixed(1)}%
+                  </span>
                   <span className="font-semibold text-gray-200">
-                    ${model.value.toFixed(2)}
+                    {displayValue}
                   </span>
                 </div>
               </div>

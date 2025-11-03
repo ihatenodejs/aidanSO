@@ -30,7 +30,8 @@ const rawAiTools = [
     status: 'active',
     hasUsage: true,
     link: 'https://chatgpt.com/',
-    price: 60
+    price: 60,
+    subscriptionPeriod: 'monthly'
   },
   {
     name: 'Claude Max 5x',
@@ -41,17 +42,18 @@ const rawAiTools = [
     hasUsage: true,
     link: 'https://claude.ai/',
     price: 100,
-    discountedPrice: 0
+    discountedPrice: 0,
+    subscriptionPeriod: 'monthly'
   },
   {
     name: 'GLM Coding Lite',
     icon: ZAI,
     description: 'Cheap, Claude-like model with a slow API',
-    status: 'cancelled',
-    reason: 'Poor quality output and a bad experience in general',
+    status: 'active',
     link: 'https://z.ai/',
-    price: 6,
-    discountedPrice: 3
+    price: 90,
+    discountedPrice: 45,
+    subscriptionPeriod: 'quarterly'
   },
   {
     name: 'Gemini Pro/Gemini CLI',
@@ -133,12 +135,6 @@ export const favoriteModels: FavoriteModel[] = [
     rating: 9.0
   },
   {
-    name: 'gpt-5-codex',
-    provider: 'OpenAI',
-    review: 'Very good at instruction calling with better code quality.',
-    rating: 8.0
-  },
-  {
     name: 'Claude 4.1 Opus',
     provider: 'Anthropic',
     review:
@@ -146,11 +142,30 @@ export const favoriteModels: FavoriteModel[] = [
     rating: 9.0
   },
   {
+    name: 'gpt-5-codex',
+    provider: 'OpenAI',
+    review: 'Very good at instruction calling with better code quality.',
+    rating: 9.0
+  },
+  {
+    name: 'GLM 4.6',
+    provider: 'Z.AI',
+    review: 'Cheap model which outputs good quality code',
+    rating: 8.7
+  },
+  {
+    name: 'Qwen3-Max-Preview',
+    provider: 'Alibaba',
+    review:
+      "A new personality for Qwen3 at a larger size, amazing for use in chats. I'm not so happy that it's closed source (for now).",
+    rating: 8.0
+  },
+  {
     name: 'Qwen3-235B-A22B',
     provider: 'Alibaba',
     review:
       'The OG thinking model. Amazing, funny, and smart for chats. Surprisingly good at coding too.',
-    rating: 8.5
+    rating: 8.0
   },
   {
     name: 'GPT-5',
@@ -159,17 +174,10 @@ export const favoriteModels: FavoriteModel[] = [
     rating: 8.0
   },
   {
-    name: 'Qwen3-Max-Preview',
-    provider: 'Alibaba',
-    review:
-      "A new personality for Qwen3 at a larger size, amazing for use in chats. I'm not so happy that it's closed source (for now).",
-    rating: 8.5
-  },
-  {
     name: 'Gemini 2.5 Pro',
     provider: 'Google',
     review:
-      'Amazing for Deep Research and reasoning tasks. I hate it for coding.',
+      'Amazing for Deep Research and reasoning tasks. I have grown to like it for some code tasks in Gemini CLI.',
     rating: 7.5
   },
   {
@@ -177,7 +185,7 @@ export const favoriteModels: FavoriteModel[] = [
     provider: 'Google',
     review:
       'My favorite for playing around with AI or creating a project. Easy to run locally and open weight!',
-    rating: 8.0
+    rating: 7.0
   }
 ]
 
@@ -197,6 +205,17 @@ export const aiReviews: AIReview[] = [
     verdict: 'Best overall for Claude lovers'
   },
   {
+    tool: 'OpenCode',
+    rating: 9.5,
+    pros: [
+      'Fantastic TUI design',
+      'Frequent updates and bug fixes',
+      'Easy to setup'
+    ],
+    cons: [],
+    verdict: 'My favorite open source agent'
+  },
+  {
     tool: 'Codex',
     rating: 9.0,
     pros: [
@@ -204,12 +223,48 @@ export const aiReviews: AIReview[] = [
       'Perfectly tuned for GPT models',
       'Simple in the right ways'
     ],
-    cons: ['Slow'],
+    cons: ['Slow output'],
     verdict: 'Exciting new player in the agent space'
   },
   {
+    tool: 'Qwen CLI',
+    rating: 9.0,
+    pros: [
+      'Just-works TUI experience',
+      'High usage limits',
+      'Good quality output from top Qwen models',
+      'Free'
+    ],
+    cons: ['Confusing model names'],
+    verdict: 'Good open source agent with free usage'
+  },
+  {
+    tool: 'Gemini CLI',
+    rating: 9.0,
+    pros: [
+      'Claude Code copycat, in a good way',
+      'Decent output quality',
+      'Great for those who already have Gemini Pro/Ultra',
+      'Easy to export usage statistics'
+    ],
+    cons: ['Gemini models are not as good as top players'],
+    verdict:
+      'Decent agent, good for those paying for Gemini already or want a free agent'
+  },
+  {
+    tool: 'Amp Free',
+    rating: 8.5,
+    pros: [
+      'Creative TUI design',
+      'Quality output at times',
+      'Ads are a fair trade off for a free agent at this quality'
+    ],
+    cons: ['Unknown model', 'Unable to track usage'],
+    verdict: 'Great for LLM coding on a budget'
+  },
+  {
     tool: 'Cursor',
-    rating: 8.0,
+    rating: 8.5,
     pros: [
       'Works like magic',
       'Lots of model support',

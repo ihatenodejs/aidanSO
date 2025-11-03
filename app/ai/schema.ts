@@ -21,6 +21,8 @@ export const aiToolStatuses = [
   ...inactiveToolStatuses
 ] as const
 
+export const subscriptionPeriods = ['monthly', 'quarterly', 'yearly'] as const
+
 const baseFields = {
   name: string({ minLength: 1, trim: true }),
   icon: optional(anyValue<React.ElementType>()),
@@ -29,7 +31,8 @@ const baseFields = {
   usage: optional(string({ minLength: 1, trim: true })),
   hasUsage: optional(boolean()),
   price: optional(number({ min: 0 })),
-  discountedPrice: optional(number({ min: 0 }))
+  discountedPrice: optional(number({ min: 0 })),
+  subscriptionPeriod: optional(enums(subscriptionPeriods))
 } as const
 
 const activeAiToolSchema = object({
@@ -70,6 +73,7 @@ export const aiToolListSchema = array(aiToolSchema)
 export type ActiveToolStatus = (typeof activeToolStatuses)[number]
 export type InactiveToolStatus = (typeof inactiveToolStatuses)[number]
 export type AIToolStatus = ActiveToolStatus | InactiveToolStatus
+export type SubscriptionPeriod = (typeof subscriptionPeriods)[number]
 
 export type ActiveAITool = Infer<typeof activeAiToolSchema>
 export type InactiveAITool = Infer<typeof inactiveAiToolSchema>

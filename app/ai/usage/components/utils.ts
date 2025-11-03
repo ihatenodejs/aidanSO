@@ -54,6 +54,39 @@ export const buildModelUsageData = (daily: DailyData[]) => {
   return AIService.buildModelUsageData(daily)
 }
 
+export const buildModelUsageDataByTokens = (daily: DailyData[]) => {
+  const raw = daily.reduce(
+    (acc, day) => {
+      if (!day.modelBreakdowns) return acc
+
+      day.modelBreakdowns.forEach((model) => {
+        const label = getModelLabel(model.modelName)
+        const existing = acc.find((m) => m.name === label)
+        const totalTokens =
+          model.inputTokens +
+          model.outputTokens +
+          model.cacheCreationTokens +
+          model.cacheReadTokens
+        if (existing) {
+          existing.value += totalTokens
+        } else {
+          acc.push({ name: label, value: totalTokens })
+        }
+      })
+      return acc
+    },
+    [] as Array<{ name: string; value: number }>
+  )
+
+  const sorted = raw.sort((a, b) => b.value - a.value)
+  const total = sorted.reduce((sum, m) => sum + m.value, 0)
+
+  return sorted.map((m) => ({
+    ...m,
+    percentage: total > 0 ? (m.value / total) * 100 : 0
+  }))
+}
+
 export const buildTokenTypeData = (totals: CCData['totals']) => {
   return AIService.buildTokenTypeData(totals)
 }

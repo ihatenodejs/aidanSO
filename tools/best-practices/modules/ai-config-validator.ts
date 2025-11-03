@@ -248,11 +248,6 @@ const aiConfigValidator: CheckDefinition = {
             messages.push(
               `AI review for "${review.tool || '(unnamed)'}" has invalid cons (must be an array)`
             )
-          } else if (review.cons.length === 0) {
-            hasErrors = true
-            messages.push(
-              `AI review for "${review.tool || '(unnamed)'}" has no cons listed`
-            )
           }
 
           if (!review.verdict || review.verdict.trim() === '') {

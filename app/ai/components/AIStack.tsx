@@ -40,10 +40,16 @@ const DEFAULT_SUBTITLE =
 const infoLabelClasses =
   'text-xs whitespace-nowrap rounded-md px-2 py-1.5 transition-colors hover:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-300 sm:text-sm'
 
-function formatPrice(price: number) {
+function formatPrice(price: number, period?: string) {
   if (price === 0) return 'Free'
-  if (Number.isInteger(price)) return `$${price}/mo`
-  return `$${price.toFixed(2)}/mo`
+  const periodSuffix =
+    period === 'quarterly'
+      ? '/quarter'
+      : period
+        ? `/${period.slice(0, 2)}`
+        : '/mo'
+  if (Number.isInteger(price)) return `$${price}${periodSuffix}`
+  return `$${price.toFixed(2)}${periodSuffix}`
 }
 
 interface ToolInfoDialogProps {
@@ -75,8 +81,8 @@ function ToolInfoDialog({ tool, onClose }: ToolInfoDialogProps) {
   const priceLabel =
     tool.price !== undefined
       ? tool.discountedPrice !== undefined
-        ? `${formatPrice(tool.discountedPrice)} (from ${formatPrice(tool.price)})`
-        : formatPrice(tool.price)
+        ? `${formatPrice(tool.discountedPrice, tool.subscriptionPeriod)} (from ${formatPrice(tool.price, tool.subscriptionPeriod)})`
+        : formatPrice(tool.price, tool.subscriptionPeriod)
       : null
 
   return (
@@ -107,7 +113,13 @@ function ToolInfoDialog({ tool, onClose }: ToolInfoDialogProps) {
             {priceLabel && <InfoField label="Price">{priceLabel}</InfoField>}
             {tool.discountedPrice !== undefined && tool.price !== undefined && (
               <InfoField label="Original Price">
-                {formatPrice(tool.price)}
+                {formatPrice(tool.price, tool.subscriptionPeriod)}
+              </InfoField>
+            )}
+            {tool.subscriptionPeriod && (
+              <InfoField label="Billing Period">
+                {tool.subscriptionPeriod.charAt(0).toUpperCase() +
+                  tool.subscriptionPeriod.slice(1)}
               </InfoField>
             )}
           </div>
@@ -204,15 +216,24 @@ export default function AIStack({
                             tool.price !== tool.discountedPrice ? (
                               <>
                                 <span className="text-xs text-gray-500 line-through sm:text-sm">
-                                  {formatPrice(tool.price)}
+                                  {formatPrice(
+                                    tool.price,
+                                    tool.subscriptionPeriod
+                                  )}
                                 </span>
                                 <span className="text-xs text-gray-200 sm:text-sm">
-                                  {formatPrice(tool.discountedPrice)}
+                                  {formatPrice(
+                                    tool.discountedPrice,
+                                    tool.subscriptionPeriod
+                                  )}
                                 </span>
                               </>
                             ) : (
                               <span className="text-xs text-gray-200 sm:text-sm">
-                                {formatPrice(tool.price)}
+                                {formatPrice(
+                                  tool.price,
+                                  tool.subscriptionPeriod
+                                )}
                               </span>
                             )}
                           </div>

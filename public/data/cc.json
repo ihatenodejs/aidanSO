@@ -1484,7 +1484,7 @@
         "cacheCreationTokens": 0,
         "cacheReadTokens": 3090603,
         "totalTokens": 12051086,
-        "totalCost": 3.2031554499999997,
+        "totalCost": 3.5431217799999977,
         "modelsUsed": [
           "glm-4.5"
         ],
@@ -1495,7 +1495,7 @@
             "outputTokens": 55822,
             "cacheCreationTokens": 0,
             "cacheReadTokens": 3090603,
-            "cost": 3.2031554499999997
+            "cost": 3.5431217799999977
           }
         ]
       },
@@ -1545,34 +1545,56 @@
       },
       {
         "date": "2025-11-02",
-        "inputTokens": 2108953,
-        "outputTokens": 7182,
+        "inputTokens": 5705466,
+        "outputTokens": 33016,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 1548549,
-        "totalTokens": 3664684,
-        "totalCost": 1.2811721999999999,
+        "cacheReadTokens": 4640590,
+        "totalTokens": 10379072,
+        "totalCost": 4.006379700000002,
         "modelsUsed": [
           "glm-4.6"
         ],
         "modelBreakdowns": [
           {
             "modelName": "glm-4.6",
-            "inputTokens": 2108953,
-            "outputTokens": 7182,
+            "inputTokens": 5705466,
+            "outputTokens": 33016,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 1548549,
-            "cost": 1.2811721999999999
+            "cacheReadTokens": 4640590,
+            "cost": 4.006379700000002
+          }
+        ]
+      },
+      {
+        "date": "2025-11-03",
+        "inputTokens": 9727373,
+        "outputTokens": 37074,
+        "cacheCreationTokens": 0,
+        "cacheReadTokens": 8115727,
+        "totalTokens": 17880174,
+        "totalCost": 6.810716569999995,
+        "modelsUsed": [
+          "glm-4.6"
+        ],
+        "modelBreakdowns": [
+          {
+            "modelName": "glm-4.6",
+            "inputTokens": 9727373,
+            "outputTokens": 37074,
+            "cacheCreationTokens": 0,
+            "cacheReadTokens": 8115727,
+            "cost": 6.810716569999995
           }
         ]
       }
     ],
     "totals": {
-      "inputTokens": 11238609,
-      "outputTokens": 65277,
+      "inputTokens": 24562495,
+      "outputTokens": 128185,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 4653387,
-      "totalTokens": 15957273,
-      "totalCost": 4.497011979999999
+      "cacheReadTokens": 15861155,
+      "totalTokens": 40551835,
+      "totalCost": 14.372902379999996
     }
   },
   "codex": {
@@ -2112,34 +2134,56 @@
       },
       {
         "date": "2025-11-02",
-        "inputTokens": 726217,
-        "outputTokens": 112342,
+        "inputTokens": 1257172,
+        "outputTokens": 186198,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 8683648,
-        "totalTokens": 9522207,
-        "totalCost": 3.1166472499999998,
+        "cacheReadTokens": 18428288,
+        "totalTokens": 19871658,
+        "totalCost": 5.736981,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 726217,
-            "outputTokens": 112342,
+            "inputTokens": 1257172,
+            "outputTokens": 186198,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 8683648,
-            "cost": 3.1166472499999998
+            "cacheReadTokens": 18428288,
+            "cost": 5.736981
+          }
+        ]
+      },
+      {
+        "date": "2025-11-03",
+        "inputTokens": 1075388,
+        "outputTokens": 244967,
+        "cacheCreationTokens": 0,
+        "cacheReadTokens": 29086976,
+        "totalTokens": 30407331,
+        "totalCost": 7.429777,
+        "modelsUsed": [
+          "gpt-5-codex"
+        ],
+        "modelBreakdowns": [
+          {
+            "modelName": "gpt-5-codex",
+            "inputTokens": 1075388,
+            "outputTokens": 244967,
+            "cacheCreationTokens": 0,
+            "cacheReadTokens": 29086976,
+            "cost": 7.429777
           }
         ]
       }
     ],
     "totals": {
-      "inputTokens": 458208050,
-      "outputTokens": 15292342,
+      "inputTokens": 459814393,
+      "outputTokens": 15611165,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 922293376,
-      "totalTokens": 1395793768,
-      "totalCost": 423.90203255367385
+      "cacheReadTokens": 961124992,
+      "totalTokens": 1436550550,
+      "totalCost": 433.95214330367384
     }
   },
   "gemini": {
@@ -2343,11 +2387,11 @@
     }
   },
   "totals": {
-    "inputTokens": 476642693,
-    "outputTokens": 17734782,
+    "inputTokens": 491572922,
+    "outputTokens": 18116513,
     "cacheCreationTokens": 63687510,
-    "cacheReadTokens": 1984478694,
-    "totalTokens": 2542543679,
-    "totalCost": 1783.4429658336742
+    "cacheReadTokens": 2034518078,
+    "totalTokens": 2607895023,
+    "totalCost": 1803.3689669836742
   }
 }

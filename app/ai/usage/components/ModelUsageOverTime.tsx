@@ -91,7 +91,6 @@ const buildLineData = (daily: DailyData[]) => {
   const sortedModels = Array.from(modelTotals.entries())
     .sort((a, b) => b[1] - a[1])
     .map(([label]) => label)
-    .slice(0, 6)
 
   return { lineData, models: sortedModels }
 }

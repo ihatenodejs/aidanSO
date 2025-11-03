@@ -137,7 +137,7 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
   return (
     <article
       className={`flex flex-col gap-4 rounded-2xl border border-gray-800 bg-gray-900/60 p-5 backdrop-blur-sm ${
-        shouldSpanWide ? 'lg:col-span-2 xl:col-span-2' : ''
+        shouldSpanWide ? 'lg:col-span-2 xl:col-span-3' : ''
       }`}
     >
       <header className="flex items-center gap-3">

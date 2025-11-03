@@ -16,6 +16,7 @@ import { FaYoutube } from 'react-icons/fa'
 import { MdOutlineAndroid } from 'react-icons/md'
 import { RiTelegram2Fill } from 'react-icons/ri'
 import { VscTerminalLinux } from 'react-icons/vsc'
+import { SiProtonmail } from 'react-icons/si'
 
 import { Section, Row, Modules, Module } from '../components'
 
@@ -42,11 +43,11 @@ export const Content = () => (
   <>
     <Section id="hardware" title="Hardware" icon={Smartphone}>
       <Row label="Chipset" value="Google Tensor G4" icon={Cpu} />
-      <Row label="RAM" value="16 GB LPDDR5X" icon={MemoryStick} />
-      <Row label="Storage" value="128 GB UFS 4.0" icon={HardDrive} />
+      <Row label="RAM" value="16 GB" icon={MemoryStick} />
+      <Row label="Storage" value="128 GB" icon={HardDrive} />
     </Section>
 
-    <Section id="software" title="Software Stack" icon={MdOutlineAndroid}>
+    <Section id="software" title="Software" icon={MdOutlineAndroid}>
       <Row
         label="Android Version"
         value="Android 16 Canary"
@@ -63,7 +64,7 @@ export const Content = () => (
       />
     </Section>
 
-    <Section id="apps" title="Daily Apps" icon={Package}>
+    <Section id="apps" title="Apps" icon={Package}>
       <Row label="Music" value="Tidal" icon={Music} href="https://tidal.com" />
       <Row
         label="Files"
@@ -89,9 +90,15 @@ export const Content = () => (
         icon={FaYoutube}
         href="https://revanced.app"
       />
+      <Row
+        label="Email"
+        value="Proton Mail"
+        icon={SiProtonmail}
+        href="https://proton.me"
+      />
     </Section>
 
-    <Modules id="modules" title="Module Suite" icon={Layers}>
+    <Modules id="modules" title="Modules" icon={Layers}>
       <Module
         label="Busybox for Android NDK"
         href="https://github.com/Magisk-Modules-Repo/busybox-ndk"

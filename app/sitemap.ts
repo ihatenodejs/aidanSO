@@ -27,6 +27,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9
     },
     {
+      url: 'https://aidan.so/status',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8
+    },
+    {
+      url: 'https://aidan.so/docs',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8
+    },
+    {
       url: 'https://aidan.so/contact',
       lastModified: new Date(),
       changeFrequency: 'monthly',

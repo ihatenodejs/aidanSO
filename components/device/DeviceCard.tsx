@@ -5,10 +5,10 @@ import {
   Calendar,
   Smartphone as SmartphoneIcon
 } from 'lucide-react'
-import type { DeviceWithMetrics } from '@/lib/types'
+import type { ClientDeviceWithMetrics } from '@/lib/types/client-device'
 
 interface DeviceCardProps {
-  device: DeviceWithMetrics
+  device: ClientDeviceWithMetrics
 }
 
 export default function DeviceCard({ device }: DeviceCardProps) {

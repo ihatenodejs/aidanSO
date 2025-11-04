@@ -12,9 +12,9 @@ import {
 } from 'lucide-react'
 import { MdOutlineAndroid } from 'react-icons/md'
 import { VscTerminalLinux } from 'react-icons/vsc'
-import { Section, Row, Modules, Module } from '../components'
+import { Section, Row } from '../components'
 import { TbBrandMatrix } from 'react-icons/tb'
-import { SiMagisk, SiLineageos, SiProtonmail, SiProtoncalendar } from 'react-icons/si'
+import { SiLineageos, SiProtonmail, SiProtoncalendar } from 'react-icons/si'
 
 export const meta = {
   slug: 'bonito',

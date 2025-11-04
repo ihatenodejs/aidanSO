@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 
-import DevicePageShell from '@/components/device/DevicePageShell'
-import { deviceSlugs, getDeviceBySlug } from '@/lib/devices'
+import ClientDevicePageShell from '@/components/device/ClientDevicePageShell'
+import { deviceSlugs } from '@/lib/config/devices/client'
+import { ClientDeviceService } from '@/lib/services/client-device.service'
 
 interface DevicePageProps {
   params: Promise<{ slug: string }>
@@ -16,7 +16,7 @@ export async function generateMetadata({
   params
 }: DevicePageProps): Promise<Metadata> {
   const { slug } = await params
-  const device = getDeviceBySlug(slug)
+  const device = ClientDeviceService.getDeviceBySlug(slug)
 
   if (!device) {
     return {}
@@ -44,11 +44,5 @@ export async function generateMetadata({
 
 export default async function DevicePage({ params }: DevicePageProps) {
   const { slug } = await params
-  const device = getDeviceBySlug(slug)
-
-  if (!device) {
-    notFound()
-  }
-
-  return <DevicePageShell device={device} />
+  return <ClientDevicePageShell slug={slug} />
 }

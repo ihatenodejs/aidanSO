@@ -52,3 +52,7 @@ bun.lockb
 
 # docs
 public/docs
+
+# devices
+lib/config/devices/built-devices.json
+lib/config/devices/built-devices-client.json

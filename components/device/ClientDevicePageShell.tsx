@@ -1,25 +1,47 @@
+'use client'
+
 import type { ReactElement } from 'react'
+import { notFound } from 'next/navigation'
 import { ArrowUpRight, Star, StarHalf, StarOff } from 'lucide-react'
 
 import Link from '@/components/objects/Link'
+import type { RatingProps, StarState } from '@/lib/types'
 import type {
-  DevicePageShellProps,
-  DeviceStatGroup,
-  StatItemProps,
-  SectionsGridProps,
-  SectionCardProps,
-  SectionRowProps,
-  RatingProps,
-  StarState
-} from '@/lib/types'
+  ClientDevice,
+  ClientSectionCardProps,
+  ClientSectionRowProps
+} from '@/lib/types/client-device'
 import { isExternalHref, externalLinkProps } from '@/lib/utils/styles'
 import { iconSizes } from '@/lib/config/devices/config'
+import { getIcon } from '@/lib/config/devices/icon-map'
+import { ClientDeviceService } from '@/lib/services/client-device.service'
 
 import DeviceHero from './DeviceHero'
 
-export default function DevicePageShell({
-  device
-}: DevicePageShellProps): ReactElement {
+function renderIcon(
+  iconId: string | undefined,
+  className?: string,
+  size?: number
+): ReactElement | null {
+  const Icon = getIcon(iconId)
+  if (!Icon) return null
+
+  return <Icon className={className} size={size} />
+}
+
+export interface ClientDevicePageShellProps {
+  slug: string
+}
+
+export default function ClientDevicePageShell({
+  slug
+}: ClientDevicePageShellProps): ReactElement {
+  const device = ClientDeviceService.getDeviceBySlug(slug)
+
+  if (!device) {
+    notFound()
+  }
+
   return (
     <div className="space-y-12">
       <DeviceHero device={device} />
@@ -35,8 +57,12 @@ function SectionsGrid({
   stats,
   sections
 }: {
-  stats: DeviceStatGroup[]
-  sections: SectionsGridProps['sections']
+  stats: Array<{
+    icon?: string
+    title: string
+    items: Array<{ label?: string; value: string; href?: string }>
+  }>
+  sections: ClientDevice['sections']
 }): ReactElement {
   return (
     <section className="space-y-5">
@@ -52,48 +78,60 @@ function SectionsGrid({
   )
 }
 
-function StatCard({ group }: { group: DeviceStatGroup }): ReactElement {
-  const Icon = group.icon
-
+function StatCard({
+  group
+}: {
+  group: {
+    icon?: string
+    title: string
+    items: Array<{ label?: string; value: string; href?: string }>
+  }
+}): ReactElement {
   return (
     <article className="flex h-full flex-col gap-4 rounded-2xl border border-gray-800 bg-gray-900/60 p-5 backdrop-blur-sm">
       <header className="flex items-center gap-3">
-        {Icon ? (
+        {group.icon ? (
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-800 text-gray-300">
-            <Icon className="h-5 w-5" />
+            {renderIcon(group.icon, 'h-5 w-5')}
           </span>
         ) : null}
         <h3 className="text-lg font-semibold text-gray-100">{group.title}</h3>
       </header>
       <div className="grid gap-3 sm:grid-cols-2">
-        {group.items.map((item) => (
-          <StatItem
-            key={`${group.title}-${item.label ?? item.value}`}
-            item={item}
-            groupIcon={group.icon}
-          />
-        ))}
+        {group.items.map(
+          (item: { label?: string; value: string; href?: string }) => (
+            <StatItem
+              key={`${group.title}-${item.label ?? item.value}`}
+              item={item}
+              groupIcon={group.icon}
+            />
+          )
+        )}
       </div>
     </article>
   )
 }
 
-function StatItem({ item, groupIcon }: StatItemProps): ReactElement {
+function StatItem({
+  item,
+  groupIcon
+}: {
+  item: { label?: string; value: string; href?: string }
+  groupIcon?: string
+}): ReactElement {
   const isExternal = isExternalHref(item.href)
   const linkProps = isExternal ? externalLinkProps : {}
   const baseClasses =
     'relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/70 px-4 py-5 text-gray-100 transition'
-  const GroupIcon = groupIcon
-
   const content = (
     <>
-      {GroupIcon ? (
-        <GroupIcon
-          aria-hidden
-          className="pointer-events-none absolute -top-4 -right-4 text-gray-800/70"
-          size={iconSizes.stat}
-        />
-      ) : null}
+      {groupIcon
+        ? renderIcon(
+            groupIcon,
+            'pointer-events-none absolute -top-4 -right-4 text-gray-800/70',
+            iconSizes.stat
+          )
+        : null}
       {item.href && isExternal ? (
         <ArrowUpRight
           aria-hidden
@@ -128,7 +166,7 @@ function StatItem({ item, groupIcon }: StatItemProps): ReactElement {
   return <div className={baseClasses}>{content}</div>
 }
 
-function SectionCard({ section }: SectionCardProps): ReactElement {
+function SectionCard({ section }: ClientSectionCardProps): ReactElement {
   const shouldSpanWide =
     !!section.paragraphs?.length &&
     (!section.rows || section.paragraphs.length > 1)
@@ -142,7 +180,7 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
       <header className="flex items-center gap-3">
         {section.icon ? (
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-800 text-gray-300">
-            <section.icon className="h-5 w-5" />
+            {renderIcon(section.icon, 'h-5 w-5')}
           </span>
         ) : null}
         <div>
@@ -211,8 +249,7 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
   )
 }
 
-function SectionRow({ row }: SectionRowProps): ReactElement {
-  const { icon: RowIcon } = row
+function SectionRow({ row }: ClientSectionRowProps): ReactElement {
   const isExternal = isExternalHref(row.href)
   const linkProps = isExternal ? externalLinkProps : {}
   const baseClasses =
@@ -220,12 +257,13 @@ function SectionRow({ row }: SectionRowProps): ReactElement {
 
   const content = (
     <>
-      {RowIcon ? (
-        <RowIcon
-          className="pointer-events-none absolute -top-4 -right-4 text-gray-800/70"
-          size={iconSizes.section}
-        />
-      ) : null}
+      {row.icon
+        ? renderIcon(
+            row.icon,
+            'pointer-events-none absolute -top-4 -right-4 text-gray-800/70',
+            iconSizes.section
+          )
+        : null}
       {row.href && isExternal ? (
         <ArrowUpRight
           aria-hidden

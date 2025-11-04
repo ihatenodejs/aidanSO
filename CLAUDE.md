@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides comprehensive guidance to Claude Code (claude.ai/code) when working with the aidanSO codebase.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
 
@@ -19,37 +19,106 @@ This file provides comprehensive guidance to Claude Code (claude.ai/code) when w
 
 ## Development Commands
 
+### Server & Build
+
 ```bash
-# Development - runs custom server with Socket.io
+# Development - runs custom Bun server with Socket.io on available port
 bun run dev
 
-# Production build and start
+# Production build (runs device data build + Next.js build)
 bun run build
+
+# Production build + start (requires pre-built application)
 bun run start
 
-# Code Quality
-bun run lint              # Run ESLint
-bun run typecheck         # Type checking without emitting files
-bun run format            # Format code with Prettier
-bun run format:check      # Check formatting without changes
-bun run test              # Run tests
-bun run best-practices    # Run best practices checks
-bun run best-practices:ci # Run best practices (skips page-load-performance)
+# Pre-build device data (runs automatically during full build)
+bun run build:devices
+```
 
-# Analysis & Monitoring
-bun run scan              # Run React Scan for performance analysis
-bun run docs:generate     # Generate TypeDoc documentation
-bun run docs:watch        # Watch and regenerate docs on changes
+### Code Quality
 
-# AI Usage Data
-bun run sync:usage        # Sync AI usage data from agent-exporter
+```bash
+# Type checking without emitting files
+bun run typecheck
+
+# Lint code with ESLint (flat config)
+bun run lint
+
+# Format code with Prettier
+bun run format
+
+# Check formatting without changes
+bun run format:check
+```
+
+### Testing
+
+```bash
+# Run all tests (uses Bun test runner)
+bun run test
+
+# Run specific test file
+bun test path/to/test.test.ts
+
+# Run tests in watch mode
+bun test --watch
+
+# Run tests with coverage
+bun test --coverage
+```
+
+### Analysis & Documentation
+
+```bash
+# Run best practices checks
+bun run best-practices
+
+# Run best practices (CI version, skips page-load-performance check)
+bun run best-practices:ci
+
+# List all available checks
+bun run best-practices --list
+
+# Run specific checks only
+bun run best-practices --only=cc-model-labels,ai-config-validator
+
+# Get JSON output from checks
+bun run best-practices --json
+
+# Show help for best-practices tool
+bun run best-practices --help
+
+# Run React Scan for performance analysis
+bun run scan
+
+# Generate TypeDoc documentation
+bun run docs:generate
+
+# Watch and regenerate documentation on file changes
+bun run docs:watch
+```
+
+### AI Usage Data
+
+```bash
+# Sync AI usage data from agent-exporter
+bun run sync:usage
+
+# Preview changes without writing
+bun run sync:usage --dry-run
+
+# Sync specific time period
+bun run sync:usage --period monthly
+
+# Get help for sync tool
+bun run sync:usage --help
 ```
 
 **Important**: Do not run a development server unless specifically asked. Use better methods to check for issues:
 
 - `bun run typecheck` - Check TypeScript types
 - `bun run lint` - Check code quality
-- IDE diagnostics via `mcp__ide__getDiagnostics`
+- `mcp__ide__getDiagnostics` - IDE diagnostics for syntax/type errors
 
 ## Project Architecture
 
@@ -102,23 +171,34 @@ import { cn } from '@/lib/utils'
 className={cn('base-class', conditional && 'conditional-class', className)}
 ```
 
-#### 2. Formatting Utilities (`lib/utils/formatting.ts`)
+#### 2. Formatting & Utility Functions (`lib/utils/`)
+
+**Formatting Utilities** (`lib/utils/formatting.ts`)
 
 ```typescript
 import { Formatter } from '@/lib/utils'
 
 // Available formatters:
-Formatter.currency(value, decimals) // $100.00
-Formatter.tokens(value) // 1.5M, 2.3K
-Formatter.percentage(value, decimals) // 85.5%
-Formatter.date(date, format) // 'short', 'long', 'iso'
-Formatter.duration(days) // 2y, 3mo, 5d
-Formatter.fileSize(bytes) // 1.5 MB
-Formatter.number(value, decimals) // 1,234.56
-Formatter.capitalize(str) // Title Case
-Formatter.truncate(str, maxLength) // Text...
-Formatter.slugify(str) // url-friendly-slug
+Formatter.currency(100, 2)          // '$100.00'
+Formatter.tokens(1500000)           // '1.5M'
+Formatter.percentage(85.5, 1)       // '85.5%'
+Formatter.date(new Date())          // Uses 'short'|'long'|'iso' format
+Formatter.duration(730)             // '2y' (days to years/months)
+Formatter.fileSize(1572864)         // '1.5 MB'
+Formatter.number(1234.56, 2)        // '1,234.56'
+Formatter.capitalize('hello')       // 'Hello'
+Formatter.truncate('long text', 5)  // 'lo...'
+Formatter.slugify('Hello World')    // 'hello-world'
 ```
+
+**Style Utilities** (`lib/utils/styles.ts`)
+- Reusable style objects and constants
+
+**Validation Utilities** (`lib/utils/validation.ts`)
+- Input validation and sanitization helpers
+
+**Device Text Utilities** (`lib/utils/device-text.ts`)
+- Device-specific text formatting and display logic
 
 #### 3. Theme System (`lib/theme/`)
 
@@ -153,43 +233,73 @@ surfaces.spacing.page // Page-level spacing
 
 #### 4. Common Components (`components/objects/`)
 
-**Link Component**
+**Navigation & Layout Components**
 
 ```typescript
 import Link from '@/components/objects/Link'
+import Button from '@/components/objects/Button'
+import AnimatedTitle from '@/components/objects/AnimatedTitle'
+import PageHeader from '@/components/objects/PageHeader'
 
+// Link with variants
 <Link
   href="/path"
   variant="default|nav|muted"
   external={true}  // Auto-adds target="_blank" and rel="noopener"
 >
-```
 
-**Button Component**
-
-```typescript
-import Button from '@/components/objects/Button'
-
+// Button with icon and variants
 <Button
   href="/path"
   variant="primary|rounded"
   icon={<IconComponent />}
   target="_blank"  // Optional
 >
+
+// Animated page title
+<AnimatedTitle text="Page Title" />
+
+// Full-featured page header
+<PageHeader title="Title" description="Optional description" />
 ```
 
-**AnimatedTitle Component**
+**Utility & Display Components**
 
 ```typescript
-import AnimatedTitle from '@/components/objects/AnimatedTitle'
+import LoadingSpinner from '@/components/objects/LoadingSpinner'
+import MusicText from '@/components/objects/MusicText'
+import SeekBar from '@/components/objects/SeekBar'
+import ProfilePicture from '@/components/objects/ProfilePicture'
+import RandomFooterMsg from '@/components/objects/RandomFooterMsg'
 
-<AnimatedTitle text="Page Title" />
+// Loading states
+<LoadingSpinner />
+
+// Music-related displays
+<MusicText />
+
+// Audio seek bar
+<SeekBar />
+
+// Profile image with fallback
+<ProfilePicture />
+
+// Random footer message rotation
+<RandomFooterMsg />
 ```
 
 #### 5. Services Pattern (`lib/services/`)
 
+Business logic is centralized in service modules:
+
 ```typescript
-import { DomainService, DeviceService, AIService } from '@/lib/services'
+import {
+  DomainService,
+  DeviceService,
+  ClientDeviceService,
+  AIService,
+  StatusService
+} from '@/lib/services'
 
 // Domain operations
 const domains = DomainService.getAllDomainsEnriched()
@@ -197,13 +307,27 @@ const domain = DomainService.getDomainByName('example.com')
 const filtered = DomainService.filterDomains({ status: 'active' })
 const stats = DomainService.getDomainStats()
 
-// Device operations
+// Device operations (server-side)
 const devices = DeviceService.getAllDevices()
 const device = DeviceService.getDeviceBySlug('device-slug')
 
-// AI operations
-const usage = AIService.getUsageData()
+// Client device operations (browser-safe data)
+const clientDevices = ClientDeviceService.getClientDevices()
+
+// AI usage analytics
+const label = AIService.getModelLabel('claude-sonnet-4-5-20250929')
+const streak = AIService.computeStreak(dailyData)
+const stats = AIService.getAIStats(ccData)
+
+// Status/health checks
+const status = StatusService.getStatus()
 ```
+
+**Service Principles:**
+- Services are stateless utility modules
+- Use in server components for data fetching
+- Export as named exports from `lib/services/index.ts`
+- Implement consistent error handling and logging
 
 #### 6. Type Definitions (`lib/types/`)
 
@@ -217,6 +341,95 @@ import type {
   SortOrder,
   PaginationConfig
 } from '@/lib/types'
+```
+
+## Testing Framework
+
+The project uses **Bun's native test runner** (`bun:test`) for unit and integration tests.
+
+### Test File Organization
+
+- Test files use `.test.ts` or `.test.tsx` suffix
+- Organized in `__tests__` directories alongside source code
+- Test imports are configured to run with Bun's built-in test runner
+
+### Writing Tests
+
+```typescript
+import { describe, expect, it, mock } from 'bun:test'
+
+describe('MyFunction', () => {
+  it('should do something', () => {
+    const result = myFunction()
+    expect(result).toBe(expectedValue)
+  })
+
+  it('should handle edge cases', () => {
+    expect(() => myFunction(null)).toThrow()
+  })
+})
+```
+
+### Test Assertion Patterns
+
+```typescript
+// Common assertions
+expect(value).toBe(expected)
+expect(value).toEqual(expected)
+expect(value).toBeTrue()
+expect(value).toBeFalse()
+expect(value).toHaveLength(n)
+expect(fn).toThrow()
+expect(Array.from(value)).toEqual([...])
+```
+
+### Available Test Commands
+
+- `bun test` - Run all tests
+- `bun test path/to/file.test.ts` - Run specific test
+- `bun test --watch` - Watch mode
+- `bun test --coverage` - Generate coverage report
+
+**Reference**: Tests can be found in:
+- `tools/__tests__/` - Tool validation tests
+- `app/ai/usage/__tests__/` - Component schema tests
+- `components/navigation/footer/__tests__/` - Component tests
+
+## Code Formatting & Linting
+
+### Prettier Configuration
+
+The project uses Prettier with these settings (`.prettierrc`):
+- **Print Width**: 80 characters
+- **Tab Width**: 2 spaces
+- **Quotes**: Single quotes (JSX: double quotes)
+- **Semicolons**: Off
+- **Trailing Commas**: None
+- **Arrow Function Parens**: Always
+- **Bracket Spacing**: Enabled
+- **Plugins**: `prettier-plugin-tailwindcss` - Auto-sorts Tailwind classes
+
+```bash
+# Format files
+bun run format
+
+# Check formatting without changes
+bun run format:check
+```
+
+### ESLint Configuration
+
+The project uses ESLint 9 with flat config (`eslint.config.mjs`):
+- **Extends**: Next.js core web vitals + TypeScript config
+- **Plugins**: Prettier for formatting rules
+- **Ignores**: `.next/`, `out/`, `build/`, `public/docs/`
+
+```bash
+# Lint all files
+bun run lint
+
+# Auto-fix linting issues (with Prettier integration)
+bun run format
 ```
 
 ## Styling Guidelines
@@ -249,6 +462,43 @@ import type {
 'border-gray-700' // Default borders
 'border-gray-600' // Hover borders
 ```
+
+## Device Data Build Process
+
+Device showcase data is pre-built at compile time using a custom build script (`tools/build-device-data.ts`).
+
+### How It Works
+
+1. **Source**: Device configurations are defined as TSX modules in `lib/config/devices/pages/`
+   - `komodo.tsx`, `cheetah.tsx`, `bonito.tsx`, `jm21.tsx`
+   - Each exports device metadata, components, and specs
+
+2. **Transform**: The `transformDevicePage()` function converts TSX exports to plain JavaScript objects
+   - Extracts component names for icons
+   - Converts React components to serializable data
+   - Generates client-safe data subset
+
+3. **Output**: Produces two JSON artifacts
+   - Full device data (used by server components)
+   - Client device data (safe for browser exposure)
+
+4. **Integration**: Automatically runs during `bun run build`
+   - Executes before Next.js build
+   - Generates data artifacts in `.next/` or build output
+
+### Key Benefits
+
+- Zero-runtime JSX parsing (components defined as TSX at build time)
+- Type-safe device data through TypeScript
+- SEO-friendly static pages
+- Dynamic routing with pre-generated data
+
+### When to Update
+
+- Add new device pages → create new file in `lib/config/devices/pages/`
+- Modify device metadata → edit corresponding device file
+- Change icon mapping → update `lib/config/devices/icon-map.ts`
+- Run `bun run build:devices` to regenerate (manual rebuild)
 
 ## Custom Server Architecture
 
@@ -439,8 +689,16 @@ The project includes a custom best-practices validation tool (`tools/best-practi
 ### Available Checks
 
 1. **page-load-performance**: Measures page load times to ensure performance goals are met
+   - Skipped in CI with `bun run best-practices:ci`
+
 2. **cc-model-labels**: Validates that all AI models in `public/data/cc.json` have human-readable labels
+   - Ensures provider compatibility and labeling consistency
+
 3. **ai-config-validator**: Validates AI configuration data structure and integrity
+   - Checks schema compliance and data validation
+
+4. **device-icons**: Validates device icon mappings and references
+   - Ensures all device icons are properly mapped and accessible
 
 ### Usage
 
@@ -452,7 +710,7 @@ bun run best-practices
 bun run best-practices --list
 
 # Run specific checks only
-bun run best-practices --only=cc-model-labels,ai-config-validator
+bun run best-practices --only=cc-model-labels,ai-config-validator,page-load-performance,device-icons
 
 # Skip specific checks (useful in CI)
 bun run best-practices --skip=page-load-performance
@@ -701,6 +959,75 @@ function ProviderFilter() {
 - Provider-specific theming
 
 See `AGENT-EXPORTER-MIGRATION.md` for detailed migration status and instructions.
+
+## Bun Runtime Considerations
+
+This project uses **Bun** instead of Node.js for all runtime operations.
+
+### Key Differences from Node.js
+
+- **Package Manager**: Bun replaces npm/yarn - `bunfig.toml` is the config file
+- **Runtime**: Bun provides native TypeScript execution without transpilation
+- **Test Runner**: Built-in `bun:test` replaces Jest or Mocha
+- **Import Resolution**: Uses Bun's module resolution (generally faster and more compatible)
+
+### Running Commands
+
+All commands use `bun` prefix:
+```bash
+bun run <script>    # Run npm script
+bun <file.ts>       # Execute TypeScript directly
+bun test            # Run tests
+bun add <package>   # Install package
+```
+
+### Bun-Specific Features Used
+
+- **Native TypeScript execution** - No build step needed for `.ts` files
+- **JSX support** - Transform JSX without compilation
+- **ESM imports** - Full ES modules support
+- **Built-in test framework** - `bun:test` with `describe`, `it`, `expect`
+- **Node.js compatibility** - Runs most Node.js packages unchanged
+
+### File: `bunfig.toml`
+
+Minimal configuration - primarily used to configure the test runner root directory.
+
+## Documentation Generation
+
+TypeDoc documentation is automatically generated from JSDoc comments in the source code.
+
+### Generating Docs
+
+```bash
+# Generate documentation
+bun run docs:generate
+
+# Watch mode - regenerate on file changes
+bun run docs:watch
+```
+
+### Documentation Location
+
+- **Output**: `public/docs/` (gitignored)
+- **Configuration**: `tsconfig.json` (TypeDoc reads tsconfig)
+- **DocGen Command**: Runs TypeDoc on the entire codebase
+
+### JSDoc Standards
+
+- Use JSDoc comments for public APIs
+- Include `@module`, `@category`, and `@public` tags
+- Example from `server.ts`:
+  ```typescript
+  /**
+   * Custom server for Next.js with Socket.io for real-time features.
+   * @remarks
+   * Provides automatic port conflict resolution...
+   * @module server
+   * @category API
+   * @public
+   */
+  ```
 
 ## Security Notes
 

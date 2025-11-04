@@ -5,10 +5,10 @@ import PageHeader from '@/components/objects/PageHeader'
 import PageShell from '@/components/layout/PageShell'
 import DeviceFilters from '@/components/device/DeviceFilters'
 import DeviceCard from '@/components/device/DeviceCard'
-import { DeviceService } from '@/lib/services'
+import { ClientDeviceService } from '@/lib/services/client-device.service'
 import { Smartphone } from 'lucide-react'
 
-const allDevices = DeviceService.getAllDevicesEnriched()
+const allDevices = ClientDeviceService.getAllDevicesEnriched()
 
 export default function DevicesPage() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -85,14 +85,16 @@ export default function DevicesPage() {
       })
     }
 
-    return DeviceService.sortDevices(filtered, 'releaseYear', 'desc').sort(
-      (a, b) => {
-        if (a.releaseYear === b.releaseYear) {
-          return a.name.localeCompare(b.name)
-        }
-        return 0
+    return ClientDeviceService.sortDevices(
+      filtered,
+      'releaseYear',
+      'desc'
+    ).sort((a, b) => {
+      if (a.releaseYear === b.releaseYear) {
+        return a.name.localeCompare(b.name)
       }
-    )
+      return 0
+    })
   }, [searchQuery, selectedType, selectedManufacturer, selectedYear])
 
   const stats = useMemo(() => {

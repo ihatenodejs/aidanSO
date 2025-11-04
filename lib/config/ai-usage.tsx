@@ -212,7 +212,9 @@ export const aiReviews: AIReview[] = [
       'Frequent updates and bug fixes',
       'Easy to setup'
     ],
-    cons: [],
+    cons: [
+      'Occasional parsing issues'
+    ],
     verdict: 'My favorite open source agent'
   },
   {

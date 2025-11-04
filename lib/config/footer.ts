@@ -43,7 +43,8 @@ export const FOOTER_ROLES = [
   'Principal Narrative Architect',
   'Lead Alignment Strategist',
   'Chief Risk Mitigator',
-  'Director of Value Realization'
+  'Director of Value Realization',
+  'AI Synergest'
 ] as const
 
 export const FOOTER_DESCRIPTION = 'Open source developer and sysadmin.'

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from '@/components/objects/Link'
-import { DeviceService } from '@/lib/services'
+import { ClientDeviceService } from '@/lib/services/client-device.service'
 import { Smartphone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
  * Shows a truncated list of devices with images and basic details.
  */
 export default function DeviceShowcase() {
-  const devices = DeviceService.getAllDevicesEnriched()
+  const devices = ClientDeviceService.getAllDevicesEnriched()
 
   const displayDevices = devices
     .sort((a, b) => {

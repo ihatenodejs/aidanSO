@@ -910,12 +910,12 @@
       },
       {
         "date": "2025-10-05",
-        "inputTokens": 142,
-        "outputTokens": 1520,
-        "cacheCreationTokens": 149629,
-        "cacheReadTokens": 471075,
-        "totalTokens": 622366,
-        "totalCost": 1.7090350499999998,
+        "inputTokens": 188,
+        "outputTokens": 1797,
+        "cacheCreationTokens": 271091,
+        "cacheReadTokens": 537866,
+        "totalTokens": 810942,
+        "totalCost": 2.1888478499999997,
         "modelsUsed": [
           "claude-opus-4-1-20250805",
           "claude-sonnet-4-5-20250929"
@@ -931,22 +931,22 @@
           },
           {
             "modelName": "claude-sonnet-4-5-20250929",
-            "inputTokens": 46,
-            "outputTokens": 277,
-            "cacheCreationTokens": 121462,
-            "cacheReadTokens": 66791,
-            "cost": 0.47981280000000004
+            "inputTokens": 92,
+            "outputTokens": 554,
+            "cacheCreationTokens": 242924,
+            "cacheReadTokens": 133582,
+            "cost": 0.9596256000000001
           }
         ]
       },
       {
         "date": "2025-10-06",
-        "inputTokens": 7741,
-        "outputTokens": 75724,
-        "cacheCreationTokens": 2168745,
-        "cacheReadTokens": 28925504,
-        "totalTokens": 31177714,
-        "totalCost": 19.243813949999982,
+        "inputTokens": 7815,
+        "outputTokens": 76418,
+        "cacheCreationTokens": 2205165,
+        "cacheReadTokens": 29496719,
+        "totalTokens": 31786117,
+        "totalCost": 20.836671449999983,
         "modelsUsed": [
           "claude-sonnet-4-5-20250929",
           "claude-opus-4-1-20250805"
@@ -962,11 +962,11 @@
           },
           {
             "modelName": "claude-opus-4-1-20250805",
-            "inputTokens": 74,
-            "outputTokens": 694,
-            "cacheCreationTokens": 36420,
-            "cacheReadTokens": 571215,
-            "cost": 1.5928575
+            "inputTokens": 148,
+            "outputTokens": 1388,
+            "cacheCreationTokens": 72840,
+            "cacheReadTokens": 1142430,
+            "cost": 3.185715
           }
         ]
       },
@@ -1016,12 +1016,12 @@
       },
       {
         "date": "2025-10-09",
-        "inputTokens": 24013,
-        "outputTokens": 38504,
-        "cacheCreationTokens": 2309913,
-        "cacheReadTokens": 27533827,
-        "totalTokens": 29906257,
-        "totalCost": 27.68270564999999,
+        "inputTokens": 24180,
+        "outputTokens": 39048,
+        "cacheCreationTokens": 2859863,
+        "cacheReadTokens": 29056236,
+        "totalTokens": 31979327,
+        "totalCost": 40.32118664999999,
         "modelsUsed": [
           "claude-sonnet-4-5-20250929",
           "claude-opus-4-1-20250805"
@@ -1037,11 +1037,11 @@
           },
           {
             "modelName": "claude-opus-4-1-20250805",
-            "inputTokens": 167,
-            "outputTokens": 544,
-            "cacheCreationTokens": 549950,
-            "cacheReadTokens": 1522409,
-            "cost": 12.638480999999997
+            "inputTokens": 334,
+            "outputTokens": 1088,
+            "cacheCreationTokens": 1099900,
+            "cacheReadTokens": 3044818,
+            "cost": 25.276961999999994
           }
         ]
       },
@@ -1091,12 +1091,12 @@
       },
       {
         "date": "2025-10-17",
-        "inputTokens": 71,
-        "outputTokens": 3127,
-        "cacheCreationTokens": 108109,
+        "inputTokens": 75,
+        "outputTokens": 3398,
+        "cacheCreationTokens": 112923,
         "cacheReadTokens": 3491720,
-        "totalTokens": 3603027,
-        "totalCost": 7.396942750000001,
+        "totalTokens": 3608116,
+        "totalCost": 7.404319250000001,
         "modelsUsed": [
           "claude-opus-4-1-20250805",
           "claude-haiku-4-5-20251001"
@@ -1112,11 +1112,11 @@
           },
           {
             "modelName": "claude-haiku-4-5-20251001",
-            "inputTokens": 4,
-            "outputTokens": 271,
-            "cacheCreationTokens": 4814,
+            "inputTokens": 8,
+            "outputTokens": 542,
+            "cacheCreationTokens": 9628,
             "cacheReadTokens": 0,
-            "cost": 0.0073765
+            "cost": 0.014753
           }
         ]
       },
@@ -1144,12 +1144,12 @@
       },
       {
         "date": "2025-10-19",
-        "inputTokens": 2412,
-        "outputTokens": 30537,
-        "cacheCreationTokens": 1545862,
-        "cacheReadTokens": 16766474,
-        "totalTokens": 18345285,
-        "totalCost": 25.57168600000001,
+        "inputTokens": 4530,
+        "outputTokens": 49139,
+        "cacheCreationTokens": 2631633,
+        "cacheReadTokens": 27552534,
+        "totalTokens": 30237836,
+        "totalCost": 32.64650975000001,
         "modelsUsed": [
           "claude-opus-4-1-20250805",
           "claude-sonnet-4-5-20250929",
@@ -1166,19 +1166,19 @@
           },
           {
             "modelName": "claude-sonnet-4-5-20250929",
-            "inputTokens": 704,
-            "outputTokens": 6684,
-            "cacheCreationTokens": 951230,
-            "cacheReadTokens": 10487765,
-            "cost": 6.8158140000000005
+            "inputTokens": 1408,
+            "outputTokens": 13368,
+            "cacheCreationTokens": 1902460,
+            "cacheReadTokens": 20975530,
+            "cost": 13.631628000000001
           },
           {
             "modelName": "claude-haiku-4-5-20251001",
-            "inputTokens": 1414,
-            "outputTokens": 11918,
-            "cacheCreationTokens": 134541,
-            "cacheReadTokens": 298295,
-            "cost": 0.25900975000000004
+            "inputTokens": 2828,
+            "outputTokens": 23836,
+            "cacheCreationTokens": 269082,
+            "cacheReadTokens": 596590,
+            "cost": 0.5180195000000001
           }
         ]
       },
@@ -1206,12 +1206,12 @@
       },
       {
         "date": "2025-10-29",
-        "inputTokens": 3129,
-        "outputTokens": 14497,
+        "inputTokens": 4198,
+        "outputTokens": 14630,
         "cacheCreationTokens": 214412,
         "cacheReadTokens": 1446477,
-        "totalTokens": 1678515,
-        "totalCost": 1.4613620999999997,
+        "totalTokens": 1679717,
+        "totalCost": 1.4630960999999996,
         "modelsUsed": [
           "claude-sonnet-4-5-20250929",
           "claude-haiku-4-5-20251001"
@@ -1227,22 +1227,22 @@
           },
           {
             "modelName": "claude-haiku-4-5-20251001",
-            "inputTokens": 1069,
-            "outputTokens": 133,
+            "inputTokens": 2138,
+            "outputTokens": 266,
             "cacheCreationTokens": 0,
             "cacheReadTokens": 0,
-            "cost": 0.0017339999999999999
+            "cost": 0.0034679999999999997
           }
         ]
       },
       {
         "date": "2025-10-30",
-        "inputTokens": 49333,
-        "outputTokens": 129209,
-        "cacheCreationTokens": 5043518,
-        "cacheReadTokens": 77789947,
-        "totalTokens": 83012007,
-        "totalCost": 44.845253300000024,
+        "inputTokens": 62142,
+        "outputTokens": 135654,
+        "cacheCreationTokens": 5159921,
+        "cacheReadTokens": 78255102,
+        "totalTokens": 83612819,
+        "totalCost": 46.06535575000002,
         "modelsUsed": [
           "claude-sonnet-4-5-20250929",
           "claude-opus-4-1-20250805",
@@ -1259,30 +1259,30 @@
           },
           {
             "modelName": "claude-opus-4-1-20250805",
-            "inputTokens": 61,
-            "outputTokens": 72,
-            "cacheCreationTokens": 31564,
-            "cacheReadTokens": 303418,
-            "cost": 1.053267
+            "inputTokens": 122,
+            "outputTokens": 144,
+            "cacheCreationTokens": 63128,
+            "cacheReadTokens": 606836,
+            "cost": 2.106534
           },
           {
             "modelName": "claude-haiku-4-5-20251001",
-            "inputTokens": 12748,
-            "outputTokens": 6373,
-            "cacheCreationTokens": 84839,
-            "cacheReadTokens": 161737,
-            "cost": 0.16683545000000002
+            "inputTokens": 25496,
+            "outputTokens": 12746,
+            "cacheCreationTokens": 169678,
+            "cacheReadTokens": 323474,
+            "cost": 0.33367090000000005
           }
         ]
       },
       {
         "date": "2025-10-31",
-        "inputTokens": 21370,
-        "outputTokens": 88899,
-        "cacheCreationTokens": 1467452,
+        "inputTokens": 24537,
+        "outputTokens": 89678,
+        "cacheCreationTokens": 1472225,
         "cacheReadTokens": 33569637,
-        "totalTokens": 35147358,
-        "totalCost": 16.9453746,
+        "totalTokens": 35156077,
+        "totalCost": 16.958402850000002,
         "modelsUsed": [
           "claude-sonnet-4-5-20250929",
           "claude-haiku-4-5-20251001"
@@ -1298,22 +1298,22 @@
           },
           {
             "modelName": "claude-haiku-4-5-20251001",
-            "inputTokens": 3167,
-            "outputTokens": 779,
-            "cacheCreationTokens": 4773,
+            "inputTokens": 6334,
+            "outputTokens": 1558,
+            "cacheCreationTokens": 9546,
             "cacheReadTokens": 0,
-            "cost": 0.01302825
+            "cost": 0.0260565
           }
         ]
       },
       {
         "date": "2025-11-01",
-        "inputTokens": 24053,
-        "outputTokens": 61824,
-        "cacheCreationTokens": 1515686,
+        "inputTokens": 26998,
+        "outputTokens": 62230,
+        "cacheCreationTokens": 1520455,
         "cacheReadTokens": 32353650,
-        "totalTokens": 33955213,
-        "totalCost": 16.367563999999998,
+        "totalTokens": 33963333,
+        "totalCost": 16.37850025,
         "modelsUsed": [
           "claude-sonnet-4-5-20250929",
           "claude-haiku-4-5-20251001"
@@ -1329,22 +1329,22 @@
           },
           {
             "modelName": "claude-haiku-4-5-20251001",
-            "inputTokens": 2945,
-            "outputTokens": 406,
-            "cacheCreationTokens": 4769,
+            "inputTokens": 5890,
+            "outputTokens": 812,
+            "cacheCreationTokens": 9538,
             "cacheReadTokens": 0,
-            "cost": 0.01093625
+            "cost": 0.0218725
           }
         ]
       },
       {
         "date": "2025-11-02",
-        "inputTokens": 19513,
-        "outputTokens": 44146,
-        "cacheCreationTokens": 1451989,
-        "cacheReadTokens": 26620720,
-        "totalTokens": 28136368,
-        "totalCost": 13.98017874999999,
+        "inputTokens": 30982,
+        "outputTokens": 46679,
+        "cacheCreationTokens": 1494715,
+        "cacheReadTokens": 26703930,
+        "totalTokens": 28276306,
+        "totalCost": 14.066041249999989,
         "modelsUsed": [
           "claude-sonnet-4-5-20250929",
           "claude-haiku-4-5-20251001"
@@ -1360,22 +1360,22 @@
           },
           {
             "modelName": "claude-haiku-4-5-20251001",
-            "inputTokens": 11469,
-            "outputTokens": 2533,
-            "cacheCreationTokens": 42726,
-            "cacheReadTokens": 83210,
-            "cost": 0.08586250000000001
+            "inputTokens": 22938,
+            "outputTokens": 5066,
+            "cacheCreationTokens": 85452,
+            "cacheReadTokens": 166420,
+            "cost": 0.17172500000000002
           }
         ]
       },
       {
         "date": "2025-11-03",
-        "inputTokens": 38244,
-        "outputTokens": 79929,
-        "cacheCreationTokens": 3555725,
-        "cacheReadTokens": 61204623,
-        "totalTokens": 64878521,
-        "totalCost": 32.630804949999984,
+        "inputTokens": 58164,
+        "outputTokens": 90355,
+        "cacheCreationTokens": 3875366,
+        "cacheReadTokens": 64478375,
+        "totalTokens": 68502260,
+        "totalCost": 33.42978139999998,
         "modelsUsed": [
           "claude-sonnet-4-5-20250929",
           "claude-haiku-4-5-20251001"
@@ -1391,22 +1391,53 @@
           },
           {
             "modelName": "claude-haiku-4-5-20251001",
-            "inputTokens": 13498,
-            "outputTokens": 8762,
-            "cacheCreationTokens": 80905,
-            "cacheReadTokens": 306696,
-            "cost": 0.18910885
+            "inputTokens": 33418,
+            "outputTokens": 19188,
+            "cacheCreationTokens": 400546,
+            "cacheReadTokens": 3580448,
+            "cost": 0.9880852999999996
+          }
+        ]
+      },
+      {
+        "date": "2025-11-04",
+        "inputTokens": 8900,
+        "outputTokens": 2283,
+        "cacheCreationTokens": 260267,
+        "cacheReadTokens": 1745626,
+        "totalTokens": 2017076,
+        "totalCost": 1.4721335499999997,
+        "modelsUsed": [
+          "claude-sonnet-4-5-20250929",
+          "claude-haiku-4-5-20251001"
+        ],
+        "modelBreakdowns": [
+          {
+            "modelName": "claude-sonnet-4-5-20250929",
+            "inputTokens": 495,
+            "outputTokens": 512,
+            "cacheCreationTokens": 240138,
+            "cacheReadTokens": 1727336,
+            "cost": 1.4278832999999997
+          },
+          {
+            "modelName": "claude-haiku-4-5-20251001",
+            "inputTokens": 8405,
+            "outputTokens": 1771,
+            "cacheCreationTokens": 20129,
+            "cacheReadTokens": 18290,
+            "cost": 0.04425025
           }
         ]
       }
     ],
     "totals": {
-      "inputTokens": 506045,
-      "outputTokens": 2401736,
-      "cacheCreationTokens": 67243235,
-      "cacheReadTokens": 1112494870,
-      "totalCost": 1380.5145677500004,
-      "totalTokens": 1182645886
+      "inputTokens": 568733,
+      "outputTokens": 2445129,
+      "cacheCreationTokens": 69790231,
+      "cacheReadTokens": 1131009088,
+      "totalCost": 1405.9106927500004,
+      "totalTokens": 1203813181
     }
   },
   "opencode": {
@@ -1617,71 +1648,93 @@
             "cost": 52.32228127999998
           }
         ]
+      },
+      {
+        "date": "2025-11-04",
+        "inputTokens": 7616273,
+        "outputTokens": 43000,
+        "cacheCreationTokens": 0,
+        "cacheReadTokens": 6768498,
+        "totalTokens": 14427771,
+        "totalCost": 5.4088985800000025,
+        "modelsUsed": [
+          "glm-4.6"
+        ],
+        "modelBreakdowns": [
+          {
+            "modelName": "glm-4.6",
+            "inputTokens": 7616273,
+            "outputTokens": 43000,
+            "cacheCreationTokens": 0,
+            "cacheReadTokens": 6768498,
+            "cost": 5.4088985800000025
+          }
+        ]
       }
     ],
     "totals": {
-      "inputTokens": 88869125,
-      "outputTokens": 374297,
+      "inputTokens": 96485398,
+      "outputTokens": 417297,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 73916976,
-      "totalTokens": 163160398,
-      "totalCost": 59.88446708999997
+      "cacheReadTokens": 80685474,
+      "totalTokens": 177588169,
+      "totalCost": 65.29336566999997
     }
   },
   "codex": {
     "daily": [
       {
         "date": "2025-09-13",
-        "inputTokens": 5226928,
-        "outputTokens": 317390,
+        "inputTokens": 5810888,
+        "outputTokens": 446037,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 8118016,
-        "totalTokens": 13662334,
-        "totalCost": 7.226262785212973,
+        "cacheReadTokens": 12177024,
+        "totalTokens": 18433949,
+        "totalCost": 9.750058785212973,
         "modelsUsed": [
           "gpt-5"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5",
-            "inputTokens": 5226928,
-            "outputTokens": 317390,
+            "inputTokens": 5810888,
+            "outputTokens": 446037,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 8118016,
-            "cost": 7.226262785212973
+            "cacheReadTokens": 12177024,
+            "cost": 9.750058785212973
           }
         ]
       },
       {
         "date": "2025-09-14",
-        "inputTokens": 573974,
-        "outputTokens": 33020,
+        "inputTokens": 628001,
+        "outputTokens": 46202,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 931840,
-        "totalTokens": 1538834,
-        "totalCost": 0.7435236512879622,
+        "cacheReadTokens": 1397760,
+        "totalTokens": 2071963,
+        "totalCost": 1.0011174012879622,
         "modelsUsed": [
           "gpt-5"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5",
-            "inputTokens": 573974,
-            "outputTokens": 33020,
+            "inputTokens": 628001,
+            "outputTokens": 46202,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 931840,
-            "cost": 0.7435236512879622
+            "cacheReadTokens": 1397760,
+            "cost": 1.0011174012879622
           }
         ]
       },
       {
         "date": "2025-09-15",
-        "inputTokens": 13271852,
-        "outputTokens": 405270,
+        "inputTokens": 14193026,
+        "outputTokens": 564641,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 22859008,
-        "totalTokens": 36536130,
-        "totalCost": 12.189951654906787,
+        "cacheReadTokens": 34288512,
+        "totalTokens": 49046179,
+        "totalCost": 16.363817154906787,
         "modelsUsed": [
           "gpt-5",
           "gpt-5-codex"
@@ -1689,382 +1742,382 @@
         "modelBreakdowns": [
           {
             "modelName": "gpt-5",
-            "inputTokens": 13148144,
-            "outputTokens": 398736,
+            "inputTokens": 14051368,
+            "outputTokens": 555448,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 22683392,
-            "cost": 10.037144488412855
+            "cacheReadTokens": 34025088,
+            "cost": 12.124077238412855
           },
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 123708,
-            "outputTokens": 6534,
+            "inputTokens": 141658,
+            "outputTokens": 9193,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 175616,
-            "cost": 2.152807166493932
+            "cacheReadTokens": 263424,
+            "cost": 4.239739916493932
           }
         ]
       },
       {
         "date": "2025-09-16",
-        "inputTokens": 7822980,
-        "outputTokens": 476004,
+        "inputTokens": 8237190,
+        "outputTokens": 654390,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 13989120,
-        "totalTokens": 22288104,
-        "totalCost": 9.329679887697049,
+        "cacheReadTokens": 20983680,
+        "totalTokens": 29875260,
+        "totalCost": 12.505622387697048,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 7822980,
-            "outputTokens": 476004,
+            "inputTokens": 8237190,
+            "outputTokens": 654390,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 13989120,
-            "cost": 9.329679887697049
+            "cacheReadTokens": 20983680,
+            "cost": 12.505622387697048
           }
         ]
       },
       {
         "date": "2025-09-17",
-        "inputTokens": 463536,
-        "outputTokens": 32154,
+        "inputTokens": 505288,
+        "outputTokens": 44551,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 760064,
-        "totalTokens": 1255754,
-        "totalCost": 0.6468891145766397,
+        "cacheReadTokens": 1140096,
+        "totalTokens": 1689935,
+        "totalCost": 0.8705531145766396,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 463536,
-            "outputTokens": 32154,
+            "inputTokens": 505288,
+            "outputTokens": 44551,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 760064,
-            "cost": 0.6468891145766397
+            "cacheReadTokens": 1140096,
+            "cost": 0.8705531145766396
           }
         ]
       },
       {
         "date": "2025-09-19",
-        "inputTokens": 1465584,
-        "outputTokens": 75394,
+        "inputTokens": 1725288,
+        "outputTokens": 102819,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 1892352,
-        "totalTokens": 3433330,
-        "totalCost": 1.9964400340224033,
+        "cacheReadTokens": 2838528,
+        "totalTokens": 4666635,
+        "totalCost": 2.7135920340224033,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 1465584,
-            "outputTokens": 75394,
+            "inputTokens": 1725288,
+            "outputTokens": 102819,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 1892352,
-            "cost": 1.9964400340224033
+            "cacheReadTokens": 2838528,
+            "cost": 2.7135920340224033
           }
         ]
       },
       {
         "date": "2025-09-20",
-        "inputTokens": 8224574,
-        "outputTokens": 201638,
+        "inputTokens": 8742365,
+        "outputTokens": 279449,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 14377984,
-        "totalTokens": 22804196,
-        "totalCost": 6.807847665486345,
+        "cacheReadTokens": 21566976,
+        "totalTokens": 30588790,
+        "totalCost": 9.131820415486345,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 8224574,
-            "outputTokens": 201638,
+            "inputTokens": 8742365,
+            "outputTokens": 279449,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 14377984,
-            "cost": 6.807847665486345
+            "cacheReadTokens": 21566976,
+            "cost": 9.131820415486345
           }
         ]
       },
       {
         "date": "2025-09-21",
-        "inputTokens": 15686396,
-        "outputTokens": 692586,
+        "inputTokens": 16393530,
+        "outputTokens": 948287,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 28544256,
-        "totalTokens": 44923238,
-        "totalCost": 15.406757495049579,
+        "cacheReadTokens": 42816384,
+        "totalTokens": 60158201,
+        "totalCost": 20.631700995049577,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 15686396,
-            "outputTokens": 692586,
+            "inputTokens": 16393530,
+            "outputTokens": 948287,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 28544256,
-            "cost": 15.406757495049579
+            "cacheReadTokens": 42816384,
+            "cost": 20.631700995049577
           }
         ]
       },
       {
         "date": "2025-09-29",
-        "inputTokens": 88999756,
-        "outputTokens": 1935446,
+        "inputTokens": 93070322,
+        "outputTokens": 2671713,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 161717248,
-        "totalTokens": 252652450,
-        "totalCost": 66.53073580379633,
+        "cacheReadTokens": 242575872,
+        "totalTokens": 338317907,
+        "totalCost": 89.08894130379633,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 88999756,
-            "outputTokens": 1935446,
+            "inputTokens": 93070322,
+            "outputTokens": 2671713,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 161717248,
-            "cost": 66.53073580379633
+            "cacheReadTokens": 242575872,
+            "cost": 89.08894130379633
           }
         ]
       },
       {
         "date": "2025-09-30",
-        "inputTokens": 7167788,
-        "outputTokens": 46698,
+        "inputTokens": 7235906,
+        "outputTokens": 67071,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 14063104,
-        "totalTokens": 21277590,
-        "totalCost": 3.48992654541342,
+        "cacheReadTokens": 21094656,
+        "totalTokens": 28397633,
+        "totalCost": 4.65774804541342,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 7167788,
-            "outputTokens": 46698,
+            "inputTokens": 7235906,
+            "outputTokens": 67071,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 14063104,
-            "cost": 3.48992654541342
+            "cacheReadTokens": 21094656,
+            "cost": 4.65774804541342
           }
         ]
       },
       {
         "date": "2025-10-07",
-        "inputTokens": 3159776,
-        "outputTokens": 82762,
+        "inputTokens": 3355920,
+        "outputTokens": 114447,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 5534976,
-        "totalTokens": 8777514,
-        "totalCost": 2.6607148013128494,
+        "cacheReadTokens": 8302464,
+        "totalTokens": 11772831,
+        "totalCost": 3.5686808013128495,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 3159776,
-            "outputTokens": 82762,
+            "inputTokens": 3355920,
+            "outputTokens": 114447,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 5534976,
-            "cost": 2.6607148013128494
+            "cacheReadTokens": 8302464,
+            "cost": 3.5686808013128495
           }
         ]
       },
       {
         "date": "2025-10-12",
-        "inputTokens": 4887374,
-        "outputTokens": 399222,
+        "inputTokens": 5236277,
+        "outputTokens": 543345,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 8379136,
-        "totalTokens": 13665732,
-        "totalCost": 7.007263651477579,
+        "cacheReadTokens": 12568704,
+        "totalTokens": 18348326,
+        "totalCost": 9.40831840147758,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 4887374,
-            "outputTokens": 399222,
+            "inputTokens": 5236277,
+            "outputTokens": 543345,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 8379136,
-            "cost": 7.007263651477579
+            "cacheReadTokens": 12568704,
+            "cost": 9.40831840147758
           }
         ]
       },
       {
         "date": "2025-10-13",
-        "inputTokens": 79010882,
-        "outputTokens": 2129592,
+        "inputTokens": 83439139,
+        "outputTokens": 2933588,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 140308736,
-        "totalTokens": 221449210,
-        "totalCost": 65.6374952764692,
+        "cacheReadTokens": 210463104,
+        "totalTokens": 296835831,
+        "totalCost": 87.98207252646918,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 79010882,
-            "outputTokens": 2129592,
+            "inputTokens": 83439139,
+            "outputTokens": 2933588,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 140308736,
-            "cost": 65.6374952764692
+            "cacheReadTokens": 210463104,
+            "cost": 87.98207252646918
           }
         ]
       },
       {
         "date": "2025-10-14",
-        "inputTokens": 425440,
-        "outputTokens": 530,
+        "inputTokens": 441360,
+        "outputTokens": 795,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 787200,
-        "totalTokens": 1213170,
-        "totalCost": 0.21241613895091327,
+        "cacheReadTokens": 1180800,
+        "totalTokens": 1622955,
+        "totalCost": 0.28416613895091325,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 425440,
-            "outputTokens": 530,
+            "inputTokens": 441360,
+            "outputTokens": 795,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 787200,
-            "cost": 0.21241613895091327
+            "cacheReadTokens": 1180800,
+            "cost": 0.28416613895091325
           }
         ]
       },
       {
         "date": "2025-10-15",
-        "inputTokens": 31550566,
-        "outputTokens": 916540,
+        "inputTokens": 32528217,
+        "outputTokens": 1260346,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 59190528,
-        "totalTokens": 91657634,
-        "totalCost": 24.783187762792814,
+        "cacheReadTokens": 88785792,
+        "totalTokens": 122574355,
+        "totalCost": 33.14271951279281,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 31550566,
-            "outputTokens": 916540,
+            "inputTokens": 32528217,
+            "outputTokens": 1260346,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 59190528,
-            "cost": 24.783187762792814
+            "cacheReadTokens": 88785792,
+            "cost": 33.14271951279281
           }
         ]
       },
       {
         "date": "2025-10-19",
-        "inputTokens": 2885428,
-        "outputTokens": 86310,
+        "inputTokens": 3122510,
+        "outputTokens": 117113,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 4822528,
-        "totalTokens": 7794266,
-        "totalCost": 2.6351547066896988,
+        "cacheReadTokens": 7233792,
+        "totalTokens": 10473415,
+        "totalCost": 3.540945206689699,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 2885428,
-            "outputTokens": 86310,
+            "inputTokens": 3122510,
+            "outputTokens": 117113,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 4822528,
-            "cost": 2.6351547066896988
+            "cacheReadTokens": 7233792,
+            "cost": 3.540945206689699
           }
         ]
       },
       {
         "date": "2025-10-23",
-        "inputTokens": 76195178,
-        "outputTokens": 2478830,
+        "inputTokens": 80084511,
+        "outputTokens": 3399109,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 136833024,
-        "totalTokens": 215507032,
-        "totalCost": 66.56120639739717,
+        "cacheReadTokens": 205249536,
+        "totalTokens": 288733156,
+        "totalCost": 89.17772664739717,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 76195178,
-            "outputTokens": 2478830,
+            "inputTokens": 80084511,
+            "outputTokens": 3399109,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 136833024,
-            "cost": 66.56120639739717
+            "cacheReadTokens": 205249536,
+            "cost": 89.17772664739717
           }
         ]
       },
       {
         "date": "2025-10-24",
-        "inputTokens": 11935268,
-        "outputTokens": 854862,
+        "inputTokens": 12911734,
+        "outputTokens": 1178389,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 19964672,
-        "totalTokens": 32754802,
-        "totalCost": 16.558792628356166,
+        "cacheReadTokens": 29947008,
+        "totalTokens": 44037131,
+        "totalCost": 22.26243712835616,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 11935268,
-            "outputTokens": 854862,
+            "inputTokens": 12911734,
+            "outputTokens": 1178389,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 19964672,
-            "cost": 16.558792628356166
+            "cacheReadTokens": 29947008,
+            "cost": 22.26243712835616
           }
         ]
       },
       {
         "date": "2025-10-27",
-        "inputTokens": 3843014,
-        "outputTokens": 93906,
+        "inputTokens": 4161577,
+        "outputTokens": 129691,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 6411776,
-        "totalTokens": 10348696,
-        "totalCost": 3.3624921096989073,
+        "cacheReadTokens": 9617664,
+        "totalTokens": 13908932,
+        "totalCost": 4.519281859698907,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 3843014,
-            "outputTokens": 93906,
+            "inputTokens": 4161577,
+            "outputTokens": 129691,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 6411776,
-            "cost": 3.3624921096989073
+            "cacheReadTokens": 9617664,
+            "cost": 4.519281859698907
           }
         ]
       },
       {
         "date": "2025-10-28",
-        "inputTokens": 35544592,
-        "outputTokens": 1153852,
+        "inputTokens": 37322968,
+        "outputTokens": 1567546,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 63975680,
-        "totalTokens": 100674124,
-        "totalCost": 30.50978891695034,
+        "cacheReadTokens": 95963520,
+        "totalTokens": 134854034,
+        "totalCost": 40.86817891695034,
         "modelsUsed": [
           "gpt-5-codex",
           "claude-sonnet-4.5"
@@ -2072,11 +2125,11 @@
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 35544592,
-            "outputTokens": 1153852,
+            "inputTokens": 37322968,
+            "outputTokens": 1567546,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 63975680,
-            "cost": 30.50978891695034
+            "cacheReadTokens": 95963520,
+            "cost": 40.86817891695034
           },
           {
             "modelName": "claude-sonnet-4.5",
@@ -2090,12 +2143,12 @@
       },
       {
         "date": "2025-10-30",
-        "inputTokens": 55192059,
-        "outputTokens": 2094925,
+        "inputTokens": 59634735,
+        "outputTokens": 3094587,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 121518848,
-        "totalTokens": 178805832,
-        "totalCost": 54.99335427612871,
+        "cacheReadTokens": 194663552,
+        "totalTokens": 257392874,
+        "totalCost": 79.6864072761287,
         "modelsUsed": [
           "gpt-5-codex",
           "claude-haiku-4.5"
@@ -2103,11 +2156,11 @@
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 55192059,
-            "outputTokens": 2094925,
+            "inputTokens": 59634735,
+            "outputTokens": 3094587,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 121518848,
-            "cost": 54.99335427612871
+            "cacheReadTokens": 194663552,
+            "cost": 79.6864072761287
           },
           {
             "modelName": "claude-haiku-4.5",
@@ -2121,100 +2174,122 @@
       },
       {
         "date": "2025-10-31",
-        "inputTokens": 266279,
-        "outputTokens": 56899,
+        "inputTokens": 532558,
+        "outputTokens": 113798,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 2090240,
-        "totalTokens": 2413418,
-        "totalCost": 1.16311875,
+        "cacheReadTokens": 4180480,
+        "totalTokens": 4826836,
+        "totalCost": 2.3262375,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 266279,
-            "outputTokens": 56899,
+            "inputTokens": 532558,
+            "outputTokens": 113798,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 2090240,
-            "cost": 1.16311875
+            "cacheReadTokens": 4180480,
+            "cost": 2.3262375
           }
         ]
       },
       {
         "date": "2025-11-01",
-        "inputTokens": 3682609,
-        "outputTokens": 616170,
+        "inputTokens": 7365218,
+        "outputTokens": 1232340,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 76539392,
-        "totalTokens": 80838171,
-        "totalCost": 20.33238525,
+        "cacheReadTokens": 153078784,
+        "totalTokens": 161676342,
+        "totalCost": 40.6647705,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 3682609,
-            "outputTokens": 616170,
+            "inputTokens": 7365218,
+            "outputTokens": 1232340,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 76539392,
-            "cost": 20.33238525
+            "cacheReadTokens": 153078784,
+            "cost": 40.6647705
           }
         ]
       },
       {
         "date": "2025-11-02",
-        "inputTokens": 1257172,
-        "outputTokens": 186198,
+        "inputTokens": 2514344,
+        "outputTokens": 372396,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 18428288,
-        "totalTokens": 19871658,
-        "totalCost": 5.736981,
+        "cacheReadTokens": 36856576,
+        "totalTokens": 39743316,
+        "totalCost": 11.473962,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 1257172,
-            "outputTokens": 186198,
+            "inputTokens": 2514344,
+            "outputTokens": 372396,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 18428288,
-            "cost": 5.736981
+            "cacheReadTokens": 36856576,
+            "cost": 11.473962
           }
         ]
       },
       {
         "date": "2025-11-03",
-        "inputTokens": 2502095,
-        "outputTokens": 569085,
+        "inputTokens": 5004190,
+        "outputTokens": 1138170,
         "cacheCreationTokens": 0,
-        "cacheReadTokens": 47068032,
-        "totalTokens": 50139212,
-        "totalCost": 14.70197275,
+        "cacheReadTokens": 94136064,
+        "totalTokens": 100278424,
+        "totalCost": 29.4039455,
         "modelsUsed": [
           "gpt-5-codex"
         ],
         "modelBreakdowns": [
           {
             "modelName": "gpt-5-codex",
-            "inputTokens": 2502095,
-            "outputTokens": 569085,
+            "inputTokens": 5004190,
+            "outputTokens": 1138170,
             "cacheCreationTokens": 0,
-            "cacheReadTokens": 47068032,
-            "cost": 14.70197275
+            "cacheReadTokens": 94136064,
+            "cost": 29.4039455
+          }
+        ]
+      },
+      {
+        "date": "2025-11-04",
+        "inputTokens": 910410,
+        "outputTokens": 278704,
+        "cacheCreationTokens": 0,
+        "cacheReadTokens": 12718336,
+        "totalTokens": 13907450,
+        "totalCost": 5.514844500000001,
+        "modelsUsed": [
+          "gpt-5-codex"
+        ],
+        "modelBreakdowns": [
+          {
+            "modelName": "gpt-5-codex",
+            "inputTokens": 910410,
+            "outputTokens": 278704,
+            "cacheCreationTokens": 0,
+            "cacheReadTokens": 12718336,
+            "cost": 5.514844500000001
           }
         ]
       }
     ],
     "totals": {
-      "inputTokens": 461241100,
-      "outputTokens": 15935283,
+      "inputTokens": 495107472,
+      "outputTokens": 23299524,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 979106048,
-      "totalTokens": 1456282431,
-      "totalCost": 441.2243390536738
+      "cacheReadTokens": 1565825664,
+      "totalTokens": 2084232660,
+      "totalCost": 630.5396660536738
     }
   },
   "gemini": {
@@ -2306,15 +2381,46 @@
             "cost": 0.083615
           }
         ]
+      },
+      {
+        "date": "2025-11-04",
+        "inputTokens": 57346,
+        "outputTokens": 845,
+        "cacheCreationTokens": 0,
+        "cacheReadTokens": 13922,
+        "totalTokens": 72113,
+        "totalCost": 0.0486765,
+        "modelsUsed": [
+          "gemini-2.5-flash",
+          "gemini-2.5-pro"
+        ],
+        "modelBreakdowns": [
+          {
+            "modelName": "gemini-2.5-flash",
+            "inputTokens": 31730,
+            "outputTokens": 175,
+            "cacheCreationTokens": 0,
+            "cacheReadTokens": 6449,
+            "cost": 0.0099565
+          },
+          {
+            "modelName": "gemini-2.5-pro",
+            "inputTokens": 25616,
+            "outputTokens": 670,
+            "cacheCreationTokens": 0,
+            "cacheReadTokens": 7473,
+            "cost": 0.03872
+          }
+        ]
       }
     ],
     "totals": {
-      "inputTokens": 391682,
-      "outputTokens": 11445,
+      "inputTokens": 449028,
+      "outputTokens": 12290,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 190607,
-      "totalTokens": 593734,
-      "totalCost": 0.6040525000000001
+      "cacheReadTokens": 204529,
+      "totalTokens": 665847,
+      "totalCost": 0.6527290000000001
     }
   },
   "qwen": {
@@ -2406,23 +2512,45 @@
             "cost": 1.745287
           }
         ]
+      },
+      {
+        "date": "2025-11-04",
+        "inputTokens": 75542,
+        "outputTokens": 702,
+        "cacheCreationTokens": 0,
+        "cacheReadTokens": 68900,
+        "totalTokens": 145144,
+        "totalCost": 0.079052,
+        "modelsUsed": [
+          "coder-model"
+        ],
+        "modelBreakdowns": [
+          {
+            "modelName": "coder-model",
+            "inputTokens": 75542,
+            "outputTokens": 702,
+            "cacheCreationTokens": 0,
+            "cacheReadTokens": 68900,
+            "cost": 0.079052
+          }
+        ]
       }
     ],
     "totals": {
-      "inputTokens": 6336551,
-      "outputTokens": 43911,
+      "inputTokens": 6412093,
+      "outputTokens": 44613,
       "cacheCreationTokens": 0,
-      "cacheReadTokens": 6051077,
-      "totalCost": 6.556106000000001,
-      "totalTokens": 12431539
+      "cacheReadTokens": 6119977,
+      "totalCost": 6.6351580000000006,
+      "totalTokens": 12576683
     }
   },
   "totals": {
-    "inputTokens": 557344503,
-    "outputTokens": 18766672,
-    "cacheCreationTokens": 67243235,
-    "cacheReadTokens": 2171759578,
-    "totalTokens": 2815113988,
-    "totalCost": 1888.7835323936742
+    "inputTokens": 599022724,
+    "outputTokens": 26218853,
+    "cacheCreationTokens": 69790231,
+    "cacheReadTokens": 2783844732,
+    "totalTokens": 3478876540,
+    "totalCost": 2109.0316114736743
   }
 }

@@ -17,7 +17,8 @@ import {
   SiLinux,
   SiTypescript,
   SiClaude,
-  SiPostgresql
+  SiPostgresql,
+  SiOpenai
 } from 'react-icons/si'
 
 import { TbUserHeart, TbMessage } from 'react-icons/tb'
@@ -98,6 +99,7 @@ export default function Home() {
                 <SiDocker size={38} />
                 <SiLinux size={38} />
                 <SiClaude size={38} />
+                <SiOpenai size={38} />
               </div>
             )}
             {mainStrings[secIndex].map((text: string, index: number) => (

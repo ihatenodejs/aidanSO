@@ -115,7 +115,8 @@ export default async function About() {
             GitHub, and aim to make daily contributions. I am a big fan of open
             source software and public domain software (which most of my repos
             are licensed under). In fact, the website you&apos;re currently on
-            is free and open source. It&apos;s even under the public domain!
+            is free and open source. It&apos;s even released into the public
+            domain!
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
             When I touch grass, I prefer to walk on the streets, especially in
@@ -134,7 +135,10 @@ export default async function About() {
             <Link href="https://en.wikipedia.org/wiki/User:OnlyNano">
               OnlyNano
             </Link>
-            .
+            . I am not very active on Wikipedia due to my time constraints.
+          </p>
+          <p className="mt-2 leading-relaxed text-gray-300">
+            I also have a collection of devices that&quot;s rapidly growing.
           </p>
         </>
       )

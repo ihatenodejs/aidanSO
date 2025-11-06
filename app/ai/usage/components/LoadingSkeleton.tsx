@@ -155,10 +155,10 @@ export default function LoadingSkeleton({
                 color: theme.button.activeText
               }}
             >
-              Cost
+              Tokens
             </button>
             <button className="rounded bg-gray-700 px-3 py-1 text-gray-300 transition-colors hover:bg-gray-600">
-              Tokens
+              Cost
             </button>
           </div>
           <div className="h-[300px] sm:h-[400px]">

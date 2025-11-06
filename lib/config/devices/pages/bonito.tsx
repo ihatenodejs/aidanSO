@@ -15,6 +15,7 @@ import { VscTerminalLinux } from 'react-icons/vsc'
 import { Section, Row } from '../components'
 import { TbBrandMatrix } from 'react-icons/tb'
 import { SiLineageos, SiProtonmail, SiProtoncalendar } from 'react-icons/si'
+import { FaYoutube } from 'react-icons/fa'
 
 export const meta = {
   slug: 'bonito',
@@ -72,6 +73,12 @@ export const Content = () => (
         value="Proton Mail"
         icon={SiProtonmail}
         href="https://f-droid.org/packages/io.element.android.x/"
+      />
+      <Row
+        label="YouTube"
+        value="ReVanced"
+        icon={FaYoutube}
+        href="https://revanced.app"
       />
       <Row
         label="Calendar"

@@ -68,7 +68,9 @@ function isValidDate(date: string): boolean {
 /**
  * Validates period value
  */
-function isValidPeriod(period: string): boolean {
+function isValidPeriod(
+  period: string
+): period is (typeof VALID_PERIODS)[number] {
   return VALID_PERIODS.includes(period as (typeof VALID_PERIODS)[number])
 }
 
@@ -88,7 +90,7 @@ interface AgentExporterOutput {
 
 interface SyncOptions {
   dryRun: boolean
-  period?: string
+  period?: (typeof VALID_PERIODS)[number]
   startDate?: string
   endDate?: string
   output: string
@@ -109,7 +111,7 @@ function printUsage() {
     `  ${colors.cyan}--dry-run${colors.reset}           Preview changes without writing`
   )
   console.log(
-    `  ${colors.cyan}--period <period>${colors.reset}   Time period (daily, weekly, monthly, yearly)`
+    `  ${colors.cyan}--period <period>${colors.reset}   Time period (daily, weekly, monthly, yearly) (default: yearly)`
   )
   console.log(
     `  ${colors.cyan}--start <date>${colors.reset}      Start date (YYYY-MM-DD)`
@@ -147,6 +149,7 @@ function parseArgs(): SyncOptions {
     output: 'public/data/cc.json',
     syncFirst: true
   }
+  let requestedPeriod: string | undefined
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i]
@@ -167,7 +170,7 @@ function parseArgs(): SyncOptions {
           log.error('Missing value for --period')
           process.exit(1)
         }
-        options.period = args[++i]
+        requestedPeriod = args[++i]
         break
 
       case '--start':
@@ -206,10 +209,14 @@ function parseArgs(): SyncOptions {
     }
   }
 
-  if (options.period && !isValidPeriod(options.period)) {
-    log.warn(
-      `Invalid period '${options.period}'. Valid periods: ${VALID_PERIODS.join(', ')}`
-    )
+  if (requestedPeriod) {
+    if (isValidPeriod(requestedPeriod)) {
+      options.period = requestedPeriod
+    } else {
+      log.warn(
+        `Invalid period '${requestedPeriod}'. Valid periods: ${VALID_PERIODS.join(', ')}`
+      )
+    }
   }
 
   if (options.startDate && !isValidDate(options.startDate)) {
@@ -232,6 +239,8 @@ function parseArgs(): SyncOptions {
     )
     process.exit(1)
   }
+
+  options.period = options.period ?? 'yearly'
 
   return options
 }
@@ -258,33 +267,16 @@ async function exportData(options: SyncOptions): Promise<AgentExporterOutput> {
   log.info('Exporting data from agent-exporter...')
 
   try {
-    let result: string
+    const period = options.period ?? 'yearly'
+    const startDate = options.startDate ?? '2020-01-01'
+    const extraArgs: string[] = []
 
-    const effectiveStartDate = options.startDate || '2020-01-01'
-
-    if (options.period && options.startDate && options.endDate) {
-      result =
-        await $`agent-exporter json -p ${options.period} -s ${options.startDate} -e ${options.endDate}`.text()
-    } else if (options.period && options.startDate) {
-      result =
-        await $`agent-exporter json -p ${options.period} -s ${options.startDate}`.text()
-    } else if (options.period && options.endDate) {
-      result =
-        await $`agent-exporter json -p ${options.period} -e ${options.endDate}`.text()
-    } else if (options.startDate && options.endDate) {
-      result =
-        await $`agent-exporter json -s ${options.startDate} -e ${options.endDate}`.text()
-    } else if (options.period) {
-      result = await $`agent-exporter json -p ${options.period}`.text()
-    } else if (options.startDate) {
-      result = await $`agent-exporter json -s ${options.startDate}`.text()
-    } else if (options.endDate) {
-      result =
-        await $`agent-exporter json -s ${effectiveStartDate} -e ${options.endDate}`.text()
-    } else {
-      // Default: export ALL data from 2020 to now
-      result = await $`agent-exporter json -s ${effectiveStartDate}`.text()
+    if (options.endDate) {
+      extraArgs.push('-e', options.endDate)
     }
+
+    const result =
+      await $`agent-exporter json -p ${period} -s ${startDate} ${extraArgs}`.text()
 
     const data = JSON.parse(result) as AgentExporterOutput
     log.success('Data export completed')

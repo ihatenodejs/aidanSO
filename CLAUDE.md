@@ -124,7 +124,7 @@ bun run sync:usage --help
 
 ### Directory Structure
 
-```
+```plaintext
 /app                  # Next.js App Router pages
   /about              # About page
   /ai                 # AI tools and usage analytics
@@ -179,25 +179,28 @@ className={cn('base-class', conditional && 'conditional-class', className)}
 import { Formatter } from '@/lib/utils'
 
 // Available formatters:
-Formatter.currency(100, 2)          // '$100.00'
-Formatter.tokens(1500000)           // '1.5M'
-Formatter.percentage(85.5, 1)       // '85.5%'
-Formatter.date(new Date())          // Uses 'short'|'long'|'iso' format
-Formatter.duration(730)             // '2y' (days to years/months)
-Formatter.fileSize(1572864)         // '1.5 MB'
-Formatter.number(1234.56, 2)        // '1,234.56'
-Formatter.capitalize('hello')       // 'Hello'
-Formatter.truncate('long text', 5)  // 'lo...'
-Formatter.slugify('Hello World')    // 'hello-world'
+Formatter.currency(100, 2) // '$100.00'
+Formatter.tokens(1500000) // '1.5M'
+Formatter.percentage(85.5, 1) // '85.5%'
+Formatter.date(new Date()) // Uses 'short'|'long'|'iso' format
+Formatter.duration(730) // '2y' (days to years/months)
+Formatter.fileSize(1572864) // '1.5 MB'
+Formatter.number(1234.56, 2) // '1,234.56'
+Formatter.capitalize('hello') // 'Hello'
+Formatter.truncate('long text', 5) // 'lo...'
+Formatter.slugify('Hello World') // 'hello-world'
 ```
 
 **Style Utilities** (`lib/utils/styles.ts`)
+
 - Reusable style objects and constants
 
 **Validation Utilities** (`lib/utils/validation.ts`)
+
 - Input validation and sanitization helpers
 
 **Device Text Utilities** (`lib/utils/device-text.ts`)
+
 - Device-specific text formatting and display logic
 
 #### 3. Theme System (`lib/theme/`)
@@ -233,7 +236,7 @@ surfaces.spacing.page // Page-level spacing
 
 #### 4. Common Components (`components/objects/`)
 
-**Navigation & Layout Components**
+##### Navigation & Layout Components
 
 ```typescript
 import Link from '@/components/objects/Link'
@@ -263,7 +266,7 @@ import PageHeader from '@/components/objects/PageHeader'
 <PageHeader title="Title" description="Optional description" />
 ```
 
-**Utility & Display Components**
+##### Utility & Display Components
 
 ```typescript
 import LoadingSpinner from '@/components/objects/LoadingSpinner'
@@ -324,6 +327,7 @@ const status = StatusService.getStatus()
 ```
 
 **Service Principles:**
+
 - Services are stateless utility modules
 - Use in server components for data fetching
 - Export as named exports from `lib/services/index.ts`
@@ -391,6 +395,7 @@ expect(Array.from(value)).toEqual([...])
 - `bun test --coverage` - Generate coverage report
 
 **Reference**: Tests can be found in:
+
 - `tools/__tests__/` - Tool validation tests
 - `app/ai/usage/__tests__/` - Component schema tests
 - `components/navigation/footer/__tests__/` - Component tests
@@ -400,6 +405,7 @@ expect(Array.from(value)).toEqual([...])
 ### Prettier Configuration
 
 The project uses Prettier with these settings (`.prettierrc`):
+
 - **Print Width**: 80 characters
 - **Tab Width**: 2 spaces
 - **Quotes**: Single quotes (JSX: double quotes)
@@ -420,6 +426,7 @@ bun run format:check
 ### ESLint Configuration
 
 The project uses ESLint 9 with flat config (`eslint.config.mjs`):
+
 - **Extends**: Next.js core web vitals + TypeScript config
 - **Plugins**: Prettier for formatting rules
 - **Ignores**: `.next/`, `out/`, `build/`, `public/docs/`
@@ -974,6 +981,7 @@ This project uses **Bun** instead of Node.js for all runtime operations.
 ### Running Commands
 
 All commands use `bun` prefix:
+
 ```bash
 bun run <script>    # Run npm script
 bun <file.ts>       # Execute TypeScript directly
@@ -1018,6 +1026,7 @@ bun run docs:watch
 - Use JSDoc comments for public APIs
 - Include `@module`, `@category`, and `@public` tags
 - Example from `server.ts`:
+
   ```typescript
   /**
    * Custom server for Next.js with Socket.io for real-time features.

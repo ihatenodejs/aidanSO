@@ -28,7 +28,7 @@ interface ModelUsageCardProps {
 
 export default function ModelUsageCard({ daily, theme }: ModelUsageCardProps) {
   const [selectedMetric, setSelectedMetric] = useState<'cost' | 'tokens'>(
-    'cost'
+    'tokens'
   )
 
   const modelUsageData = useMemo(() => {
@@ -77,20 +77,6 @@ export default function ModelUsageCard({ daily, theme }: ModelUsageCardProps) {
         </h2>
         <div className="flex gap-2">
           <button
-            onClick={() => setSelectedMetric('cost')}
-            className={`rounded px-3 py-1 text-sm transition-colors ${selectedMetric === 'cost' ? '' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-            style={
-              selectedMetric === 'cost'
-                ? {
-                    backgroundColor: theme.button.activeBackground,
-                    color: theme.button.activeText
-                  }
-                : undefined
-            }
-          >
-            Cost
-          </button>
-          <button
             onClick={() => setSelectedMetric('tokens')}
             className={`rounded px-3 py-1 text-sm transition-colors ${selectedMetric === 'tokens' ? '' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
             style={
@@ -103,6 +89,20 @@ export default function ModelUsageCard({ daily, theme }: ModelUsageCardProps) {
             }
           >
             Tokens
+          </button>
+          <button
+            onClick={() => setSelectedMetric('cost')}
+            className={`rounded px-3 py-1 text-sm transition-colors ${selectedMetric === 'cost' ? '' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+            style={
+              selectedMetric === 'cost'
+                ? {
+                    backgroundColor: theme.button.activeBackground,
+                    color: theme.button.activeText
+                  }
+                : undefined
+            }
+          >
+            Cost
           </button>
         </div>
       </div>

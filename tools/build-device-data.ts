@@ -21,8 +21,7 @@ function getIconId(
   if (!icon) return ''
   if (typeof icon === 'string') return icon
 
-  const componentName =
-    icon.displayName || icon.name || icon.render?.name || ''
+  const componentName = icon.displayName || icon.name || icon.render?.name || ''
 
   if (!componentName && context) {
     console.warn(
@@ -59,10 +58,7 @@ async function buildDeviceData() {
 
       const { sections, ...clientDevice } = fullDevice
       const clientSections = sections.map((section) => {
-        const iconName = getIconId(
-          section.icon,
-          `${slug}.${section.id}.icon`
-        )
+        const iconName = getIconId(section.icon, `${slug}.${section.id}.icon`)
         return {
           ...section,
           icon: iconName,

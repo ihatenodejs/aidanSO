@@ -11,15 +11,10 @@ import {
 } from 'recharts'
 import { DailyData } from '@/lib/types'
 import type { ToolTheme } from '@/app/ai/theme'
+import { Formatter } from '@/lib/utils/formatting'
 
 const formatTooltipValue = (value: number): string => {
-  if (value >= 1000000) {
-    return `${(value / 1000000).toFixed(2)}B tokens`
-  } else if (value >= 1000) {
-    return `${(value / 1000).toFixed(2)}M tokens`
-  } else {
-    return `${value.toFixed(0)}K tokens`
-  }
+  return `${Formatter.tokens(value)} tokens`
 }
 
 const buildRadarData = (daily: DailyData[]) => {

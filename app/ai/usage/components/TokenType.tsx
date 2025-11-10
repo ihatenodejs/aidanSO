@@ -21,7 +21,7 @@ import type { ToolTheme } from '@/app/ai/theme'
 import { Formatter } from '@/lib/utils/formatting'
 
 type TokenTooltipProps = TooltipProps<ValueType, NameType> & {
-  payload?: Payload<ValueType, NameType>[]
+  payload?: readonly Payload<ValueType, NameType>[]
 }
 
 interface TokenTypeProps {

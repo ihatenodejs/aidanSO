@@ -18,7 +18,7 @@ import {
 import type { ToolTheme } from '@/app/ai/theme'
 
 type ModelTooltipProps = TooltipProps<ValueType, NameType> & {
-  payload?: Payload<ValueType, NameType>[]
+  payload?: readonly Payload<ValueType, NameType>[]
 }
 
 interface ModelUsageCardProps {

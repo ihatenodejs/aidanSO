@@ -82,7 +82,8 @@ export default function Activity({ daily, theme, timeRange }: ActivityProps) {
         return [formatCurrency(value), label]
       }
 
-      return [`${formatTokens(value)} tokens`, label]
+      const tokenValue = value * 1000000
+      return [`${formatTokens(tokenValue)} tokens`, label]
     },
     [selectedMetric]
   )
@@ -271,8 +272,10 @@ export default function Activity({ daily, theme, timeRange }: ActivityProps) {
                 />
                 <YAxis
                   stroke="#9ca3af"
-                  tickFormatter={
-                    selectedMetric === 'cost' ? formatCurrency : formatTokens
+                  tickFormatter={(value) =>
+                    selectedMetric === 'cost'
+                      ? formatCurrency(value)
+                      : formatTokens(value * 1000000)
                   }
                   domain={[0, 'auto']}
                 />

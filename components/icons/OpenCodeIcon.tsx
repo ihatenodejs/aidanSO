@@ -1,6 +1,9 @@
 import React from 'react'
 
-interface OpenCodeIconProps {
+/**
+ * @public
+ */
+export interface OpenCodeIconProps {
   className?: string
 }
 

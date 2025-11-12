@@ -6,16 +6,28 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import type { CheckDefinition, CheckResult } from './best-practices/types'
 
-type CliFormat = 'human' | 'json'
+/**
+ * @public
+ * @category Tools
+ */
+export type CliFormat = 'human' | 'json'
 
-interface CliOptions {
+/**
+ * @public
+ * @category Tools
+ */
+export interface CliOptions {
   format: CliFormat
   listOnly: boolean
   selectedChecks: Set<string>
   skippedChecks: Set<string>
 }
 
-interface CliParseResult {
+/**
+ * @public
+ * @category Tools
+ */
+export interface CliParseResult {
   options: CliOptions
   errors: string[]
   helpRequested: boolean
@@ -86,6 +98,26 @@ async function main() {
   reportResults(results, options.format)
 }
 
+/**
+ * Parses command line arguments for best-practices tool.
+ *
+ * @remarks
+ * Processes CLI arguments to determine which checks to run,
+ * output format, and other options. Returns structured
+ * parse result with options and any validation errors.
+ *
+ * @param args - Array of command line arguments (excluding script name)
+ * @returns Parsed CLI options and any errors encountered
+ *
+ * @example
+ * ```ts
+ * const result = parseCliArguments(['--only=jsdoc-validator', '--json'])
+ * console.log(result.options.format) // 'json'
+ * ```
+ *
+ * @category CLI Tools
+ * @public
+ */
 export function parseCliArguments(args: readonly string[]): CliParseResult {
   const selectedChecks = new Set<string>()
   const skippedChecks = new Set<string>()
@@ -131,6 +163,25 @@ export function parseCliArguments(args: readonly string[]): CliParseResult {
   }
 }
 
+/**
+ * Loads and validates best-practice check modules.
+ *
+ * @remarks
+ * Scans the modules directory for TypeScript files, imports them,
+ * and validates that they export proper check definitions.
+ * Handles import errors gracefully and logs warnings.
+ *
+ * @returns Array of validated check definitions
+ *
+ * @example
+ * ```ts
+ * const checks = await loadRegistry()
+ * console.log(`Loaded ${checks.length} checks`)
+ * ```
+ *
+ * @category CLI Tools
+ * @public
+ */
 export async function loadRegistry(): Promise<CheckDefinition[]> {
   const registry: CheckDefinition[] = []
   let entries
@@ -206,10 +257,51 @@ function resolveModuleChecks(moduleExports: unknown): unknown[] | undefined {
   return undefined
 }
 
+/**
+ * Checks if a file has a supported module extension.
+ *
+ * @remarks
+ * Validates that a file name has one of the supported TypeScript
+ * or JavaScript extensions for module loading.
+ *
+ * @param fileName - Name of the file to check
+ * @returns True if file has supported extension
+ *
+ * @example
+ * ```ts
+ * isSupportedModule('check.ts') // true
+ * isSupportedModule('readme.md') // false
+ * ```
+ *
+ * @category CLI Tools
+ * @public
+ */
 export function isSupportedModule(fileName: string): boolean {
   return SUPPORTED_EXTENSIONS.has(extname(fileName))
 }
 
+/**
+ * Type guard to validate check definition objects.
+ *
+ * @remarks
+ * Ensures that an object has the required properties (id, description, run)
+ * to be considered a valid check definition. Used for runtime validation
+ * of loaded modules.
+ *
+ * @param value - Value to validate as check definition
+ * @returns True if value is a valid CheckDefinition
+ *
+ * @example
+ * ```ts
+ * const obj = { id: 'test', description: 'Test check', run: async () => {} }
+ * if (isValidCheckDefinition(obj)) {
+ *   console.log('Valid check definition')
+ * }
+ * ```
+ *
+ * @category CLI Tools
+ * @public
+ */
 export function isValidCheckDefinition(
   value: unknown
 ): value is CheckDefinition {
@@ -230,6 +322,31 @@ export function isValidCheckDefinition(
   )
 }
 
+/**
+ * Resolves which checks to run based on selection and skip sets.
+ *
+ * @remarks
+ * Determines the final list of checks to execute by applying
+ * inclusion and exclusion filters to the available registry.
+ * Handles validation of unknown check IDs.
+ *
+ * @param selected - Set of check IDs to include (empty = all)
+ * @param skipped - Set of check IDs to exclude
+ * @param registry - Available check definitions
+ * @returns Array of checks to run
+ *
+ * @example
+ * ```ts
+ * const checks = resolveChecksToRun(
+ *   new Set(['jsdoc-validator']),
+ *   new Set(['page-load-performance']),
+ *   allChecks
+ * )
+ * ```
+ *
+ * @category CLI Tools
+ * @public
+ */
 export function resolveChecksToRun(
   selected: Set<string>,
   skipped: Set<string>,
@@ -269,6 +386,26 @@ export function resolveChecksToRun(
   return resolved
 }
 
+/**
+ * Executes an array of best-practice checks.
+ *
+ * @remarks
+ * Runs each check with the repository root context and captures
+ * results. Handles errors gracefully by converting them to failed
+ * check results with error messages.
+ *
+ * @param checks - Array of check definitions to execute
+ * @returns Array of check results
+ *
+ * @example
+ * ```ts
+ * const results = await runChecks(selectedChecks)
+ * const failures = results.filter(r => !r.ok)
+ * ```
+ *
+ * @category CLI Tools
+ * @public
+ */
 export async function runChecks(
   checks: CheckDefinition[]
 ): Promise<CheckResult[]> {

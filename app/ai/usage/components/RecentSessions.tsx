@@ -4,7 +4,10 @@ import { DailyData } from '@/lib/types'
 import { getModelLabel } from './utils'
 import type { ToolTheme } from '@/app/ai/theme'
 
-interface RecentSessionsProps {
+/**
+ * @public
+ */
+export interface RecentSessionsProps {
   daily: DailyData[]
   theme: ToolTheme
 }

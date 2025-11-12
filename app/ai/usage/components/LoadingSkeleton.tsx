@@ -8,7 +8,10 @@ import type { ToolTheme, ProviderId } from '@/app/ai/theme'
 import type { TimeRangeKey } from '@/lib/types'
 import { surfaces } from '@/lib/theme'
 
-interface LoadingSkeletonProps {
+/**
+ * @public
+ */
+export interface LoadingSkeletonProps {
   theme: ToolTheme
   selectedProvider?: ProviderId
   timeRange?: TimeRangeKey

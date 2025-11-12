@@ -3,7 +3,10 @@
 import Link from 'next/link'
 import { footerMessages } from './footerMessages'
 
-interface RandomFooterMsgProps {
+/**
+ * @public
+ */
+export interface RandomFooterMsgProps {
   index?: number
 }
 

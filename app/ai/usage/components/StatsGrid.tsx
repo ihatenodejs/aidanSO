@@ -8,7 +8,10 @@ import { Formatter } from '@/lib/utils/formatting'
 import { FaFire } from 'react-icons/fa'
 import UsageTrendGraph from './UsageTrendGraph'
 
-interface StatsGridProps {
+/**
+ * @public
+ */
+export interface StatsGridProps {
   totals: Totals
   daily: DailyData[]
   theme: ToolTheme

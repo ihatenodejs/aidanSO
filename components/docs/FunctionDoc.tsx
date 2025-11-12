@@ -1,16 +1,19 @@
 import { cn } from '@/lib/utils'
 import { colors, surfaces, effects } from '@/lib/theme'
-import type { DocItem } from '@/lib/docs/types'
+import type { DocItem, DocParameter } from '@/lib/docs/types'
 import CodeBlock from './CodeBlock'
 import TypeLink from './TypeLink'
 import { ExternalLink, TriangleAlert } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
-interface FunctionDocProps {
+/**
+ * @public
+ */
+export interface FunctionDocProps {
   item: DocItem
+  availableTypeIds: Set<string>
   className?: string
-  availableTypeIds?: Set<string>
 }
 
 export default function FunctionDoc({
@@ -187,44 +190,48 @@ export default function FunctionDoc({
                   </tr>
                 </thead>
                 <tbody>
-                  {item.parameters.map((param, index) => (
-                    <tr
-                      key={index}
-                      className="border-b last:border-0"
-                      style={{ borderColor: colors.borders.subtle }}
-                    >
-                      <td
-                        className="px-4 py-3 font-mono"
-                        style={{ color: colors.text.secondary }}
+                  {item.parameters?.map(
+                    (param: DocParameter, index: number) => (
+                      <tr
+                        key={index}
+                        className="border-b last:border-0"
+                        style={{ borderColor: colors.borders.subtle }}
                       >
-                        {param.name}
-                        {param.optional && (
-                          <span style={{ color: colors.text.disabled }}>?</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        <TypeLink
-                          type={param.type}
-                          className="text-sm"
-                          availableTypeIds={availableTypeIds}
-                        />
-                      </td>
-                      <td
-                        className="px-4 py-3"
-                        style={{ color: colors.text.body }}
-                      >
-                        {param.description || '—'}
-                        {param.defaultValue && (
-                          <div
-                            className="mt-1 text-xs"
-                            style={{ color: colors.text.disabled }}
-                          >
-                            Default: <code>{param.defaultValue}</code>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                        <td
+                          className="px-4 py-3 font-mono"
+                          style={{ color: colors.text.secondary }}
+                        >
+                          {param.name}
+                          {param.optional && (
+                            <span style={{ color: colors.text.disabled }}>
+                              ?
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          <TypeLink
+                            type={param.type}
+                            className="text-sm"
+                            availableTypeIds={availableTypeIds}
+                          />
+                        </td>
+                        <td
+                          className="px-4 py-3"
+                          style={{ color: colors.text.body }}
+                        >
+                          {param.description || '—'}
+                          {param.defaultValue && (
+                            <div
+                              className="mt-1 text-xs"
+                              style={{ color: colors.text.disabled }}
+                            >
+                              Default: <code>{param.defaultValue}</code>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
@@ -271,7 +278,7 @@ export default function FunctionDoc({
               Throws
             </h4>
             <div className="space-y-2">
-              {item.throws.map((throwsDoc, index) => (
+              {item.throws?.map((throwsDoc: string, index: number) => (
                 <div
                   key={index}
                   className={cn('rounded-lg border-2 p-4')}
@@ -299,14 +306,19 @@ export default function FunctionDoc({
               Examples
             </h4>
             <div className="space-y-4">
-              {item.examples.map((example, index) => (
-                <CodeBlock
-                  key={index}
-                  code={example.code}
-                  language={example.language}
-                  showLineNumbers
-                />
-              ))}
+              {item.examples?.map(
+                (
+                  example: { code: string; language: string },
+                  index: number
+                ) => (
+                  <CodeBlock
+                    key={index}
+                    code={example.code}
+                    language={example.language}
+                    showLineNumbers
+                  />
+                )
+              )}
             </div>
           </div>
         )}
@@ -314,7 +326,7 @@ export default function FunctionDoc({
         {/* Tags */}
         {item.tags && item.tags.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {item.tags.map((tag) => (
+            {item.tags?.map((tag: string) => (
               <span key={tag} className={cn(surfaces.badge.muted)}>
                 {tag}
               </span>
@@ -332,7 +344,7 @@ export default function FunctionDoc({
               See Also
             </h4>
             <div className="space-y-2">
-              {item.see.map((ref, index) => (
+              {item.see?.map((ref: string, index: number) => (
                 <div
                   key={index}
                   className="text-sm"

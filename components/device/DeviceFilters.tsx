@@ -1,8 +1,15 @@
 'use client'
 
 import { Search } from 'lucide-react'
+import type { ClientDevice } from '@/lib/types/client-device'
 
-interface DeviceFiltersProps {
+/**
+ * @public
+ */
+export interface DeviceFiltersProps {
+  devices?: ClientDevice[]
+  onFilterChange?: (filteredDevices: ClientDevice[]) => void
+  className?: string
   searchQuery: string
   selectedType: 'all' | 'mobile' | 'dap'
   selectedManufacturer: string

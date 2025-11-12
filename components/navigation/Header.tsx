@@ -1,19 +1,23 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  memo
+} from 'react'
 import Link from 'next/link'
 import { X, Menu, ChevronDown, ChevronRight } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn, throttle } from '@/lib/utils'
 import { colors, surfaces } from '@/lib/theme'
 import type {
   NavigationIcon,
-  NavigationMenuItem,
   NavigationDropdownConfig,
   NavigationDropdownGroup
 } from '@/lib/types/navigation'
 import { headerNavigationConfig } from '../../lib/config/header'
-
-const NAVIGATION_CONFIG: NavigationMenuItem[] = headerNavigationConfig
 
 interface NavItemProps {
   href: string
@@ -22,22 +26,35 @@ interface NavItemProps {
   onClick?: () => void
 }
 
-const NavItem = ({ href, icon, children, onClick }: NavItemProps) => (
-  <div className="nav-item">
-    <Link
-      href={href}
-      onClick={onClick}
-      className={cn('flex items-center', surfaces.button.nav)}
-    >
-      {React.createElement(icon, {
+const NavItem = memo(function NavItem({
+  href,
+  icon,
+  children,
+  onClick
+}: NavItemProps) {
+  const iconElement = useMemo(
+    () =>
+      React.createElement(icon, {
         className: 'text-md mr-2',
         strokeWidth: 2.5,
         size: 20
-      })}
-      {children}
-    </Link>
-  </div>
-)
+      }),
+    [icon]
+  )
+
+  return (
+    <div className="nav-item">
+      <Link
+        href={href}
+        onClick={onClick}
+        className={cn('flex items-center', surfaces.button.nav)}
+      >
+        {iconElement}
+        {children}
+      </Link>
+    </div>
+  )
+})
 
 interface DropdownNavItemProps {
   id: string
@@ -50,7 +67,7 @@ interface DropdownNavItemProps {
   onOpenChange?: (id: string | null, immediate?: boolean) => void
 }
 
-const DropdownNavItem = ({
+const DropdownNavItem = memo(function DropdownNavItem({
   id,
   href,
   icon,
@@ -59,8 +76,18 @@ const DropdownNavItem = ({
   isMobile = false,
   isOpen = false,
   onOpenChange
-}: DropdownNavItemProps) => {
+}: DropdownNavItemProps) {
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const iconElement = useMemo(
+    () =>
+      React.createElement(icon, {
+        className: 'text-md mr-2',
+        strokeWidth: 2.5,
+        size: 20
+      }),
+    [icon]
+  )
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -121,11 +148,7 @@ const DropdownNavItem = ({
         )}
       >
         <span className="flex flex-1 items-center">
-          {React.createElement(icon, {
-            className: 'text-md mr-2',
-            strokeWidth: 2.5,
-            size: 20
-          })}
+          {iconElement}
           <span>{children}</span>
         </span>
         <ChevronDown
@@ -152,7 +175,7 @@ const DropdownNavItem = ({
       )}
     </div>
   )
-}
+})
 
 interface NestedDropdownItemProps {
   children: React.ReactNode
@@ -164,7 +187,7 @@ interface NestedDropdownItemProps {
   onNestedChange: (key: string | null, immediate?: boolean) => void
 }
 
-const NestedDropdownItem = ({
+const NestedDropdownItem = memo(function NestedDropdownItem({
   children,
   nestedContent,
   icon: Icon,
@@ -172,7 +195,7 @@ const NestedDropdownItem = ({
   itemKey,
   activeNested,
   onNestedChange
-}: NestedDropdownItemProps) => {
+}: NestedDropdownItemProps) {
   const itemRef = useRef<HTMLDivElement>(null)
   const isOpen = activeNested === itemKey
 
@@ -282,7 +305,7 @@ const NestedDropdownItem = ({
       )}
     </div>
   )
-}
+})
 
 const renderNestedGroups = (
   groups: NavigationDropdownGroup[],
@@ -390,7 +413,11 @@ const renderDropdownContent = (
   </div>
 )
 
-interface HeaderProps {
+/**
+ * @public
+ */
+export interface HeaderProps {
+  className?: string
   onMobileMenuChange?: (isOpen: boolean) => void
 }
 
@@ -405,6 +432,8 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
     null
   )
   const overlayOpenFrameRef = useRef<number | null>(null)
+
+  const navigationConfig = useMemo(() => headerNavigationConfig, [])
 
   const toggleMenu = useCallback(() => {
     setIsOpen((previous) => {
@@ -438,9 +467,11 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
       setIsMobile(window.innerWidth < 1024)
     }
 
+    const throttledCheckMobile = throttle(checkMobile, 150)
+
     checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    window.addEventListener('resize', throttledCheckMobile)
+    return () => window.removeEventListener('resize', throttledCheckMobile)
   }, [])
 
   useEffect(() => {
@@ -504,6 +535,29 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
     }
   }, [activeDropdown, isMobile])
 
+  const mobileMenuStyle = useMemo(
+    () => ({
+      backgroundColor: isMobile ? colors.backgrounds.cardSolid : undefined
+    }),
+    [isMobile]
+  )
+
+  const dropdownContents = useMemo(() => {
+    const contents: Record<string, React.ReactNode> = {}
+    navigationConfig.forEach((item) => {
+      if (item.type === 'dropdown') {
+        contents[item.id] = renderDropdownContent(
+          item.dropdown,
+          isMobile,
+          activeNested,
+          handleNestedChange,
+          closeMenu
+        )
+      }
+    })
+    return contents
+  }, [navigationConfig, isMobile, activeNested, handleNestedChange, closeMenu])
+
   return (
     <>
       {showDesktopOverlay && (
@@ -555,13 +609,9 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
               'lg:bg-transparent',
               isOpen ? 'flex' : 'hidden lg:flex'
             )}
-            style={{
-              backgroundColor: isMobile
-                ? colors.backgrounds.cardSolid
-                : undefined
-            }}
+            style={mobileMenuStyle}
           >
-            {NAVIGATION_CONFIG.map((item) => {
+            {navigationConfig.map((item) => {
               if (item.type === 'link') {
                 return (
                   <NavItem
@@ -581,13 +631,7 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
                   id={item.id}
                   href={item.href}
                   icon={item.icon}
-                  dropdownContent={renderDropdownContent(
-                    item.dropdown,
-                    isMobile,
-                    activeNested,
-                    handleNestedChange,
-                    closeMenu
-                  )}
+                  dropdownContent={dropdownContents[item.id]}
                   isMobile={isMobile}
                   isOpen={activeDropdown === item.id}
                   onOpenChange={handleDropdownChange}

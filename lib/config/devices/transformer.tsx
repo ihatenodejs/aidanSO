@@ -19,7 +19,12 @@ import type {
   SectionProps
 } from './components'
 
-interface DevicePageModule {
+/**
+ * Represents a device page module with metadata and content component.
+ * @category Device Configuration
+ * @public
+ */
+export interface DevicePageModule {
   meta: Omit<DeviceSpec, 'stats' | 'sections'>
   Content: () => ReactElement
 }

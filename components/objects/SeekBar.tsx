@@ -2,11 +2,41 @@
 
 import * as React from 'react'
 
-interface SeekBarProps {
+/**
+ * @public
+ */
+export interface SeekBarProps {
   duration: string
   startPos: number
+  onSeek: (time: number) => void
+  className?: string
 }
 
+/**
+ * Interactive seek bar component for audio/video playback.
+ *
+ * @remarks
+ * Displays a clickable progress bar for media playback with time indicators.
+ * Converts position strings to seconds and handles seek interactions.
+ * Used primarily in music player components.
+ *
+ * @param props - SeekBar component properties
+ * @param props.duration - Total duration in "MM:SS" or "HH:MM:SS" format
+ * @param props.startPos - Current position in "MM:SS" or "HH:MM:SS" format
+ * @returns Interactive seek bar with time display
+ *
+ * @example
+ * ```ts
+ * <SeekBar
+ *   duration="3:45"
+ *   startPos="1:23"
+ *   onSeek={(seconds) => console.log('Seek to:', seconds)}
+ * />
+ * ```
+ *
+ * @category Media Components
+ * @public
+ */
 export function SeekBar({ duration, startPos }: SeekBarProps) {
   const getDurationInSeconds = (timeStr: string) => {
     const parts = timeStr.split(':').map(Number)

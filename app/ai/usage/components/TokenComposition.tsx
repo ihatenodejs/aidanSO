@@ -53,7 +53,10 @@ const buildRadarData = (daily: DailyData[]) => {
   ]
 }
 
-interface TokenCompositionProps {
+/**
+ * @public
+ */
+export interface TokenCompositionProps {
   daily: DailyData[]
   theme: ToolTheme
 }

@@ -36,6 +36,19 @@ export const meta = {
   ]
 }
 
+/**
+ * Content component for Bonito device page.
+ *
+ * @remarks
+ * Defines the structured content layout for the Bonito device showcase page,
+ * including hardware specifications, software information, and usage details.
+ * Uses the stub components defined in ../components.tsx for type safety.
+ *
+ * @returns JSX content tree for device page
+ *
+ * @category Device Pages
+ * @public
+ */
 export const Content = () => (
   <>
     <Section id="hardware" title="Hardware" icon={Smartphone}>

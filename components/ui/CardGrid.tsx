@@ -1,9 +1,12 @@
-import { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-interface CardGridProps {
-  children: ReactNode
+/**
+ * @public
+ */
+export interface CardGridProps {
+  children: React.ReactNode
   cols?: '2' | '3' | '4'
+  gap?: 'sm' | 'md' | 'lg'
   className?: string
 }
 

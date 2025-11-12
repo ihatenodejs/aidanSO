@@ -1,7 +1,12 @@
 import { colors } from '@/lib/theme'
 import type { ServiceStatus, SystemHealth } from '@/lib/types/status'
 
-interface SystemHealthMeta {
+/**
+ * Metadata for system health status display and theming.
+ * @category Status Configuration
+ * @public
+ */
+export interface SystemHealthMeta {
   /** Human-readable label displayed in UI */
   label: string
   /** Short description for tooltips or summaries */
@@ -53,7 +58,12 @@ export function getSystemHealthConfig(health: SystemHealth) {
   return SYSTEM_HEALTH_CONFIG[health]
 }
 
-interface ServiceStatusMeta {
+/**
+ * Metadata for individual service status display and theming.
+ * @category Status Configuration
+ * @public
+ */
+export interface ServiceStatusMeta {
   /** Short status label for service cards and summaries */
   label: string
   /** Low-opacity background tint for service cards */
@@ -83,6 +93,27 @@ export const SERVICE_STATUS_CONFIG: Record<ServiceStatus, ServiceStatusMeta> = {
   }
 } as const
 
+/**
+ * Retrieves status configuration for a given service status.
+ *
+ * @remarks
+ * Returns the visual configuration (colors, icons, labels) for displaying
+ * service status indicators throughout the application. Used by status
+ * components and service monitoring interfaces.
+ *
+ * @param status - The service status to get configuration for
+ * @returns Status configuration object with colors, icon, and label
+ *
+ * @example
+ * ```ts
+ * const config = getServiceStatusConfig('healthy')
+ * console.log(config.label) // 'Operational'
+ * console.log(config.color) // green color value
+ * ```
+ *
+ * @category Configuration
+ * @public
+ */
 export function getServiceStatusConfig(status: ServiceStatus) {
   return SERVICE_STATUS_CONFIG[status]
 }

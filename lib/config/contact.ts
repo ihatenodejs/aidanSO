@@ -73,6 +73,29 @@ export const contactLinks: ContactLink[] = [
   }
 ]
 
+/**
+ * Retrieves contact links, optionally filtered by specific IDs.
+ *
+ * @remarks
+ * Returns all configured contact links or a subset filtered by the provided IDs.
+ * Used throughout the application to display contact information in headers,
+ * footers, and contact pages.
+ *
+ * @param ids - Optional array of contact link IDs to filter by
+ * @returns Array of contact link objects
+ *
+ * @example
+ * ```ts
+ * // Get all contact links
+ * const allLinks = getContactLinks()
+ *
+ * // Get only specific links
+ * const socialLinks = getContactLinks(['github', 'linkedin'])
+ * ```
+ *
+ * @category Configuration
+ * @public
+ */
 export const getContactLinks = (ids?: ReadonlyArray<ContactLink['id']>) => {
   if (!ids) {
     return contactLinks

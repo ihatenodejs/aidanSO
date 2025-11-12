@@ -3,7 +3,10 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState, useMemo, type ReactNode } from 'react'
 
-interface PaginatedCardListProps<T> {
+/**
+ * @public
+ */
+export interface PaginatedCardListProps<T> {
   items: T[]
   renderItem: (item: T, index: number) => ReactNode
   itemsPerPage: number

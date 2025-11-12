@@ -1,6 +1,9 @@
 import { ReactNode } from 'react'
 
-interface PageHeaderProps {
+/**
+ * @public
+ */
+export interface PageHeaderProps {
   icon: ReactNode
   title: string
   subtitle?: string

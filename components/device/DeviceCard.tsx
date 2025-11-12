@@ -7,8 +7,14 @@ import {
 } from 'lucide-react'
 import type { ClientDeviceWithMetrics } from '@/lib/types/client-device'
 
-interface DeviceCardProps {
+/**
+ * @public
+ */
+export interface DeviceCardProps {
   device: ClientDeviceWithMetrics
+  variant?: 'default' | 'featured'
+  showStatus?: boolean
+  className?: string
 }
 
 export default function DeviceCard({ device }: DeviceCardProps) {

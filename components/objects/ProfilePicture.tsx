@@ -1,9 +1,15 @@
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
-type BorderWidth = '0' | '1' | '2' | '4' | '8'
+/**
+ * @public
+ */
+export type BorderWidth = '0' | '1' | '2' | '4' | '8'
 
-interface ProfilePictureProps {
+/**
+ * @public
+ */
+export interface ProfilePictureProps {
   src?: string
   alt?: string
   size?: number

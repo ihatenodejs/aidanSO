@@ -1,10 +1,14 @@
 'use client'
 
+import { useMemo } from 'react'
 import Link from 'next/link'
 import { PROVIDER_CONFIGS } from '@/lib/config/ai-providers'
 import { toolThemes, type ToolTheme, type ProviderId } from '@/app/ai/theme'
 
-interface PageHeaderProps {
+/**
+ * @public
+ */
+export interface PageHeaderProps {
   selectedProvider?: ProviderId
   theme: ToolTheme
 }
@@ -15,7 +19,7 @@ export default function PageHeader({
 }: PageHeaderProps) {
   const iconSize = 48
 
-  const renderIcons = (): React.JSX.Element => {
+  const renderedIcons = useMemo(() => {
     if (selectedProvider !== 'all') {
       const config = PROVIDER_CONFIGS[selectedProvider]
       const Icon = config.icon
@@ -53,17 +57,21 @@ export default function PageHeader({
         )}
       </div>
     )
-  }
+  }, [selectedProvider, theme.accent])
 
-  const getTitle = (): string => {
+  const title = useMemo(() => {
     if (selectedProvider === 'all') return 'AI Usage'
     return `${PROVIDER_CONFIGS[selectedProvider].displayName} Usage`
-  }
-
-  const getSubtitle = (): string => {
+  }, [selectedProvider])
+  const subtitle = useMemo(() => {
     if (selectedProvider === 'all') return 'Track my AI usage across providers'
     return `Track my ${PROVIDER_CONFIGS[selectedProvider].displayName} usage`
-  }
+  }, [selectedProvider])
+
+  const dividerStyle = useMemo(
+    () => ({ backgroundColor: theme.accent }),
+    [theme.accent]
+  )
 
   return (
     <div className="relative">
@@ -76,15 +84,15 @@ export default function PageHeader({
         </Link>
         <div className="py-8 text-center sm:py-12">
           <div className="mb-4 flex justify-center sm:mb-6">
-            {renderIcons()}
+            {renderedIcons}
           </div>
           <h1 className="glow mb-2 text-2xl font-bold text-gray-100 sm:text-3xl lg:text-4xl">
-            {getTitle()}
+            {title}
           </h1>
-          <p className="text-sm text-gray-400 sm:text-base">{getSubtitle()}</p>
+          <p className="text-sm text-gray-400 sm:text-base">{subtitle}</p>
           <div
             className="mx-auto mt-4 h-1 w-12 rounded-full sm:mt-6 sm:w-16"
-            style={{ backgroundColor: theme.accent }}
+            style={dividerStyle}
           />
         </div>
       </div>

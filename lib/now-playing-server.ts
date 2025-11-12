@@ -41,6 +41,26 @@ interface NowPlayingData {
   message?: string
 }
 
+/**
+ * Service for fetching and caching real-time music playing data.
+ *
+ * @remarks
+ * Integrates with Last.fm and ListenBrainz APIs to track currently playing
+ * music with intelligent caching, rate limiting, and fallback support.
+ * Provides Socket.io integration for real-time updates to connected clients.
+ *
+ * @example
+ * ```ts
+ * const service = new NowPlayingService(ioServer, lastfmApiKey)
+ * const nowPlaying = await service.getNowPlaying()
+ * if (nowPlaying.status === 'success') {
+ *   console.log(`Now playing: ${nowPlaying.data.track}`)
+ * }
+ * ```
+ *
+ * @category Services
+ * @public
+ */
 export class NowPlayingService {
   private readonly io: SocketServer
   private readonly lastFmApiKey: string | undefined

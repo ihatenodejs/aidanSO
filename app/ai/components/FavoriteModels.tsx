@@ -2,7 +2,10 @@ import { Brain } from 'lucide-react'
 import PaginatedCardList from '@/components/ui/PaginatedCardList'
 import type { FavoriteModel } from '../types'
 
-interface FavoriteModelsProps {
+/**
+ * @public
+ */
+export interface FavoriteModelsProps {
   models: FavoriteModel[]
 }
 

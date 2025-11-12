@@ -19,7 +19,10 @@ import type { ServiceStatusResult } from '@/lib/types'
 import { STATUS_CHART_COLORS } from '@/lib/config/status'
 import StatusInfoDialog from './StatusInfoDialog'
 
-interface MetricsOverviewProps {
+/**
+ * @public
+ */
+export interface MetricsOverviewProps {
   services: ServiceStatusResult[]
   stats: {
     operational: number

@@ -7,7 +7,10 @@ import { ExternalLink, TriangleAlert } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
-interface TypeDocProps {
+/**
+ * @public
+ */
+export interface TypeDocProps {
   item: DocItem
   className?: string
   availableTypeIds?: Set<string>

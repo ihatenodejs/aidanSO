@@ -14,7 +14,13 @@ import type {
   StatusReport
 } from '@/lib/types/status'
 
-type SerializedServiceStatusResult = Omit<ServiceStatusResult, 'checkedAt'> & {
+/**
+ * @public
+ */
+export type SerializedServiceStatusResult = Omit<
+  ServiceStatusResult,
+  'checkedAt'
+> & {
   checkedAt: string
 }
 
@@ -32,9 +38,19 @@ type BrowserLatencyMeasurement = {
   outcome: 'success' | 'timeout' | 'network'
 }
 
-interface StatusPageClientProps {
+/**
+ * @public
+ */
+export interface StatusPageClientProps {
   report: SerializedStatusReport
   avgResponseTime: number
+  refreshInterval?: number
+}
+
+export interface StatusDataPoint {
+  timestamp: string
+  value: number
+  label?: string
 }
 
 export default function StatusPageClient({

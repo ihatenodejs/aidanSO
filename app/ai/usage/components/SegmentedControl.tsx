@@ -11,7 +11,10 @@ export interface SegmentedOption<T extends string> {
   accentColor?: string
 }
 
-interface SegmentedControlProps<T extends string> {
+/**
+ * @public
+ */
+export interface SegmentedControlProps<T extends string> {
   options: SegmentedOption<T>[]
   value: T
   onChange?: (value: T) => void

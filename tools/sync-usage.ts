@@ -6,10 +6,12 @@
  * Syncs AI usage data from agent-exporter to public/data/cc.json
  * Replaces the legacy ccombine tool with direct agent-exporter integration.
  *
- * @usage
+ * @example
+ * ```bash
  * bun tools/sync-usage.ts              # Sync all data
  * bun tools/sync-usage.ts --dry-run    # Preview without writing
  * bun tools/sync-usage.ts --period 1m  # Sync last month only
+ * ```
  */
 
 import { $ } from 'bun'

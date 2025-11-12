@@ -21,7 +21,10 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-interface DocsSidebarProps {
+/**
+ * @public
+ */
+export interface DocsSidebarProps {
   navigation: DocNavigation
   currentItemId?: string
   className?: string

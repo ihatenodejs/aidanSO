@@ -3,7 +3,10 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-interface GitHubStatsImageProps {
+/**
+ * @public
+ */
+export interface GitHubStatsImageProps {
   username: string
 }
 

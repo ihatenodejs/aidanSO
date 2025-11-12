@@ -24,7 +24,10 @@ type TokenTooltipProps = TooltipProps<ValueType, NameType> & {
   payload?: readonly Payload<ValueType, NameType>[]
 }
 
-interface TokenTypeProps {
+/**
+ * @public
+ */
+export interface TokenTypeProps {
   totals: CCData['totals']
   theme: ToolTheme
 }

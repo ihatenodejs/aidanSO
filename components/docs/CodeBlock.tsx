@@ -75,7 +75,10 @@ function normalizeLanguage(language: string): SupportedLanguage {
   return 'typescript'
 }
 
-interface CodeBlockProps {
+/**
+ * @public
+ */
+export interface CodeBlockProps {
   code: string
   language?: string
   title?: string

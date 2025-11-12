@@ -95,7 +95,10 @@ const buildLineData = (daily: DailyData[]) => {
   return { lineData, models: sortedModels }
 }
 
-interface ModelUsageOverTimeProps {
+/**
+ * @public
+ */
+export interface ModelUsageOverTimeProps {
   daily: DailyData[]
   theme: ToolTheme
   timeRange: TimeRangeKey

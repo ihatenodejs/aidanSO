@@ -24,7 +24,10 @@ import {
 import type { ToolTheme } from '@/app/ai/theme'
 import { Formatter } from '@/lib/utils/formatting'
 
-interface ActivityProps {
+/**
+ * @public
+ */
+export interface ActivityProps {
   daily: DailyData[]
   theme: ToolTheme
   timeRange: TimeRangeKey

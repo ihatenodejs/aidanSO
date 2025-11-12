@@ -1,7 +1,10 @@
 import { ReactNode } from 'react'
 import { cn, surfaces } from '@/lib/theme'
 
-interface SectionProps {
+/**
+ * @public
+ */
+export interface SectionProps {
   children: ReactNode
   variant?: keyof typeof surfaces.section
   className?: string
@@ -9,6 +12,32 @@ interface SectionProps {
   title?: ReactNode
 }
 
+/**
+ * Section component for content layout with consistent styling.
+ *
+ * @remarks
+ * Provides a standardized section container with optional title and
+ * configurable surface variants. Used throughout the application for
+ * consistent content section styling and spacing.
+ *
+ * @param props - Section component properties
+ * @param props.children - Section content
+ * @param props.variant - Surface style variant (default, etc.)
+ * @param props.className - Additional CSS classes
+ * @param props.id - HTML id attribute
+ * @param props.title - Optional section title displayed as h2
+ * @returns Rendered section element
+ *
+ * @example
+ * ```ts
+ * <Section id="overview" title="Overview" variant="default">
+ *   <p>Section content here</p>
+ * </Section>
+ * ```
+ *
+ * @category UI Components
+ * @public
+ */
 export function Section({
   children,
   variant = 'default',

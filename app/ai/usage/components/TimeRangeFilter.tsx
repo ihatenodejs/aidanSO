@@ -15,7 +15,10 @@ const TIME_RANGE_OPTIONS = [
 
 type TimeRangeOptionId = (typeof TIME_RANGE_OPTIONS)[number]['id']
 
-interface TimeRangeFilterProps {
+/**
+ * @public
+ */
+export interface TimeRangeFilterProps {
   value: TimeRangeKey
   onChange: (value: TimeRangeKey) => void
   theme: ToolTheme

@@ -7,7 +7,10 @@ import { Dialog } from '@/components/ui/Dialog'
 import { isInactiveTool, type AITool, type AIToolStatus } from '../types'
 import { cn } from '@/lib/theme'
 
-interface AIStackProps {
+/**
+ * @public
+ */
+export interface AIStackProps {
   tools: AITool[]
   title?: string
   subtitle?: string
@@ -52,7 +55,7 @@ function formatPrice(price: number, period?: string) {
   return `$${price.toFixed(2)}${periodSuffix}`
 }
 
-interface ToolInfoDialogProps {
+export interface ToolInfoDialogProps {
   tool: AITool | null
   onClose: () => void
 }

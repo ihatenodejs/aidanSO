@@ -1,14 +1,17 @@
-import { ReactNode } from 'react'
 import { cn, surfaces } from '@/lib/theme'
 
 type CardVariant = keyof typeof surfaces.card
 type SectionVariant = keyof typeof surfaces.section
 
-interface CardProps {
-  children: ReactNode
-  title?: ReactNode
-  variant?: CardVariant | SectionVariant
+/**
+ * @public
+ */
+export interface CardProps {
+  children: React.ReactNode
+  variant?: 'default' | 'domain' | 'ai' | 'featured' | 'simple' | 'status'
+  hover?: boolean
   className?: string
+  title?: React.ReactNode
   spanCols?: number
   onClick?: () => void
   id?: string

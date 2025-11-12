@@ -2,7 +2,11 @@
 
 import type React from 'react'
 
-interface ScrollTxtProps {
+/**
+ * @public
+ * @category Components
+ */
+export interface ScrollTxtProps {
   text: string
   className?: string
   type?: 'artist' | 'track' | 'release'

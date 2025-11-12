@@ -6,9 +6,13 @@ import { colors, effects } from '@/lib/theme'
 import { Search, X } from 'lucide-react'
 import type { DocItem } from '@/lib/docs/types'
 
-interface DocsSearchProps {
+/**
+ * @public
+ */
+export interface DocsSearchProps {
   items: DocItem[]
   onSearch: (query: string) => void
+  placeholder?: string
   className?: string
 }
 

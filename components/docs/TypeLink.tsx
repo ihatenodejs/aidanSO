@@ -3,7 +3,10 @@
 import { colors, effects } from '@/lib/theme'
 import { cn } from '@/lib/utils'
 
-interface TypeLinkProps {
+/**
+ * @public
+ */
+export interface TypeLinkProps {
   type: string
   className?: string
   availableTypeIds?: Set<string>

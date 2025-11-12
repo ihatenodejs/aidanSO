@@ -1,7 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
 
-interface ButtonProps {
+/**
+ * @public
+ * @category Components
+ */
+export interface ButtonProps {
   href: string
   target?: string
   variant?: 'primary' | 'rounded'

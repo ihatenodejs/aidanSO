@@ -1,10 +1,12 @@
 import React from 'react'
 import { SiGoogle } from 'react-icons/si'
 
-interface GoogleIconProps {
-  className?: string
-  strokeWidth?: number
+/**
+ * @public
+ */
+export interface GoogleIconProps {
   size?: number
+  className?: string
 }
 
 export default function GoogleIcon({ className, size }: GoogleIconProps) {

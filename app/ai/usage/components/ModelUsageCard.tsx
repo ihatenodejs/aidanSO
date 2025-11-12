@@ -21,7 +21,10 @@ type ModelTooltipProps = TooltipProps<ValueType, NameType> & {
   payload?: readonly Payload<ValueType, NameType>[]
 }
 
-interface ModelUsageCardProps {
+/**
+ * @public
+ */
+export interface ModelUsageCardProps {
   daily: DailyData[]
   theme: ToolTheme
 }

@@ -3,9 +3,15 @@
 import { DailyData } from '@/lib/types/ai'
 import { cn } from '@/lib/utils'
 
-type TrendType = 'cost' | 'tokens' | 'days' | 'average'
+/**
+ * @public
+ */
+export type TrendType = 'cost' | 'tokens' | 'days' | 'average'
 
-interface UsageTrendGraphProps {
+/**
+ * @public
+ */
+export interface UsageTrendGraphProps {
   daily: DailyData[]
   type: TrendType
   className?: string

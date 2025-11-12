@@ -17,7 +17,10 @@ import { colors } from '@/lib/theme'
 import { cn } from '@/lib/utils'
 import { Menu } from 'lucide-react'
 
-interface DocsPageClientProps {
+/**
+ * @public
+ */
+export interface DocsPageClientProps {
   sections: DocSection[]
   navigation: DocNavigation
   items: DocItem[]

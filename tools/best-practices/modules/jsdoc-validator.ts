@@ -24,7 +24,7 @@ const jsdocValidator: CheckDefinition = {
     let hasErrors = false
 
     try {
-      const fs = await import('node:fs/promises')
+      const { readdir } = await import('node:fs/promises')
       const { resolve } = await import('node:path')
 
       async function getTsFiles(
@@ -32,7 +32,7 @@ const jsdocValidator: CheckDefinition = {
         baseDir: string = dir
       ): Promise<string[]> {
         const files: string[] = []
-        const entries = await fs.readdir(dir, { withFileTypes: true })
+        const entries = await readdir(dir, { withFileTypes: true })
 
         for (const entry of entries) {
           const fullPath = resolve(dir, entry.name)
@@ -70,10 +70,9 @@ const jsdocValidator: CheckDefinition = {
       }
 
       const serverTsPath = resolve(context.repoRoot, 'server.ts')
-      try {
-        await fs.access(serverTsPath)
+      if (await Bun.file(serverTsPath).exists()) {
         allFiles.push(serverTsPath)
-      } catch {}
+      }
 
       const functionMap = new Map<
         string,
@@ -91,7 +90,7 @@ const jsdocValidator: CheckDefinition = {
       }> = []
 
       for (const filePath of allFiles) {
-        const content = await fs.readFile(filePath, 'utf-8')
+        const content = await Bun.file(filePath).text()
 
         const classMatches = content.matchAll(/^export\s+class\s+(\w+)/gm)
         for (const match of classMatches) {

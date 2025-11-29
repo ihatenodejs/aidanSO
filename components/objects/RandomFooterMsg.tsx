@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { footerMessages } from './footerMessages'
 
@@ -10,25 +8,15 @@ export interface RandomFooterMsgProps {
   index?: number
 }
 
-const fallbackMessage = footerMessages[0] ?? null
-
-const getMessageByIndex = (index: number | undefined) => {
+export default function RandomFooterMsg({ index = 0 }: RandomFooterMsgProps) {
   if (!footerMessages.length) {
     return null
-  }
-
-  if (typeof index !== 'number' || Number.isNaN(index)) {
-    return fallbackMessage
   }
 
   const safeIndex =
     ((Math.floor(index) % footerMessages.length) + footerMessages.length) %
     footerMessages.length
-  return footerMessages[safeIndex] ?? fallbackMessage
-}
-
-export default function RandomFooterMsg({ index }: RandomFooterMsgProps) {
-  const message = getMessageByIndex(index)
+  const message = footerMessages[safeIndex]
 
   if (!message) {
     return null

@@ -241,8 +241,8 @@ export default function StatusPageClient({
 
         setClientMeasuredServices(reconciledClientServices)
         setLastUpdated(new Date())
-      } catch (error) {
-        console.error('Error updating status data:', error)
+      } catch {
+        // swallow error
       } finally {
         isCheckingRef.current = false
         setIsChecking(false)

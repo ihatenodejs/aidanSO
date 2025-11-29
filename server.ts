@@ -14,6 +14,7 @@ import { createServer } from 'node:http'
 import next from 'next'
 import { Server } from 'socket.io'
 import { NowPlayingService } from './lib/now-playing-server'
+import { logger } from './lib/utils/logger'
 
 const dev = process.env.NODE_ENV !== 'production'
 const hostname = dev ? 'localhost' : process.env.HOSTNAME || '0.0.0.0'
@@ -37,8 +38,9 @@ const handler = app.getRequestHandler()
  */
 function startServer(port: number, attempt: number = 0): void {
   if (attempt >= maxPortAttempts) {
-    console.error(
-      `✗ Failed to find an available port after ${maxPortAttempts} attempts (tried ports ${initialPort}-${port - 1})`
+    logger.error(
+      `✗ Failed to find an available port after ${maxPortAttempts} attempts (tried ports ${initialPort}-${port - 1})`,
+      'Server'
     )
     process.exit(1)
   }
@@ -53,7 +55,7 @@ function startServer(port: number, attempt: number = 0): void {
       if (pathname === '/_next/webpack-hmr') {
         upgradeHandler(req, socket, head).catch((err) => {
           socket.destroy()
-          console.error('✗ Upgrade handler error:', err)
+          logger.error('✗ Upgrade handler error', 'Server', err)
         })
       }
     })
@@ -99,7 +101,7 @@ function startServer(port: number, attempt: number = 0): void {
   }
 
   io.on('connection', (socket) => {
-    console.log('[WS] Client connected:', socket.id)
+    logger.info(`Client connected: ${socket.id}`, 'WebSocket')
 
     const stopAutoRefresh = () => {
       const existingInterval = refreshIntervals.get(socket.id)
@@ -134,28 +136,32 @@ function startServer(port: number, attempt: number = 0): void {
     socket.once('disconnect', () => {
       stopAutoRefresh()
       rateLimitMap.delete(socket.id)
-      console.log('[WS] Client disconnected:', socket.id)
+      logger.debug(`Client disconnected: ${socket.id}`, 'WebSocket')
     })
   })
 
   httpServer.on('error', (err: NodeJS.ErrnoException) => {
     if (err.code === 'EADDRINUSE') {
-      console.log(`⚠ Port ${port} is already in use, trying ${port + 1}...`)
+      logger.warning(
+        `⚠ Port ${port} is already in use, trying ${port + 1}...`,
+        'Server'
+      )
       httpServer.close()
       startServer(port + 1, attempt + 1)
     } else {
-      console.error('✗ Server error:', err)
+      logger.error('✗ Server error', 'Server', err)
       process.exit(1)
     }
   })
 
   httpServer.listen(port, () => {
     if (port !== initialPort) {
-      console.log(
-        `✓ Ready on http://${hostname}:${port} (port ${initialPort} in use)`
+      logger.success(
+        `✓ Ready on http://${hostname}:${port} (port ${initialPort} in use)`,
+        'Server'
       )
     } else {
-      console.log(`✓ Ready on http://${hostname}:${port}`)
+      logger.success(`✓ Ready on http://${hostname}:${port}`, 'Server')
     }
   })
 }

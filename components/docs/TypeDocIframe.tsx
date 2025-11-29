@@ -137,6 +137,26 @@ function applyScrollEnhancements(doc: Document) {
       ::-webkit-scrollbar-track {
         background-color: rgba(31, 41, 55, 0.6);
       }
+
+      .tsd-anchor-icon svg {
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        display: none !important;
+      }
+
+      .tsd-anchor-icon {
+        margin-left: 0 !important;
+      }
+
+      .tsd-member-summary-name:hover > .tsd-anchor-icon svg,
+      .tsd-anchor-link:hover > .tsd-anchor-icon svg,
+      .tsd-anchor-icon:focus-visible svg {
+        visibility: visible !important;
+        width: 1em !important;
+        height: 1em !important;
+        display: inline-block !important;
+      }
     `
     doc.head?.appendChild(styleEl)
   }

@@ -64,7 +64,8 @@ export default function PageHeader({
     return `${PROVIDER_CONFIGS[selectedProvider].displayName} Usage`
   }, [selectedProvider])
   const subtitle = useMemo(() => {
-    if (selectedProvider === 'all') return 'Track my AI usage across providers'
+    if (selectedProvider === 'all')
+      return 'Track my AI usage across providers and tools'
     return `Track my ${PROVIDER_CONFIGS[selectedProvider].displayName} usage`
   }, [selectedProvider])
 

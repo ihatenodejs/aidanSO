@@ -88,48 +88,82 @@ export default function LoadingSkeleton({
       </div>
 
       <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 md:grid-cols-4">
-        <div className={surfaces.card.ai}>
-          <h3 className="mb-2 text-sm font-medium text-gray-400">Total Cost</h3>
-          <div
-            className="h-9 w-24 animate-pulse rounded"
-            style={placeholderStyles.gradient}
-          />
-        </div>
-        <div className={surfaces.card.ai}>
-          <h3 className="mb-2 text-sm font-medium text-gray-400">
-            Total Tokens
-          </h3>
-          <div
-            className="h-9 w-20 animate-pulse rounded"
-            style={placeholderStyles.gradient}
-          />
-        </div>
-        <div className={surfaces.card.ai}>
-          <h3 className="mb-2 text-sm font-medium text-gray-400">
-            Days Active
-          </h3>
-          <div className="flex items-center text-3xl">
+        <div className={`relative ${surfaces.card.ai}`}>
+          <div className="absolute inset-0 overflow-hidden rounded-lg opacity-30">
             <div
-              className="h-9 w-12 animate-pulse rounded"
+              className="h-full w-full animate-pulse"
+              style={placeholderStyles.subtle}
+            />
+          </div>
+          <div className="relative z-10">
+            <h3 className="mb-2 text-sm font-medium text-gray-400">
+              Total Cost
+            </h3>
+            <div
+              className="h-9 w-24 animate-pulse rounded"
               style={placeholderStyles.gradient}
             />
-            <span className="ml-3 flex items-center gap-1.5 rounded-full bg-gray-700 px-3 py-1 text-sm font-semibold text-gray-50">
-              <div className="h-4 w-4 animate-pulse rounded-full bg-orange-500/30" />
-              <div
-                className="h-3 w-6 animate-pulse rounded"
-                style={placeholderStyles.gradient}
-              />
-            </span>
           </div>
         </div>
-        <div className={surfaces.card.ai}>
-          <h3 className="mb-2 text-sm font-medium text-gray-400">
-            Avg Daily Cost
-          </h3>
-          <div
-            className="h-9 w-24 animate-pulse rounded"
-            style={placeholderStyles.gradient}
-          />
+        <div className={`relative ${surfaces.card.ai}`}>
+          <div className="absolute inset-0 overflow-hidden rounded-lg opacity-30">
+            <div
+              className="h-full w-full animate-pulse"
+              style={placeholderStyles.subtle}
+            />
+          </div>
+          <div className="relative z-10">
+            <h3 className="mb-2 text-sm font-medium text-gray-400">
+              Total Tokens
+            </h3>
+            <div
+              className="h-9 w-20 animate-pulse rounded"
+              style={placeholderStyles.gradient}
+            />
+          </div>
+        </div>
+        <div className={`relative ${surfaces.card.ai}`}>
+          <div className="absolute inset-0 overflow-hidden rounded-lg opacity-30">
+            <div
+              className="h-full w-full animate-pulse"
+              style={placeholderStyles.subtle}
+            />
+          </div>
+          <div className="relative z-10">
+            <h3 className="mb-2 text-sm font-medium text-gray-400">
+              Days Active
+            </h3>
+            <div className="flex items-center text-3xl">
+              <div
+                className="h-9 w-12 animate-pulse rounded"
+                style={placeholderStyles.gradient}
+              />
+              <span className="ml-3 flex items-center gap-1.5 rounded-full bg-gray-700 px-3 py-1 text-sm font-semibold text-gray-50">
+                <div className="h-4 w-4 animate-pulse rounded-full bg-orange-500/30" />
+                <div
+                  className="h-3 w-6 animate-pulse rounded"
+                  style={placeholderStyles.gradient}
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className={`relative ${surfaces.card.ai}`}>
+          <div className="absolute inset-0 overflow-hidden rounded-lg opacity-30">
+            <div
+              className="h-full w-full animate-pulse"
+              style={placeholderStyles.subtle}
+            />
+          </div>
+          <div className="relative z-10">
+            <h3 className="mb-2 text-sm font-medium text-gray-400">
+              Avg Daily Cost
+            </h3>
+            <div
+              className="h-9 w-24 animate-pulse rounded"
+              style={placeholderStyles.gradient}
+            />
+          </div>
         </div>
       </div>
 
@@ -175,9 +209,21 @@ export default function LoadingSkeleton({
 
       <div className="grid grid-cols-1 gap-4 px-4 pt-4 lg:grid-cols-2">
         <section className="col-span-2 rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600 sm:p-6 lg:col-span-1 lg:p-8">
-          <h2 className="mb-4 text-xl font-semibold text-gray-200 sm:text-2xl">
-            Model Usage Distribution
-          </h2>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-gray-200 sm:text-2xl">
+              Model Usage Distribution
+            </h2>
+            <div className="flex gap-2">
+              <div
+                className="h-7 w-16 animate-pulse rounded px-3 py-1"
+                style={{
+                  backgroundColor: theme.button.activeBackground,
+                  opacity: 0.6
+                }}
+              />
+              <div className="h-7 w-12 animate-pulse rounded bg-gray-700 px-3 py-1" />
+            </div>
+          </div>
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="h-[250px] lg:h-[300px]">
               <div
@@ -238,6 +284,27 @@ export default function LoadingSkeleton({
               className="h-full w-full animate-pulse rounded"
               style={placeholderStyles.gradient}
             />
+          </div>
+          <div className="mt-6 grid grid-cols-2 gap-3 border-t border-gray-700 pt-4">
+            {[...Array(4)].map((_, i) => (
+              <div
+                key={i}
+                className="flex flex-col rounded-md border border-gray-700 bg-gray-800/30 p-3"
+              >
+                <div
+                  className="h-3 w-16 animate-pulse rounded"
+                  style={placeholderStyles.subtle}
+                />
+                <div
+                  className="mt-2 h-5 w-12 animate-pulse rounded"
+                  style={placeholderStyles.gradient}
+                />
+                <div
+                  className="mt-1 h-3 w-8 animate-pulse rounded"
+                  style={placeholderStyles.subtle}
+                />
+              </div>
+            ))}
           </div>
         </section>
       </div>

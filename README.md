@@ -42,6 +42,8 @@ Just create a `.env` file with the below variables, run `docker compose up -d --
 | `GITHUB_PAT`                     | No        | Fallback GitHub personal access token if `GITHUB_PROJECTS_PAT` is not set                  |
 | `PORT`                           | No        | Server port (defaults to `3000`)                                                           |
 | `NODE_ENV`                       | No        | Environment mode (`production` or `development`, automatically set by deployment platform) |
+| `WARNING_LEVEL`                  | No        | Logging level: `debug`, `info`, `warning`, or `error` (defaults to `info`)                 |
+| `NO_COLOR`                       | No        | Set to any value to disable colored terminal output                                        |
 | `NEXT_PUBLIC_DEFAULT_TIME_RANGE` | No        | Default time range for AI usage page (defaults to `3m`)                                    |
 
 ## MusicBrainz

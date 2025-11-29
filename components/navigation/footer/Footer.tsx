@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-react'
 import { TbBrandGithub, TbCopyrightOff } from 'react-icons/tb'
 
 import RandomFooterMsg from '../../objects/RandomFooterMsg'
+import { footerMessages } from '../../objects/footerMessages'
 import ProfilePicture from '../../objects/ProfilePicture'
 
 import { getContactLinks } from '@/lib/config/contact'
@@ -106,10 +107,13 @@ const getRoleByIndex = (index: number | undefined): string => {
 }
 
 export default async function Footer({
-  footerMessageIndex,
+  footerMessageIndex = undefined,
   className
 }: FooterProps) {
-  const role = getRoleByIndex(footerMessageIndex)
+  const messageIndex =
+    // eslint-disable-next-line react-hooks/purity -- Server component renders once per request
+    footerMessageIndex ?? Math.floor(Math.random() * footerMessages.length)
+  const role = getRoleByIndex(messageIndex)
   const { username: githubUsername, repos: githubRepos } =
     await getRecentGitHubRepos()
   const footerContactLinks = getContactLinks(FOOTER_CONTACT_LINK_IDS)
@@ -262,7 +266,7 @@ export default async function Footer({
             </div>
 
             <div className="flex items-center justify-center space-x-2 text-sm">
-              <RandomFooterMsg index={footerMessageIndex} />
+              <RandomFooterMsg index={messageIndex} />
             </div>
 
             <SystemStatusClient />

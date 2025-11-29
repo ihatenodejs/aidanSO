@@ -2,18 +2,18 @@
 
 ## Project Overview
 
-**aidanSO** (formerly aidxnCC) is a personal portfolio and services website built with Next.js 15, featuring real-time music tracking, domain management, device showcases, and AI usage analytics. The project is deployed at [aidan.so](https://aidan.so).
+**aidanSO** (formerly aidxnCC) is a personal portfolio and services website built with Next.js 16, featuring real-time music tracking, domain management, device showcases, and AI usage analytics. The project is deployed at [aidan.so](https://aidan.so).
 
 ### Tech Stack
 
 - **Runtime**: Bun (not Node.js) - all scripts use `bun run`
-- **Framework**: Next.js 15 with App Router
+- **Framework**: Next.js 16.0.3 with App Router and React 19
 - **Language**: TypeScript with strict mode
 - **Styling**: Tailwind CSS v4 with custom theme system
 - **Server**: Custom Bun server with Socket.io
-- **UI Libraries**: Some Shadcn UI Components, Lucide Icons, React Icons
+- **UI Libraries**: Custom and Shadcn components (interact with Shadcn with `bunx shadcn@latest [command]`), Lucide Icons, React Icons, @lobehub/icons
 - **Data Visualization**: Recharts
-- **Internationalization**: i18next with React bindings
+- **Documentation Rendering**: react-markdown with react-syntax-highlighter and remark-gfm for GitHub-flavored Markdown
 
 ## Development Commands
 
@@ -126,34 +126,53 @@ bun run sync:usage --help
 /app                  # Next.js App Router pages
   /about              # About page
   /ai                 # AI tools and usage analytics
-    /usage            # Claude usage tracking components
+    /usage            # AI usage tracking and analytics
   /contact            # Contact page
-  /device             # Device showcase pages (dynamic)
-  /domains            # Domain portfolio management
+  /device/[slug]      # Individual device showcase pages (dynamic)
+  /devices            # Device listing page
+  /docs               # Documentation system
+    /[category]       # Dynamic category pages
+      /[item]         # Dynamic documentation item pages
+    /typedoc          # TypeDoc-generated API documentation
+  /domains/[domain]   # Domain portfolio pages (dynamic)
   /manifesto          # Personal manifesto page
+  /status             # System status monitoring page
   /api                # API routes
     /now-playing      # Music tracking endpoint
+    /status           # Status endpoint
 
 /components           # Reusable React components
   /device             # Device-specific components
+  /docs               # Documentation rendering components
   /domains            # Domain management components
   /icons              # Custom icon components
+  /layout             # Layout components
+  /navigation         # Navigation components (header, footer)
   /objects            # Common UI elements (IMPORTANT - reuse these!)
   /ui                 # Base UI components
   /widgets            # Feature-specific widgets
 
 /lib                  # Core application logic (IMPORTANT - always use these utilities!)
+  /config             # Configuration files for features
   /devices            # Device data and configuration
+  /docs               # Documentation loader and HTML parser
   /domains            # Domain data and utilities
   /services           # Business logic services
   /theme              # Theme system and design tokens
   /types              # TypeScript type definitions
   /utils              # Utility functions
+  /validation         # Input validation utilities
 
 /public               # Static assets
   /data               # JSON data files
+  /docs               # TypeDoc-generated documentation (gitignored)
   /img                # Images
-  /locales            # i18n translation files
+
+/tools                # Build and development tools
+  /best-practices     # Code quality validation system
+    /modules          # Individual check modules
+  build-device-data.ts # Device data pre-build script
+  sync-usage.ts       # AI usage data synchronization
 ```
 
 ## Critical Reusable Components & Utilities
@@ -201,6 +220,97 @@ Formatter.slugify('Hello World') // 'hello-world'
 
 - Device-specific text formatting and display logic
 
+**Terminal Colors** (`lib/utils/terminal-colors.ts`)
+
+```typescript
+import { terminalColors, colorLog } from '@/lib/utils'
+
+// Direct color functions (for custom formatting)
+terminalColors.error('Error message') // Red
+terminalColors.warn('Warning message') // Yellow
+terminalColors.success('Success message') // Green
+terminalColors.info('Info message') // Cyan
+terminalColors.debug('Debug message') // Blue
+terminalColors.accent('Special message') // Magenta
+terminalColors.dim('Muted text') // Dimmed
+terminalColors.bright('Bold text') // Bright/bold
+
+// Logging helpers with prefixes
+colorLog.error('Failed to connect', 'server')
+colorLog.warn('Port in use', 'server')
+colorLog.success('Build complete', 'build')
+colorLog.info('Processing...', 'worker')
+```
+
+**Logger Utility** (`lib/utils/logger.ts`)
+
+```typescript
+import { logger } from '@/lib/utils'
+
+// Standardized logging with timestamps and filtering
+logger.info('Server starting...', 'server')
+logger.warning('Port already in use', 'server')
+logger.error('Failed to connect', 'database', error)
+logger.success('Build completed successfully')
+logger.debug('Cache hit for key: abc123', 'cache')
+
+// Check log level
+logger.isLevelEnabled(LogLevel.INFO) // true/false
+logger.getLevel() // Current log level
+```
+
+**Logging Features:**
+
+- **Environment-based filtering**: Set `WARNING_LEVEL` env var (`debug`, `info`, `warning`, or `error`)
+  - `WARNING_LEVEL=debug` - Shows all messages including verbose debug logs (also enables full error stack traces)
+  - `WARNING_LEVEL=info` - Shows info, success, warnings, and errors (default)
+  - `WARNING_LEVEL=warning` - Shows warnings and errors only
+  - `WARNING_LEVEL=error` - Shows errors only
+- **Auto-colored output**: Uses Bun.color() with TTY detection
+- **NO_COLOR support**: Respects NO_COLOR environment variable
+
+**Log Level Guidance:**
+
+- **`debug()`** - Verbose internal details, only shown when `WARNING_LEVEL=debug`
+  - Use for: Cache hits/misses, transformation progress, minor state changes
+  - Visual: Dimmed gray text to reduce noise
+  - Examples: "Client disconnected", "Transforming device data", "Cache hit"
+
+- **`info()`** - Important operational events that should be visible by default
+  - Use for: Server startup, build completion, data syncing, major operations
+  - Visual: Cyan colored text
+  - Examples: "Server started on port 3000", "Syncing usage data"
+
+- **`success()`** - Positive confirmation messages (treated as info level)
+  - Use for: Successful completions, validations passing
+  - Visual: Green colored text
+  - Examples: "Build completed successfully", "All checks passed"
+
+- **`warning()`** - Recoverable issues that need attention
+  - Use for: Deprecations, port conflicts, fallback behavior
+  - Visual: Yellow colored text
+  - Examples: "Port 3000 in use, trying 3001", "Using fallback API"
+
+- **`error()`** - Critical failures (always shown)
+  - Use for: Unrecoverable errors, failed operations, exceptions
+  - Visual: Red colored text
+  - Examples: "Failed to connect to database", "Build failed"
+
+**Error Detail Control:**
+
+The `WARNING_LEVEL` environment variable also controls error verbosity. When set to `debug`, CLI tools show full error stack traces:
+
+```typescript
+// Pattern used in tools/sync-usage.ts and tools/best-practices.ts
+const details = logger.shouldShowErrorDetails() ? error : undefined
+logger.error('Operation failed', 'tool-name', details)
+
+// When WARNING_LEVEL=debug: Shows full error stack traces
+// When WARNING_LEVEL=info/warning/error: Shows error message only
+```
+
+Set `WARNING_LEVEL=debug` when troubleshooting to see complete error details and verbose debug logs.
+
 #### 3. Theme System (`lib/theme/`)
 
 **Colors (`lib/theme/colors.ts`)**
@@ -225,11 +335,37 @@ surfaces.card.default // Standard card styling
 surfaces.card.domain // Domain-specific card
 surfaces.card.ai // AI theme card
 surfaces.card.featured // Featured/highlighted card
+surfaces.card.status // Status monitoring card
 surfaces.section.default // Section container
+surfaces.section.compact // Compact section
+surfaces.section.plain // Plain section (no background)
 surfaces.button.nav // Navigation button
 surfaces.button.primary // Primary CTA button
+surfaces.button.active // Active button state
+surfaces.button.icon // Icon button
 surfaces.badge.default // Badge styling
 surfaces.spacing.page // Page-level spacing
+```
+
+**Effects (`lib/theme/effects.ts`)**
+
+```typescript
+import { effects } from '@/lib/theme/effects'
+
+// Text shadows
+effects.textShadows.glow // Standard glow effect
+effects.textShadows.glowHover // Hover glow effect
+effects.textShadows.glowIntense // Intense glow effect
+effects.textShadows.subtle // Subtle shadow
+
+// Box shadows
+effects.boxShadows // Various shadow effects
+
+// Transitions
+effects.transitions // Transition presets
+
+// Backdrop filters
+effects.backdrops // Backdrop blur/filter effects
 ```
 
 #### 4. Common Components (`components/objects/`)
@@ -257,11 +393,15 @@ import PageHeader from '@/components/objects/PageHeader'
   target="_blank"  // Optional
 >
 
-// Animated page title
-<AnimatedTitle text="Page Title" />
+// Animated document title (renders nothing, animates browser tab title to "aidan.so")
+<AnimatedTitle />
 
-// Full-featured page header
-<PageHeader title="Title" description="Optional description" />
+// Full-featured page header with icon
+<PageHeader
+  icon={<IconComponent />}  // Required
+  title="Title"
+  subtitle="Optional subtitle"  // Note: uses 'subtitle', not 'description'
+/>
 ```
 
 ##### Utility & Display Components
@@ -276,17 +416,21 @@ import RandomFooterMsg from '@/components/objects/RandomFooterMsg'
 // Loading states
 <LoadingSpinner />
 
-// Music-related displays
-<MusicText />
-
-// Audio seek bar
-<SeekBar />
+// Scrolling text for music displays (artist, track, release)
+<MusicText
+  text="Song Title"
+  type="track"  // 'artist' | 'track' | 'release'
+/>
 
 // Profile image with fallback
-<ProfilePicture />
+<ProfilePicture
+  src="/path/to/image.jpg"
+  size={48}
+  borderWidth="2"  // '0'|'1'|'2'|'4'|'8'
+/>
 
 // Random footer message rotation
-<RandomFooterMsg />
+<RandomFooterMsg index={0} />  // Optional: specify which message
 ```
 
 #### 5. Services Pattern (`lib/services/`)
@@ -297,10 +441,12 @@ Business logic is centralized in service modules:
 import {
   DomainService,
   DeviceService,
-  ClientDeviceService,
   AIService,
   StatusService
 } from '@/lib/services'
+
+// Note: ClientDeviceService must be imported directly (not exported from barrel)
+import { ClientDeviceService } from '@/lib/services/client-device.service'
 
 // Domain operations
 const domains = DomainService.getAllDomainsEnriched()
@@ -611,17 +757,23 @@ HOSTNAME=0.0.0.0              # Server hostname (defaults to localhost in dev, 0
 NODE_ENV=production           # Environment mode (automatically set by deployment platform)
 CORS_ORIGIN=*                 # CORS origin for Socket.io (defaults to * in production)
 
+# Logging Configuration
+WARNING_LEVEL=info            # Logging level: debug, info, warning, or error (defaults to info)
+NO_COLOR=                     # Set to any value to disable colored terminal output
+
 # Application Defaults
 NEXT_PUBLIC_DEFAULT_TIME_RANGE=3m  # Default time range for AI usage page (3m = 3 months)
 ```
 
 ### Docker Deployment
 
-Use the `docker-compose.yml.example` file as a template. Create a `.env` file with required variables and run:
+Use the `examples/docker-compose.yml` file as a template. Create a `.env` file with required variables and run:
 
 ```bash
 docker compose up -d --build
 ```
+
+**Note**: A production `docker-compose.yml` exists in the root directory and uses port 3001:3000 mapping.
 
 ## Important Conventions
 
@@ -675,10 +827,43 @@ function ClientComponent({ initialData }) {
 }
 ```
 
-### 5. Error Handling
+### 5. Logging & Error Handling
 
+**Use the standardized logger for all server-side logging:**
+
+```typescript
+import { logger } from '@/lib/utils'
+
+// In server files, CLI tools, and services
+try {
+  await performOperation()
+  logger.success('Operation completed', 'module-name')
+} catch (error) {
+  logger.error('Operation failed', 'module-name', error)
+}
+
+// For progress messages
+logger.info('Processing data...', 'worker')
+logger.debug('Cache hit for key: abc123', 'cache')
+```
+
+**Use terminal colors for custom formatting:**
+
+```typescript
+import { terminalColors } from '@/lib/utils'
+
+// When you need custom color formatting
+console.log(
+  `${terminalColors.bright('Total')}: ${terminalColors.success('$1,234.56')}`
+)
+```
+
+**Best Practices:**
+
+- Use `logger` for standardized server/CLI logging with filtering
+- Use `terminalColors` for custom terminal output formatting
 - Use try-catch in async functions
-- Always have error handling built into the UI and console
+- Always have error handling built into the UI and server logs (only use the logger for server-side logging, however).
 
 ### 6. Performance Optimizations
 
@@ -705,6 +890,11 @@ The project includes a custom best-practices validation tool (`tools/best-practi
 4. **device-icons**: Validates device icon mappings and references
    - Ensures all device icons are properly mapped and accessible
 
+5. **jsdoc-validator**: Validates JSDoc documentation coverage
+   - Scans TypeScript files for missing JSDoc comments on classes and exported functions
+   - Identifies duplicate function names across files
+   - Ensures proper documentation standards
+
 ### Usage
 
 ```bash
@@ -715,7 +905,7 @@ bun run best-practices
 bun run best-practices --list
 
 # Run specific checks only
-bun run best-practices --only=cc-model-labels,ai-config-validator,page-load-performance,device-icons
+bun run best-practices --only=cc-model-labels,ai-config-validator,page-load-performance,device-icons,jsdoc-validator
 
 # Skip specific checks (useful in CI)
 bun run best-practices --skip=page-load-performance
@@ -948,23 +1138,6 @@ function ProviderFilter() {
 }
 ```
 
-### Migration Status
-
-**✅ Completed:**
-
-- Type system with 5 provider support
-- Provider configuration and utilities
-- AIService model labels
-- Data structure updates
-
-**⏳ In Progress:**
-
-- ccombine tool agent-exporter integration
-- UI component updates for new providers
-- Provider-specific theming
-
-See `AGENT-EXPORTER-MIGRATION.md` for detailed migration status and instructions.
-
 ## Bun Runtime Considerations
 
 This project uses **Bun** instead of Node.js for all runtime operations.
@@ -987,13 +1160,7 @@ bun test            # Run tests
 bun add <package>   # Install package
 ```
 
-### Bun-Specific Features Used
-
-- **Native TypeScript execution** - No build step needed for `.ts` files
-- **JSX support** - Transform JSX without compilation
-- **ESM imports** - Full ES modules support
-- **Built-in test framework** - `bun:test` with `describe`, `it`, `expect`
-- **Node.js compatibility** - Runs most Node.js packages unchanged
+aidanSO uses Bun for development, production, and testing. NPM is only used in edge cases when Bun cannot be used.
 
 ### File: `bunfig.toml`
 

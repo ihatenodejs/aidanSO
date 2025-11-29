@@ -58,7 +58,7 @@ const NavItem = memo(function NavItem({
 
 interface DropdownNavItemProps {
   id: string
-  href: string
+  href?: string
   icon: NavigationIcon
   children: React.ReactNode
   dropdownContent: React.ReactNode
@@ -132,6 +132,25 @@ const DropdownNavItem = memo(function DropdownNavItem({
     }
   }
 
+  const content = (
+    <>
+      <span className="flex flex-1 items-center">
+        {iconElement}
+        <span>{children}</span>
+      </span>
+      <ChevronDown
+        className={`ml-2 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+        strokeWidth={2.5}
+        size={16}
+      />
+    </>
+  )
+
+  const buttonClasses = cn(
+    'flex w-full items-center justify-between',
+    surfaces.button.nav
+  )
+
   return (
     <div
       className="nav-item relative"
@@ -139,24 +158,22 @@ const DropdownNavItem = memo(function DropdownNavItem({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Link
-        href={href}
-        onClick={isMobile ? handleClick : undefined}
-        className={cn(
-          'flex w-full items-center justify-between',
-          surfaces.button.nav
-        )}
-      >
-        <span className="flex flex-1 items-center">
-          {iconElement}
-          <span>{children}</span>
-        </span>
-        <ChevronDown
-          className={`ml-2 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          strokeWidth={2.5}
-          size={16}
-        />
-      </Link>
+      {href ? (
+        <Link
+          href={href}
+          onClick={isMobile ? handleClick : undefined}
+          className={buttonClasses}
+        >
+          {content}
+        </Link>
+      ) : (
+        <button
+          onClick={isMobile ? handleClick : undefined}
+          className={buttonClasses}
+        >
+          {content}
+        </button>
+      )}
       {isOpen && (
         <>
           {!isMobile && (
@@ -181,6 +198,7 @@ interface NestedDropdownItemProps {
   children: React.ReactNode
   nestedContent: React.ReactNode
   icon: NavigationIcon
+  href?: string
   isMobile?: boolean
   itemKey: string
   activeNested: string | null
@@ -191,6 +209,7 @@ const NestedDropdownItem = memo(function NestedDropdownItem({
   children,
   nestedContent,
   icon: Icon,
+  href,
   isMobile = false,
   itemKey,
   activeNested,
@@ -226,26 +245,41 @@ const NestedDropdownItem = memo(function NestedDropdownItem({
     }
   }
 
+  const labelContent = (
+    <>
+      <span className="flex flex-1 items-center">
+        <Icon className="mr-3" strokeWidth={2.5} size={18} />
+        {children}
+      </span>
+      <ChevronRight
+        className={`transform transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
+        strokeWidth={2.5}
+        size={18}
+      />
+    </>
+  )
+
+  const mobileButtonClasses = cn(
+    'flex w-full items-center justify-between px-4 py-3 text-left text-sm',
+    surfaces.button.dropdownItem
+  )
+
   if (isMobile) {
     return (
       <div className="relative" ref={itemRef}>
-        <button
-          onClick={handleClick}
-          className={cn(
-            'flex w-full items-center justify-between px-4 py-3 text-left text-sm',
-            surfaces.button.dropdownItem
-          )}
-        >
-          <span className="flex flex-1 items-center">
-            <Icon className="mr-3" strokeWidth={2.5} size={18} />
-            {children}
-          </span>
-          <ChevronRight
-            className={`transform transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
-            strokeWidth={2.5}
-            size={18}
-          />
-        </button>
+        {href ? (
+          <Link
+            href={href}
+            onClick={handleClick}
+            className={mobileButtonClasses}
+          >
+            {labelContent}
+          </Link>
+        ) : (
+          <button onClick={handleClick} className={mobileButtonClasses}>
+            {labelContent}
+          </button>
+        )}
         {isOpen && (
           <div className="relative mt-2 ml-5 space-y-1 pr-4">
             {nestedContent}
@@ -255,6 +289,25 @@ const NestedDropdownItem = memo(function NestedDropdownItem({
     )
   }
 
+  const desktopLabelContent = (
+    <>
+      <span className="flex flex-1 items-center">
+        <Icon className="mr-3" strokeWidth={2.5} size={18} />
+        {children}
+      </span>
+      <ChevronDown
+        className={`transform transition-transform duration-200 ${isOpen ? '-rotate-90' : ''}`}
+        strokeWidth={2.5}
+        size={18}
+      />
+    </>
+  )
+
+  const desktopButtonClasses = cn(
+    'flex w-full items-center justify-between px-4 py-3 text-left text-sm',
+    isOpen ? 'bg-gray-700/40 text-white' : surfaces.button.dropdownItem
+  )
+
   return (
     <div
       className="relative"
@@ -262,23 +315,19 @@ const NestedDropdownItem = memo(function NestedDropdownItem({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button
-        onClick={handleClick}
-        className={cn(
-          'flex w-full items-center justify-between px-4 py-3 text-left text-sm',
-          isOpen ? 'bg-gray-700/40 text-white' : surfaces.button.dropdownItem
-        )}
-      >
-        <span className="flex flex-1 items-center">
-          <Icon className="mr-3" strokeWidth={2.5} size={18} />
-          {children}
-        </span>
-        <ChevronDown
-          className={`transform transition-transform duration-200 ${isOpen ? '-rotate-90' : ''}`}
-          strokeWidth={2.5}
-          size={18}
-        />
-      </button>
+      {href ? (
+        <Link
+          href={href}
+          onClick={handleClick}
+          className={desktopButtonClasses}
+        >
+          {desktopLabelContent}
+        </Link>
+      ) : (
+        <button onClick={handleClick} className={desktopButtonClasses}>
+          {desktopLabelContent}
+        </button>
+      )}
       {isOpen && (
         <>
           <div className="absolute top-0 left-full z-50 h-full w-4" />
@@ -401,6 +450,7 @@ const renderDropdownContent = (
           key={`nested-${item.label}`}
           itemKey={`nested-${item.label}`}
           icon={item.icon}
+          href={item.href}
           isMobile={isMobile}
           activeNested={activeNested}
           onNestedChange={onNestedChange}

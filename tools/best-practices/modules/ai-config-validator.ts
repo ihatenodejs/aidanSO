@@ -9,11 +9,10 @@ const aiConfigValidator: CheckDefinition = {
 
     // Test 1: Load raw source file to validate before schema processing
     try {
-      const fs = await import('node:fs/promises')
       const { resolve } = await import('node:path')
 
       const filePath = resolve(context.repoRoot, 'lib/config/ai-usage.tsx')
-      const fileContent = await fs.readFile(filePath, 'utf-8')
+      const fileContent = await Bun.file(filePath).text()
 
       const activeStatusPattern =
         /status:\s*['"](?:primary|active|occasional)['"]/g

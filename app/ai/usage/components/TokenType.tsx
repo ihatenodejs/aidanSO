@@ -85,6 +85,23 @@ export default function TokenType({ totals, theme }: TokenTypeProps) {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-3 border-t border-gray-700 pt-4">
+        {tokenTypeData.map((token) => (
+          <div
+            key={token.name}
+            className="flex flex-col rounded-md border border-gray-700 bg-gray-800/30 p-3"
+          >
+            <span className="text-xs text-gray-400">{token.name}</span>
+            <span className="mt-1 text-lg font-semibold text-gray-200">
+              {Formatter.tokens(token.value)}
+            </span>
+            <span className="mt-0.5 text-xs text-gray-500">
+              {(token.percentage ?? 0).toFixed(1)}%
+            </span>
+          </div>
+        ))}
+      </div>
     </section>
   )
 }

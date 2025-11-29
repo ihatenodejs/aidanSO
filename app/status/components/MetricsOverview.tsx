@@ -66,7 +66,7 @@ export default function MetricsOverview({
               Online/Total
             </h3>
             <div className="flex items-center gap-2 sm:gap-3">
-              <Activity className="flex-shrink-0 text-gray-300" size={16} />
+              <Activity className="shrink-0 text-gray-300" size={16} />
               <p className="flex items-baseline gap-1.5">
                 <span className="text-xl font-bold text-gray-100 sm:text-2xl md:text-3xl">
                   {stats.operational}
@@ -83,7 +83,7 @@ export default function MetricsOverview({
               Avg Response
             </h3>
             <div className="flex items-center gap-2 sm:gap-3">
-              <Clock className="flex-shrink-0 text-gray-300" size={16} />
+              <Clock className="shrink-0 text-gray-300" size={16} />
               <p className="text-xl font-bold text-gray-100 sm:text-2xl md:text-3xl">
                 {avgResponseTime}ms
               </p>

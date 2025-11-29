@@ -3,7 +3,8 @@ import Link from 'next/link'
 import {
   ChevronRight,
   Calendar,
-  Smartphone as SmartphoneIcon
+  Smartphone as SmartphoneIcon,
+  Music
 } from 'lucide-react'
 import type { ClientDeviceWithMetrics } from '@/lib/types/client-device'
 
@@ -22,27 +23,34 @@ export default function DeviceCard({ device }: DeviceCardProps) {
     .find((s) => s.id === 'software')
     ?.rows?.find((r) => r.label === 'Android Version')
 
+  const isMobile = device.type === 'mobile'
+  const deviceColor = isMobile ? 'text-blue-400' : 'text-purple-400'
+
   return (
     <Link href={`/device/${device.slug}`}>
-      <div className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-800 bg-gray-900/50 transition-all hover:border-gray-700">
+      <div className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600">
         {/* Device Image */}
-        <div className="relative aspect-video w-full overflow-hidden bg-gray-800/50">
+        <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-md bg-gray-800/50">
           <Image
             src={device.heroImage.src}
             alt={device.heroImage.alt}
             fill
             className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
           />
         </div>
 
         {/* Content */}
-        <div className="flex flex-1 flex-col p-6">
+        <div className="flex flex-1 flex-col">
           <div className="mb-3 flex items-start justify-between">
             <div className="flex-1">
               <div className="mb-1 flex items-center gap-2">
-                <span className="text-blue-400">
-                  <SmartphoneIcon className="h-4 w-4" />
+                <span className={deviceColor}>
+                  {isMobile ? (
+                    <SmartphoneIcon className="h-4 w-4" />
+                  ) : (
+                    <Music className="h-4 w-4" />
+                  )}
                 </span>
                 <h3 className="text-lg font-semibold text-gray-100 transition-colors group-hover:text-white">
                   {device.shortName || device.name}
@@ -57,13 +65,15 @@ export default function DeviceCard({ device }: DeviceCardProps) {
                 {device.tagline}
               </p>
             </div>
-            <ChevronRight className="h-5 w-5 text-gray-600 transition-all group-hover:translate-x-1 group-hover:text-gray-400" />
+            <ChevronRight className="h-5 w-5 text-gray-600 transition-all group-hover:text-gray-400" />
           </div>
 
           {/* Device Info */}
           <div className="mb-3 flex items-center gap-4 text-xs text-gray-400">
-            <span className="font-medium tracking-wide text-blue-400 uppercase">
-              {device.type === 'mobile' ? 'Mobile' : 'DAP'}
+            <span
+              className={`font-medium tracking-wide uppercase ${deviceColor}`}
+            >
+              {isMobile ? 'Mobile' : 'DAP'}
             </span>
             {device.manufacturer && (
               <>

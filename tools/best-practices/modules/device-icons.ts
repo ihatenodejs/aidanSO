@@ -1,4 +1,4 @@
-import { readdir, readFile } from 'node:fs/promises'
+import { readdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import type { CheckDefinition } from '../types'
 
@@ -17,7 +17,7 @@ export const checks: CheckDefinition[] = [
       const devicesDir = resolve(repoRoot, 'lib/config/devices/pages')
       const iconMapPath = resolve(repoRoot, 'lib/config/devices/icon-map.ts')
 
-      const iconMapContent = await readFile(iconMapPath, 'utf-8')
+      const iconMapContent = await Bun.file(iconMapPath).text()
       const iconMapMatches = iconMapContent.match(
         /export const iconMap = \{([\s\S]+)\}/
       )
@@ -50,7 +50,7 @@ export const checks: CheckDefinition[] = [
 
       for (const file of deviceFiles) {
         const filePath = resolve(devicesDir, file)
-        const content = await readFile(filePath, 'utf-8')
+        const content = await Bun.file(filePath).text()
 
         const importMatches = content.match(
           /import\s+\{[^}]+\}\s+from\s+['"][^'"]+['"]/g

@@ -34,7 +34,6 @@ import type {
   TypeDocParameter,
   DocItem,
   DocSection,
-  DocNavigation,
   DocCategory,
   DocKind
 } from './types'
@@ -77,7 +76,7 @@ const KIND_MAP: Record<number, DocKind> = {
   262144: 'method', // ConstructorSignature
   524288: 'property', // Parameter
   1048576: 'type', // TypeParameter
-  2097152: 'property', // Accessor
+  2097152: 'type', // TypeAlias
   4194304: 'property', // GetSignature
   8388608: 'property', // SetSignature
   16777216: 'type', // ObjectLiteral
@@ -683,42 +682,4 @@ function createId(reflection: TypeDocReflection): string {
     return `${file}-${reflection.name}-${reflection.id}`
   }
   return `${reflection.name}-${reflection.id}`
-}
-
-/**
- * Build navigation structure from doc sections
- */
-export function buildNavigation(sections: DocSection[]): DocNavigation {
-  return {
-    sections: sections.map((section) => ({
-      title: section.title,
-      category: section.category,
-      items: section.items.map((item) => ({
-        id: item.id,
-        name: item.name,
-        kind: item.kind
-      }))
-    }))
-  }
-}
-
-/**
- * Get all doc items flattened
- */
-export function getAllItems(sections: DocSection[]): DocItem[] {
-  return sections.flatMap((section) => section.items)
-}
-
-/**
- * Find a doc item by ID
- */
-export function findItemById(
-  sections: DocSection[],
-  id: string
-): DocItem | undefined {
-  for (const section of sections) {
-    const item = section.items.find((i) => i.id === id)
-    if (item) return item
-  }
-  return undefined
 }

@@ -123,22 +123,27 @@ export interface AIStatsResult {
  */
 export class AIService {
   private static readonly MODEL_LABELS: Record<string, string> = {
-    // Claude models (Anthropic)
-    'claude-sonnet-4-20250514': 'Claude Sonnet 4',
-    'claude-sonnet-4-5-20250929': 'Claude Sonnet 4.5',
+    // Claude models
+    'claude-sonnet-4-20250514': 'Claude Sonnet 4 (2025-05-14)',
+    'claude-sonnet-4-5-20250929': 'Claude Sonnet 4.5 (2025-09-29)',
     'claude-sonnet-4.5': 'Claude Sonnet 4.5',
-    'claude-haiku-4-5-20251001': 'Claude Haiku 4.5',
+    'claude-sonnet-4': 'Claude Sonnet 4',
+    'claude-haiku-4-5-20251001': 'Claude Haiku 4.5 (2025-10-01)',
     'claude-haiku-4.5': 'Claude Haiku 4.5',
-    'claude-opus-4-1-20250805': 'Claude Opus 4.1',
+    'claude-opus-4-5-20251101': 'Claude Opus 4.5 (2025-11-01)',
+    'claude-opus-4-1-20250805': 'Claude Opus 4.1 (2025-08-05)',
     // OpenAI models
     'gpt-5': 'GPT-5',
     'gpt-5-codex': 'GPT-5 Codex',
-    // Gemini models (Google)
+    'gpt-5.1-codex': 'GPT-5.1 Codex',
+    'gpt-5.1-codex-max': 'GPT-5.1 Codex Max',
+    // Gemini models
+    'gemini-3-pro-preview': 'Gemini 3 Pro Preview',
     'gemini-2.5-pro': 'Gemini 2.5 Pro',
     'gemini-2.5-pro-preview-06-05': 'Gemini 2.5 Pro Preview (2025-06-05)',
     'gemini-2.5-flash': 'Gemini 2.5 Flash',
     'gemma-3-27b': 'Gemma 3 27B',
-    // Qwen models (Alibaba)
+    // Qwen models
     'qwen3-235b-a22b': 'Qwen 3 235B',
     'qwen3-max-preview': 'Qwen 3 Max Preview',
     'qwen2.5-coder-32b': 'Qwen 2.5 Coder 32B',
@@ -148,7 +153,7 @@ export class AIService {
     'glm-4.5': 'GLM 4.5',
     'glm-4.5-air': 'GLM 4.5 Air',
     'glm-4.6': 'GLM 4.6',
-    // Ghost models
+    // Stealth models
     'big-pickle': 'Big Pickle'
   }
 

@@ -167,18 +167,6 @@ export interface DocSection {
   category: DocCategory
 }
 
-export interface DocNavigation {
-  sections: Array<{
-    title: string
-    category: DocCategory
-    items: Array<{
-      id: string
-      name: string
-      kind: DocKind
-    }>
-  }>
-}
-
 /**
  * API endpoint documentation
  */

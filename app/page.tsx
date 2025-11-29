@@ -27,14 +27,14 @@ import { BiDonateHeart } from 'react-icons/bi'
 export default function Home() {
   const mainStrings: string[][] = [
     [
-      "Hey there! My name is Aidan, and I'm a systems administrator, full-stack developer, and student from the Boston area. I primarily work with Linux, Docker, Next.js, Tailwind CSS and TypeScript.",
-      'My favorite projects and hobbies revolve around web development and SysAdmin. Most of my work is released into the public domain.',
-      "I'm also a huge advocate for AI and it's practical applications to programming and life itself. I am fond of open-weight models the most, specifically Qwen3!",
-      "When I'm not programming, I can be found re-flashing my phone with a new custom ROM and jumping between projects. I tend to be quite depressed, but I make do."
+      "Hey there! My name is Aidan, and I'm a systems administrator, developer, and student from the Boston area. I primarily work with Linux, Docker, Next.js, Tailwind CSS and TypeScript.",
+      "I'm a huge advocate for AI and its practical applications in coding and life itself. While I love open-weight models, I prefer and use Claude for most of my work. I integrate LLMs with my workflow to improve my efficency and leave more time for ideation and creativity.",
+      "And if you can't already tell, I'm a huge fan of the public domain and open-source software in general. You can find most of my projects released into the public domain.",
+      "When I'm not coding, you can find me listening to music, walking the streets, getting stuck in my thoughts, watching ice hockey, trading prediction markets, and/or smoking."
     ],
     [
-      "I'm at my best when I'm doing system administration and development in TypeScript. I frequently implement AI into my workflow.",
-      'I manage a dedicated server in Germany, for use as a mailserver (against my better judgement) and other self-hosted services.',
+      'I create primarily web-based projects with Next.js, Tailwind CSS and TypeScript. Mixing in my system administration skills, I frequently create tools and services that turn scary data and/or commands into a polished tool for your browser.',
+      'I also manage a dedicated server in Germany, used as a mailserver (against my better judgement) and other self-hosted services.',
       'My biggest project is p0ntus, a cloud services provider which I self-host and maintain. It features most services you would find from large companies like Google, although everything is free and open-source.'
     ]
   ]
@@ -60,7 +60,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="-mb-6 grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="relative rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600">
           <div className="absolute top-2 right-2">
             <LiveIndicator />
@@ -78,12 +78,12 @@ export default function Home() {
             <h2 className="mb-4 text-2xl font-semibold text-gray-200">
               {section === 'Who I am' ? (
                 <div className="flex flex-row items-center gap-2">
-                  <UserCircle />
+                  <UserCircle className="h-6 w-6" />
                   <span className="align-middle">{section}</span>
                 </div>
               ) : section === 'What I do' ? (
                 <div className="flex flex-row items-center gap-2">
-                  <TbUserHeart />
+                  <TbUserHeart className="h-6 w-6" />
                   <span className="align-middle">{section}</span>
                 </div>
               ) : (

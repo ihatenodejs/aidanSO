@@ -4,10 +4,10 @@
  * This ensures device data is available in production builds
  */
 
-import { writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { transformDevicePage } from '../lib/config/devices/transformer'
 import type { DeviceCollection } from '../lib/types'
+import { logger } from '../lib/utils/logger'
 
 /**
  * Get icon identifier from component reference
@@ -24,8 +24,9 @@ function getIconId(
   const componentName = icon.displayName || icon.name || icon.render?.name || ''
 
   if (!componentName && context) {
-    console.warn(
-      `⚠️  Warning: Unable to extract icon identifier for ${context}. Icon may not render correctly.`
+    logger.warning(
+      `⚠️  Warning: Unable to extract icon identifier for ${context}. Icon may not render correctly.`,
+      'build-device-data'
     )
   }
 
@@ -45,14 +46,14 @@ const deviceModules = {
 }
 
 async function buildDeviceData() {
-  console.log('🔧 Building device data...')
+  logger.info('Building device data...', 'build-device-data')
 
   const devices: DeviceCollection = {}
   const clientDevices: Record<string, unknown> = {}
 
   for (const [slug, module] of Object.entries(deviceModules)) {
     try {
-      console.log(`  Transforming ${slug}...`)
+      logger.debug(`Transforming ${slug}...`, 'build-device-data')
       const fullDevice = transformDevicePage(module)
       devices[slug] = fullDevice
 
@@ -80,28 +81,29 @@ async function buildDeviceData() {
         sections: clientSections
       }
     } catch (error) {
-      console.error(`  ✗ Failed to transform ${slug}:`, error)
+      logger.error(`✗ Failed to transform ${slug}`, 'build-device-data', error)
       process.exit(1)
     }
   }
 
   const outputPath = join(__dirname, '../lib/config/devices/built-devices.json')
-  writeFileSync(outputPath, JSON.stringify(devices, null, 2))
+  await Bun.write(outputPath, JSON.stringify(devices, null, 2))
 
   const clientOutputPath = join(
     __dirname,
     '../lib/config/devices/built-devices-client.json'
   )
-  writeFileSync(clientOutputPath, JSON.stringify(clientDevices, null, 2))
+  await Bun.write(clientOutputPath, JSON.stringify(clientDevices, null, 2))
 
-  console.log(
-    `✓ Device data built successfully (${Object.keys(devices).length} devices)`
+  logger.success(
+    `Device data built successfully (${Object.keys(devices).length} devices)`,
+    'build-device-data'
   )
-  console.log(`  Server output: ${outputPath}`)
-  console.log(`  Client output: ${clientOutputPath}`)
+  logger.debug(`Server output: ${outputPath}`, 'build-device-data')
+  logger.debug(`Client output: ${clientOutputPath}`, 'build-device-data')
 }
 
 buildDeviceData().catch((error) => {
-  console.error('✗ Build failed:', error)
+  logger.error('Build failed', 'build-device-data', error)
   process.exit(1)
 })

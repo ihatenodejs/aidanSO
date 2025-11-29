@@ -31,11 +31,11 @@ export default function DeviceShowcase() {
     .slice(0, 3)
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="mb-4 flex items-center gap-2">
-        <Smartphone className="h-5 w-5 text-gray-300" />
-        <h3 className="text-lg font-semibold text-gray-200">My Devices</h3>
-      </div>
+    <>
+      <h2 className="mb-4 flex flex-row items-center gap-2 text-2xl font-semibold text-gray-200">
+        <Smartphone className="h-6 w-6" />
+        My Devices
+      </h2>
 
       <div className="flex flex-1 flex-col gap-4">
         {displayDevices.map((device) => (
@@ -58,7 +58,7 @@ export default function DeviceShowcase() {
             </div>
 
             <div className="flex min-w-0 flex-1 flex-col">
-              <h4 className="truncate text-sm font-medium text-gray-100 group-hover:text-blue-400">
+              <h4 className="truncate text-sm font-medium text-gray-100">
                 {device.shortName || device.name}
               </h4>
               {device.status && (
@@ -83,12 +83,12 @@ export default function DeviceShowcase() {
               + {devices.length - 3} more device
               {devices.length - 3 !== 1 ? 's' : ''}
             </span>
-            <Link href="/about#devices" className="font-medium">
+            <Link href="/devices" className="font-medium text-gray-200">
               View More
             </Link>
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }

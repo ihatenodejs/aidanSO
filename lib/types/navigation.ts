@@ -25,6 +25,7 @@ export type NavigationDropdownGroup = {
 export type NavigationDropdownNestedItem = {
   type: 'nested'
   label: string
+  href?: string
   icon: NavigationIcon
   groups: NavigationDropdownGroup[]
 }
@@ -46,7 +47,7 @@ export type NavigationMenuDropdownItem = {
   type: 'dropdown'
   id: string
   label: string
-  href: string
+  href?: string
   icon: NavigationIcon
   dropdown: NavigationDropdownConfig
 }

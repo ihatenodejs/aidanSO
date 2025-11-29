@@ -16,29 +16,24 @@
 
 import { $ } from 'bun'
 import type { ExtendedCCData, Totals, DailyData } from '../lib/types/ai'
+import { terminalColors } from '../lib/utils/terminal-colors'
+import { logger } from '../lib/utils/logger'
 
-const VERSION = '1.0.0'
+const VERSION = '1.0.1'
 
-const colors = {
-  reset: '\x1b[0m',
-  bright: '\x1b[1m',
-  dim: '\x1b[2m',
-  red: '\x1b[31m',
-  green: '\x1b[32m',
-  yellow: '\x1b[33m',
-  cyan: '\x1b[36m'
-}
+const LOG_PREFIX = 'sync-usage'
 
 const log = {
-  error: (msg: string) =>
-    console.error(`${colors.red}[sync-usage]${colors.reset} ${msg}`),
-  warn: (msg: string) =>
-    console.warn(`${colors.yellow}[sync-usage]${colors.reset} ${msg}`),
-  success: (msg: string) =>
-    console.log(`${colors.green}[sync-usage]${colors.reset} ${msg}`),
-  info: (msg: string) =>
-    console.log(`${colors.cyan}[sync-usage]${colors.reset} ${msg}`),
-  dim: (msg: string) => console.log(`${colors.dim}${msg}${colors.reset}`)
+  error: (msg: string, details?: unknown) =>
+    logger.error(msg, LOG_PREFIX, details),
+  warn: (msg: string, details?: unknown) =>
+    logger.warning(msg, LOG_PREFIX, details),
+  success: (msg: string, details?: unknown) =>
+    logger.success(msg, LOG_PREFIX, details),
+  info: (msg: string, details?: unknown) =>
+    logger.info(msg, LOG_PREFIX, details),
+  dim: (msg: string, details?: unknown) =>
+    logger.debug(msg, LOG_PREFIX, details)
 }
 
 const PROVIDER_MAP: Record<string, Exclude<keyof ExtendedCCData, 'totals'>> = {
@@ -100,42 +95,30 @@ interface SyncOptions {
 }
 
 function printUsage() {
-  console.log(`${colors.bright}sync-usage v${VERSION}${colors.reset}`)
-  console.log(
-    `${colors.dim}Sync AI usage data from agent-exporter${colors.reset}\n`
-  )
+  const lines = [
+    terminalColors.bright(`sync-usage v${VERSION}`),
+    terminalColors.dim('Sync AI usage data from agent-exporter'),
+    '',
+    terminalColors.bright('Usage:'),
+    '  bun tools/sync-usage.ts [options]',
+    '',
+    terminalColors.bright('Options:'),
+    `  ${terminalColors.info('--dry-run')}           Preview changes without writing`,
+    `  ${terminalColors.info('--period <period>')}   Time period (daily, weekly, monthly, yearly) (default: yearly)`,
+    `  ${terminalColors.info('--start <date>')}      Start date (YYYY-MM-DD)`,
+    `  ${terminalColors.info('--end <date>')}        End date (YYYY-MM-DD)`,
+    `  ${terminalColors.info('--output <path>')}     Output file (default: public/data/cc.json)`,
+    `  ${terminalColors.info('--no-sync')}           Skip syncing from providers`,
+    `  ${terminalColors.info('--help')}              Show this help message`,
+    '',
+    terminalColors.bright('Examples:'),
+    '  bun tools/sync-usage.ts',
+    '  bun tools/sync-usage.ts --dry-run',
+    '  bun tools/sync-usage.ts --period monthly',
+    '  bun tools/sync-usage.ts --start 2025-01-01 --end 2025-12-31'
+  ]
 
-  console.log(`${colors.bright}Usage:${colors.reset}`)
-  console.log('  bun tools/sync-usage.ts [options]\n')
-
-  console.log(`${colors.bright}Options:${colors.reset}`)
-  console.log(
-    `  ${colors.cyan}--dry-run${colors.reset}           Preview changes without writing`
-  )
-  console.log(
-    `  ${colors.cyan}--period <period>${colors.reset}   Time period (daily, weekly, monthly, yearly) (default: yearly)`
-  )
-  console.log(
-    `  ${colors.cyan}--start <date>${colors.reset}      Start date (YYYY-MM-DD)`
-  )
-  console.log(
-    `  ${colors.cyan}--end <date>${colors.reset}        End date (YYYY-MM-DD)`
-  )
-  console.log(
-    `  ${colors.cyan}--output <path>${colors.reset}     Output file (default: public/data/cc.json)`
-  )
-  console.log(
-    `  ${colors.cyan}--no-sync${colors.reset}           Skip syncing from providers`
-  )
-  console.log(
-    `  ${colors.cyan}--help${colors.reset}              Show this help message\n`
-  )
-
-  console.log(`${colors.bright}Examples:${colors.reset}`)
-  console.log(`  bun tools/sync-usage.ts`)
-  console.log(`  bun tools/sync-usage.ts --dry-run`)
-  console.log(`  bun tools/sync-usage.ts --period monthly`)
-  console.log(`  bun tools/sync-usage.ts --start 2025-01-01 --end 2025-12-31`)
+  log.info(lines.join('\n'))
 }
 
 function parseArgs(): SyncOptions {
@@ -260,7 +243,7 @@ async function syncProviders(options: SyncOptions): Promise<void> {
     log.dim(result)
     log.success('Provider sync completed')
   } catch (error) {
-    log.error(`Failed to sync providers: ${error}`)
+    log.error('Failed to sync providers', error)
     throw error
   }
 }
@@ -284,7 +267,7 @@ async function exportData(options: SyncOptions): Promise<AgentExporterOutput> {
     log.success('Data export completed')
     return data
   } catch (error) {
-    log.error(`Failed to export data: ${error}`)
+    log.error('Failed to export data', error)
     throw error
   }
 }
@@ -450,8 +433,8 @@ async function writeOutput(
       )
     }
     log.dim('[DRY RUN] No files were written')
-    console.log(
-      `\n${colors.dim}Run without --dry-run to apply changes${colors.reset}`
+    log.info(
+      `\n${terminalColors.dim('Run without --dry-run to apply changes')}`
     )
 
     return
@@ -484,19 +467,19 @@ async function writeOutput(
     'gemini'
   ]
 
-  console.log(`\n${colors.bright}Summary:${colors.reset}`)
+  log.info(`\n${terminalColors.bright('Summary:')}`)
   for (const provider of providers) {
     const providerData = data[provider]
     if (providerData) {
-      console.log(
-        `  ${colors.cyan}${String(provider)}${colors.reset}: ${providerData.daily.length} days, ${colors.green}$${providerData.totals.totalCost.toFixed(2)}${colors.reset}`
+      log.info(
+        `  ${terminalColors.info(String(provider))}: ${providerData.daily.length} days, ${terminalColors.success(`$${providerData.totals.totalCost.toFixed(2)}`)}`
       )
     }
   }
 
   if (data.totals) {
-    console.log(
-      `  ${colors.bright}Total${colors.reset}: ${colors.green}$${data.totals.totalCost.toFixed(2)}${colors.reset} (${data.totals.totalTokens.toLocaleString()} tokens)`
+    log.info(
+      `  ${terminalColors.bright('Total')}: ${terminalColors.success(`$${data.totals.totalCost.toFixed(2)}`)} (${data.totals.totalTokens.toLocaleString()} tokens)`
     )
   }
 }
@@ -517,10 +500,11 @@ async function main() {
 
     log.success('Sync completed successfully')
   } catch (error) {
-    log.error(`Fatal error: ${error instanceof Error ? error.message : error}`)
-    if (process.env.DEBUG) {
-      console.error(error)
-    }
+    const details = logger.shouldShowErrorDetails() ? error : undefined
+    log.error(
+      `Fatal error: ${error instanceof Error ? error.message : error}`,
+      details
+    )
     process.exit(1)
   }
 }

@@ -22,6 +22,7 @@ export const aiToolStatuses = [
 ] as const
 
 export const subscriptionPeriods = ['monthly', 'quarterly', 'yearly'] as const
+export const aiToolCategories = ['tool', 'provider'] as const
 
 const baseFields = {
   name: string({ minLength: 1, trim: true }),
@@ -32,7 +33,8 @@ const baseFields = {
   hasUsage: optional(boolean()),
   price: optional(number({ min: 0 })),
   discountedPrice: optional(number({ min: 0 })),
-  subscriptionPeriod: optional(enums(subscriptionPeriods))
+  subscriptionPeriod: optional(enums(subscriptionPeriods)),
+  category: optional(enums(aiToolCategories))
 } as const
 
 export const activeAiToolSchema = object({
@@ -74,6 +76,7 @@ export type ActiveToolStatus = (typeof activeToolStatuses)[number]
 export type InactiveToolStatus = (typeof inactiveToolStatuses)[number]
 export type AIToolStatus = ActiveToolStatus | InactiveToolStatus
 export type SubscriptionPeriod = (typeof subscriptionPeriods)[number]
+export type AIToolCategory = (typeof aiToolCategories)[number]
 
 export type ActiveAITool = Infer<typeof activeAiToolSchema>
 export type InactiveAITool = Infer<typeof inactiveAiToolSchema>

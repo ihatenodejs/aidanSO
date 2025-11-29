@@ -11,7 +11,7 @@ export default function DomainTimeline({ domain }: DomainTimelineProps) {
   const nextRenewalDate = getNextRenewalDate(domain)
 
   return (
-    <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 backdrop-blur-sm">
+    <div className="rounded-lg border-2 border-gray-700 p-6 transition-colors duration-300 hover:border-gray-600">
       <div className="relative">
         <div className="absolute top-8 bottom-0 left-6 w-0.5 bg-gray-700"></div>
 

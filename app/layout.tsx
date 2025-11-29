@@ -4,28 +4,8 @@ import { GeistSans } from 'geist/font/sans'
 import AnimatedTitle from '../components/objects/AnimatedTitle'
 import { LayoutClient, MobileMenuProvider } from '../components/layout'
 import { Footer } from '../components/navigation'
-import { footerMessages } from '../components/objects/footerMessages'
 
 export const dynamic = 'force-dynamic'
-
-const getFooterMessageIndex = (): number | undefined => {
-  const totalMessages = footerMessages.length
-
-  if (!totalMessages) {
-    return undefined
-  }
-
-  if (
-    typeof crypto !== 'undefined' &&
-    typeof crypto.getRandomValues === 'function'
-  ) {
-    const buffer = new Uint32Array(1)
-    crypto.getRandomValues(buffer)
-    return buffer[0] % totalMessages
-  }
-
-  return Math.floor(Math.random() * totalMessages)
-}
 
 export const metadata: Metadata = {
   title: 'aidan.so',
@@ -80,8 +60,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const footerMessageIndex = getFooterMessageIndex()
-
   return (
     <html lang="en" className="dark h-full">
       <body
@@ -90,7 +68,7 @@ export default function RootLayout({
         <MobileMenuProvider>
           <AnimatedTitle />
           <LayoutClient>{children}</LayoutClient>
-          <Footer footerMessageIndex={footerMessageIndex} />
+          <Footer />
         </MobileMenuProvider>
       </body>
     </html>

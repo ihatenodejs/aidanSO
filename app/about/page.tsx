@@ -29,12 +29,10 @@ export default async function About() {
   const featuredProjects = await getFeaturedReposWithMetrics()
   const githubUsername = getGitHubUsername()
 
-  // Fetch device data for dynamic content injection
   const komodo = DeviceService.getDeviceBySlug('komodo')
   const cheetah = DeviceService.getDeviceBySlug('cheetah')
   const bonito = DeviceService.getDeviceBySlug('bonito')
 
-  // Extract OS and root information
   const komodoOS = getDeviceOSInfo(komodo)
   const komodoRoot = getDeviceRootInfo(komodo)
   const cheetahOS = getDeviceOSInfo(cheetah)
@@ -98,11 +96,10 @@ export default async function About() {
       content: (
         <>
           <p className="mt-2 leading-relaxed text-gray-300">
-            When I&apos;m not programming, I can typically be found distro
-            hopping or flashing a new ROM to{' '}
-            <Link href="/device/cheetah">my phone</Link>. I also spend a lot of
-            time spreading Next.js and TypeScript propaganda to JavaScript
-            developers.
+            When I&apos;m not coding, I can typically be found distro hopping or
+            flashing a new ROM to <Link href="/device/cheetah">my phone</Link>.
+            I also spend a lot of time spreading Next.js and TypeScript
+            propaganda to JavaScript developers.
           </p>
           <p className="mt-2 leading-relaxed text-gray-300">
             I consider maintaining my devices as a hobby as well, as I devote a
@@ -272,20 +269,22 @@ export default async function About() {
         <PageHeader icon={<TbUser size={60} />} title="About" />
       </div>
 
-      <CardGrid cols="3">
-        {sections.map((section) => (
-          <Card
-            key={section.title}
-            variant="default"
-            title={section.title}
-            id={section.title === 'Devices' ? 'devices' : undefined}
-            spanCols={section.title === 'Featured Projects' ? 2 : undefined}
-            className="p-4 sm:p-8"
-          >
-            {section.content}
-          </Card>
-        ))}
-      </CardGrid>
+      <div className="-mb-6 p-4">
+        <CardGrid cols="3">
+          {sections.map((section) => (
+            <Card
+              key={section.title}
+              variant="default"
+              title={section.title}
+              id={section.title === 'Devices' ? 'devices' : undefined}
+              spanCols={section.title === 'Featured Projects' ? 2 : undefined}
+              className="p-4 sm:p-8"
+            >
+              {section.content}
+            </Card>
+          ))}
+        </CardGrid>
+      </div>
     </PageShell>
   )
 }

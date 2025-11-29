@@ -38,7 +38,7 @@ export default function DomainDetails({ domain }: DomainDetailsProps) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 backdrop-blur-sm">
+      <div className="rounded-lg border-2 border-gray-700 p-6 transition-colors duration-300 hover:border-gray-600">
         <div className="grid grid-cols-2 gap-4">
           <div>
             <p className="mb-2 text-xs tracking-wide text-gray-500 uppercase">
@@ -73,7 +73,7 @@ export default function DomainDetails({ domain }: DomainDetailsProps) {
         </div>
       </div>
 
-      <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 backdrop-blur-sm">
+      <div className="rounded-lg border-2 border-gray-700 p-6 transition-colors duration-300 hover:border-gray-600">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-sm font-medium text-gray-300">
             Domain Lifecycle
@@ -146,7 +146,7 @@ export default function DomainDetails({ domain }: DomainDetailsProps) {
         )}
       </div>
 
-      <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 backdrop-blur-sm">
+      <div className="rounded-lg border-2 border-gray-700 p-6 transition-colors duration-300 hover:border-gray-600">
         <div className="grid grid-cols-2 gap-6">
           <div>
             <div className="mb-3 flex items-center gap-2">
@@ -197,7 +197,7 @@ export default function DomainDetails({ domain }: DomainDetailsProps) {
         </div>
       </div>
 
-      <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 backdrop-blur-sm">
+      <div className="rounded-lg border-2 border-gray-700 p-6 transition-colors duration-300 hover:border-gray-600">
         <div className="mb-4 flex items-center gap-2">
           <Tag className="h-4 w-4 text-gray-500" />
           <h3 className="text-sm font-medium text-gray-300">Tags</h3>

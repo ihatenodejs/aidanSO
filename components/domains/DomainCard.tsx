@@ -27,7 +27,7 @@ export default function DomainCard({ domain }: DomainCardProps) {
 
   return (
     <Link href={`/domains/${domain.domain}`}>
-      <div className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-800 bg-gray-900/50 backdrop-blur-sm transition-all hover:border-gray-700 hover:shadow-xl hover:shadow-black/20">
+      <div className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border-2 border-gray-700 transition-colors duration-300 hover:border-gray-600">
         {expiringSoon && (
           <div className="absolute top-0 right-0 left-0 h-1 bg-gray-500"></div>
         )}
@@ -43,7 +43,7 @@ export default function DomainCard({ domain }: DomainCardProps) {
                   {domain.domain}
                 </h3>
               </div>
-              <p className="line-clamp-2 min-h-[2.5rem] text-sm text-gray-500">
+              <p className="line-clamp-2 min-h-10 text-sm text-gray-500">
                 {domain.usage}
               </p>
             </div>

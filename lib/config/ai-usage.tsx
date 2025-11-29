@@ -21,16 +21,20 @@ const rawAiTools = [
     description: 'Free agent with decent output',
     status: 'occasional',
     link: 'https://ampcode.com/',
-    price: 0
+    price: 0,
+    category: 'tool'
   },
   {
     name: 'ChatGPT Business',
     icon: OpenAI,
     description: 'Feature-rich and budget-friendly (for now)',
-    status: 'active',
+    status: 'unused',
+    reason: 'Too expensive for the output quality',
     hasUsage: true,
     link: 'https://chatgpt.com/',
-    price: 60
+    price: 60,
+    subscriptionPeriod: 'monthly',
+    category: 'provider'
   },
   {
     name: 'Claude Max 5x',
@@ -41,17 +45,20 @@ const rawAiTools = [
     hasUsage: true,
     link: 'https://claude.ai/',
     price: 100,
-    discountedPrice: 0
+    discountedPrice: 0,
+    subscriptionPeriod: 'monthly',
+    category: 'provider'
   },
   {
     name: 'GLM Coding Lite',
     icon: ZAI,
     description: 'Cheap, Claude-like model with a slow API',
-    status: 'cancelled',
-    reason: 'Poor quality output and a bad experience in general',
+    status: 'active',
     link: 'https://z.ai/',
-    price: 6,
-    discountedPrice: 3
+    price: 90,
+    discountedPrice: 45,
+    subscriptionPeriod: 'quarterly',
+    category: 'provider'
   },
   {
     name: 'Gemini Pro/Gemini CLI',
@@ -60,7 +67,8 @@ const rawAiTools = [
     status: 'occasional',
     link: 'https://gemini.google.com/',
     price: 20,
-    discountedPrice: 0
+    discountedPrice: 0,
+    category: 'provider'
   },
   {
     name: 'Qwen Chat/Qwen CLI',
@@ -68,7 +76,8 @@ const rawAiTools = [
     description: 'My favorite open source LLM for chatting',
     status: 'active',
     link: 'https://chat.qwen.ai/',
-    price: 0
+    price: 0,
+    category: 'provider'
   },
   {
     name: 'Perplexity Pro',
@@ -77,7 +86,8 @@ const rawAiTools = [
     status: 'occasional',
     link: 'https://perplexity.ai/',
     price: 20,
-    discountedPrice: 0
+    discountedPrice: 0,
+    category: 'provider'
   },
   {
     name: 'OpenCode',
@@ -85,7 +95,8 @@ const rawAiTools = [
     description: 'My favorite FOSS AI coding assistant',
     status: 'active',
     link: 'https://opencode.ai/',
-    price: 0
+    price: 0,
+    category: 'tool'
   },
   {
     name: 'GitHub Copilot Pro',
@@ -95,7 +106,8 @@ const rawAiTools = [
     reason: 'Poor performance and older models',
     link: 'https://github.com/features/copilot',
     price: 10,
-    discountedPrice: 0
+    discountedPrice: 0,
+    category: 'tool'
   },
   {
     name: 'v0 Free',
@@ -103,7 +115,8 @@ const rawAiTools = [
     description: 'Generating boilerplate UIs',
     status: 'occasional',
     link: 'https://v0.dev/',
-    price: 0
+    price: 0,
+    category: 'tool'
   },
   {
     name: 'Windsurf',
@@ -111,7 +124,8 @@ const rawAiTools = [
     description: 'Amazing free tab completion and solid IDE',
     status: 'active',
     link: 'https://windsurf.com/',
-    price: 0
+    price: 0,
+    category: 'tool'
   }
 ] as const satisfies ReadonlyArray<AITool>
 
@@ -120,56 +134,81 @@ export const inactiveAiTools = aiTools.filter(isInactiveTool)
 
 export const favoriteModels: FavoriteModel[] = [
   {
-    name: 'Claude 4.5 Sonnet',
+    name: 'Claude Opus 4.5',
+    provider: 'Anthropic',
+    review: `Fantastic planning model for use with Claude Code's Opus Plan Mode.`,
+    rating: 9.5
+  },
+  {
+    name: 'Claude Sonnet 4.5',
     provider: 'Anthropic',
     review: 'Better judgement with a different personality.',
     rating: 9.5
   },
   {
-    name: 'Claude 4 Sonnet',
+    name: 'Claude Sonnet 4',
     provider: 'Anthropic',
     review:
       'The perfect balance of capability, speed, and price. Perfect for development with React.',
     rating: 9.0
   },
   {
-    name: 'gpt-5-codex',
-    provider: 'OpenAI',
-    review: 'Very good at instruction calling with better code quality.',
-    rating: 8.0
-  },
-  {
-    name: 'Claude 4.1 Opus',
+    name: 'Claude Opus 4.1',
     provider: 'Anthropic',
     review:
       'Amazing planner, useful for Plan Mode in Claude Code. Useful in code generation, albeit at a higher cost.',
     rating: 9.0
   },
   {
-    name: 'Qwen3-235B-A22B',
-    provider: 'Alibaba',
-    review:
-      'The OG thinking model. Amazing, funny, and smart for chats. Surprisingly good at coding too.',
+    name: 'GLM 4.6',
+    provider: 'Z.AI',
+    review: 'Cheap model with suprisingly good output quality.',
+    rating: 9.0
+  },
+  {
+    name: 'gpt-5.1-codex-max',
+    provider: 'OpenAI',
+    review: 'Improves slightly on gpt-5-codex.',
+    rating: 8.7
+  },
+  {
+    name: 'gpt-5-codex',
+    provider: 'OpenAI',
+    review: 'Very good at tool calling with solid code quality.',
     rating: 8.5
   },
   {
     name: 'GPT-5',
     provider: 'OpenAI',
     review: `A solid model for coding and instruction following. Lacks personality and quality critical thinking at times, but this isn't a barrier to quality output.`,
-    rating: 8.0
+    rating: 8.2
+  },
+  {
+    name: 'Gemini 3 Pro',
+    provider: 'Google',
+    review:
+      'Better than 2.5 Pro ever was, but still has some issues with code quality.',
+    rating: 7.5
   },
   {
     name: 'Qwen3-Max-Preview',
     provider: 'Alibaba',
     review:
       "A new personality for Qwen3 at a larger size, amazing for use in chats. I'm not so happy that it's closed source (for now).",
-    rating: 8.5
+    rating: 8.0
+  },
+  {
+    name: 'Qwen3-235B-A22B',
+    provider: 'Alibaba',
+    review:
+      'The OG thinking model. Amazing, funny, and smart for chats. Surprisingly good at coding too.',
+    rating: 8.0
   },
   {
     name: 'Gemini 2.5 Pro',
     provider: 'Google',
     review:
-      'Amazing for Deep Research and reasoning tasks. I hate it for coding.',
+      'Amazing for Deep Research and reasoning tasks. I have grown to like it for some code tasks in Gemini CLI.',
     rating: 7.5
   },
   {
@@ -177,7 +216,7 @@ export const favoriteModels: FavoriteModel[] = [
     provider: 'Google',
     review:
       'My favorite for playing around with AI or creating a project. Easy to run locally and open weight!',
-    rating: 8.0
+    rating: 7.0
   }
 ]
 
@@ -197,6 +236,17 @@ export const aiReviews: AIReview[] = [
     verdict: 'Best overall for Claude lovers'
   },
   {
+    tool: 'OpenCode',
+    rating: 9.5,
+    pros: [
+      'Fantastic TUI design',
+      'Frequent updates and bug fixes',
+      'Easy to setup'
+    ],
+    cons: ['Occasional parsing issues'],
+    verdict: 'My favorite open source agent'
+  },
+  {
     tool: 'Codex',
     rating: 9.0,
     pros: [
@@ -204,12 +254,48 @@ export const aiReviews: AIReview[] = [
       'Perfectly tuned for GPT models',
       'Simple in the right ways'
     ],
-    cons: ['Slow'],
+    cons: ['Slow output'],
     verdict: 'Exciting new player in the agent space'
   },
   {
+    tool: 'Qwen CLI',
+    rating: 9.0,
+    pros: [
+      'Just-works TUI experience',
+      'High usage limits',
+      'Good quality output from top Qwen models',
+      'Free'
+    ],
+    cons: ['Confusing model names'],
+    verdict: 'Good open source agent with free usage'
+  },
+  {
+    tool: 'Gemini CLI',
+    rating: 9.0,
+    pros: [
+      'Claude Code copycat, in a good way',
+      'Decent output quality',
+      'Great for those who already have Gemini Pro/Ultra',
+      'Easy to export usage statistics'
+    ],
+    cons: ['Gemini models are not as good as top players'],
+    verdict:
+      'Decent agent, good for those paying for Gemini already or want a free agent'
+  },
+  {
+    tool: 'Amp Free',
+    rating: 8.5,
+    pros: [
+      'Creative TUI design',
+      'Quality output at times',
+      'Ads are a fair trade off for a free agent at this quality'
+    ],
+    cons: ['Unknown model', 'Unable to track usage'],
+    verdict: 'Great for LLM coding on a budget'
+  },
+  {
     tool: 'Cursor',
-    rating: 8.0,
+    rating: 8.5,
     pros: [
       'Works like magic',
       'Lots of model support',
@@ -241,7 +327,11 @@ export const aiReviews: AIReview[] = [
       'Great autocomplete',
       'Budget-friendly subscription price'
     ],
-    cons: ['No thinking', 'Low quality output', 'Bad support for other IDEs'],
+    cons: [
+      'Lack of thinking models',
+      'Poor support in non-VS Code IDEs',
+      'Frequent parsing issues'
+    ],
     verdict: 'Good for casual use'
   }
 ]

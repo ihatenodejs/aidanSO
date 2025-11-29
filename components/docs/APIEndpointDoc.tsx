@@ -4,7 +4,10 @@ import type { APIEndpoint } from '@/lib/docs/types'
 import CodeBlock from './CodeBlock'
 import { LuLock } from 'react-icons/lu'
 
-interface APIEndpointDocProps {
+/**
+ * @public
+ */
+export interface APIEndpointDocProps {
   endpoint: APIEndpoint
   className?: string
 }

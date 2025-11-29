@@ -5,7 +5,10 @@ import { toolThemes, type ToolTheme, type ProviderId } from '@/app/ai/theme'
 import { SegmentedControl, type SegmentedOption } from './SegmentedControl'
 import OpenCodeIcon from '@/components/icons/OpenCodeIcon'
 
-interface ProviderFilterProps {
+/**
+ * @public
+ */
+export interface ProviderFilterProps {
   selectedProvider: ProviderId
   onProviderChange: (provider: ProviderId) => void
   hasClaudeCode: boolean

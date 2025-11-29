@@ -2,13 +2,17 @@
 
 import type React from 'react'
 
-interface ScrollTxtProps {
+/**
+ * @public
+ * @category Components
+ */
+export interface MusicTextProps {
   text: string
   className?: string
   type?: 'artist' | 'track' | 'release'
 }
 
-const ScrollTxt: React.FC<ScrollTxtProps> = ({
+const MusicText: React.FC<MusicTextProps> = ({
   text,
   className = '',
   type
@@ -37,4 +41,4 @@ const ScrollTxt: React.FC<ScrollTxtProps> = ({
   )
 }
 
-export default ScrollTxt
+export default MusicText

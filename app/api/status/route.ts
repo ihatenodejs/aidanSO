@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { StatusService } from '@/lib/services'
+import { logger } from '@/lib/utils/logger'
 
 export const runtime = 'edge'
 export const revalidate = 60 // in seconds
@@ -67,7 +68,7 @@ export async function GET() {
       }
     })
   } catch (error) {
-    console.error('Error checking service status:', error)
+    logger.error('Error checking service status', 'StatusAPI', error)
 
     return NextResponse.json(
       {

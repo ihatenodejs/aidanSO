@@ -449,11 +449,16 @@ export interface DevicePageShellProps {
 /**
  * Props for DeviceHero component.
  *
+ * @remarks
+ * Accepts both DeviceSpec and ClientDeviceWithMetrics to allow usage in both
+ * server and client components. DeviceHero only uses base properties (name, heroImage, etc.)
+ * which are structurally identical between both types.
+ *
  * @public
  */
 export interface DeviceHeroProps {
   /** Device data for hero section */
-  device: DeviceSpec
+  device: DeviceSpec | import('./client-device').ClientDeviceWithMetrics
 }
 
 /**

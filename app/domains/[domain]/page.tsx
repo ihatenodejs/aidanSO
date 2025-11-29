@@ -8,6 +8,18 @@ import { DomainService } from '@/lib/services'
 
 const domains = DomainService.getAllDomains()
 
+/**
+ * Generates static paths for domain pages at build time.
+ *
+ * @remarks
+ * Pre-builds all domain pages to ensure optimal performance and SEO.
+ * Each domain gets its own static page based on the domain configuration.
+ *
+ * @returns Array of route parameters for static generation
+ *
+ * @category Static Generation
+ * @public
+ */
 export async function generateStaticParams() {
   return domains.map((domain) => ({
     domain: domain.domain

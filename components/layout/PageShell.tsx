@@ -1,6 +1,9 @@
 import { cn } from '@/lib/utils'
 
-interface PageShellProps {
+/**
+ * @public
+ */
+export interface PageShellProps {
   children: React.ReactNode
   variant?: 'centered' | 'full-width'
   maxWidth?: '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl'
@@ -14,11 +17,7 @@ interface PageShellProps {
  * A standardized page layout component that provides consistent spacing and structure
  * across all pages in the application.
  *
- * @param variant - Layout variant: 'centered' (container with max-width) or 'full-width'
- * @param maxWidth - Maximum width for centered variant inner content (default: no restriction)
- * @param className - Additional classes for the outer container
- * @param innerClassName - Additional classes for the inner wrapper (centered variant only)
- *
+ * @category Layout
  */
 export default function PageShell({
   children,

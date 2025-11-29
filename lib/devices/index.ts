@@ -2,12 +2,12 @@
  * Device data exports for my portfolio showcase.
  *
  * @remarks
- * This module re-exports all device-related data from the TSX page configurations.
- * Device pages are defined using TSX components for better maintainability.
+ * This module exports client-safe device data that can be used
+ * in both server and client components.
  *
  * @module lib/devices
  * @category Devices
  * @public
  */
 
-export * from '../config/devices/pages'
+export * from '../config/devices/client'

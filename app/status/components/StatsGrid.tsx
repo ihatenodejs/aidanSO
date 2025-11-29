@@ -4,7 +4,10 @@ import { surfaces } from '@/lib/theme/surfaces'
 import { cn } from '@/lib/utils'
 import { Activity, Zap, TrendingUp, Clock } from 'lucide-react'
 
-interface StatsGridProps {
+/**
+ * @public
+ */
+export interface StatsGridProps {
   stats: {
     operational: number
     down: number

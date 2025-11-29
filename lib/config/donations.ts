@@ -1,8 +1,8 @@
 import type { NavigationIcon } from '@/lib/types/navigation'
-import { CreditCard, PillBottle, Scale } from 'lucide-react'
+import { Computer, CreditCard, PillBottle, Scale } from 'lucide-react'
 import { BsArrowClockwise } from 'react-icons/bs'
 import { FaHandcuffs } from 'react-icons/fa6'
-import { SiGithubsponsors } from 'react-icons/si'
+import { SiGithubsponsors, SiTorproject } from 'react-icons/si'
 
 export type DonationGroupId = 'charity' | 'me'
 
@@ -46,10 +46,10 @@ export const donationGroups: DonationGroup[] = [
         groupId: 'charity'
       },
       {
-        id: 'aclu',
-        label: 'ACLU',
-        href: 'https://www.aclu.org',
-        icon: Scale,
+        id: 'eff',
+        label: 'Electronic Frontier Foundation',
+        href: 'https://www.eff.org',
+        icon: Computer,
         external: true,
         target: '_blank',
         groupId: 'charity'
@@ -59,6 +59,24 @@ export const donationGroups: DonationGroup[] = [
         label: 'EPIC Restart Foundation',
         href: 'https://www.epicrestartfoundation.org',
         icon: BsArrowClockwise,
+        external: true,
+        target: '_blank',
+        groupId: 'charity'
+      },
+      {
+        id: 'aclu',
+        label: 'ACLU',
+        href: 'https://www.aclu.org',
+        icon: Scale,
+        external: true,
+        target: '_blank',
+        groupId: 'charity'
+      },
+      {
+        id: 'the-tor-project',
+        label: 'The Tor Project',
+        href: 'https://www.torproject.org',
+        icon: SiTorproject,
         external: true,
         target: '_blank',
         groupId: 'charity'

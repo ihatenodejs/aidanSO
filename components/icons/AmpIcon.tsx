@@ -1,6 +1,10 @@
 import React from 'react'
 
-interface AmpIconProps {
+/**
+ * @public
+ */
+export interface AmpIconProps {
+  size?: number
   className?: string
 }
 

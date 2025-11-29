@@ -1,7 +1,7 @@
-import { readFileSync } from 'fs'
 import { join } from 'path'
 import { parseTypeDocJSON } from './parser'
 import type { TypeDocRoot, DocSection } from './types'
+import { logger } from '@/lib/utils/logger'
 
 /**
  * Loads and parses TypeDoc-generated API documentation from JSON file.
@@ -24,8 +24,8 @@ import type { TypeDocRoot, DocSection } from './types'
  * import { loadDocumentation } from '@/lib/docs/loader'
  *
  * // In a server component
- * export default function DocsPage() {
- *   const sections = loadDocumentation()
+ * export default async function DocsPage() {
+ *   const sections = await loadDocumentation()
  *   return <DocsList sections={sections} />
  * }
  * ```
@@ -35,14 +35,13 @@ import type { TypeDocRoot, DocSection } from './types'
  * @category Documentation
  * @public
  */
-export function loadDocumentation(): DocSection[] {
+export async function loadDocumentation(): Promise<DocSection[]> {
   try {
     const filePath = join(process.cwd(), 'public/docs/api.json')
-    const fileContents = readFileSync(filePath, 'utf8')
-    const typeDocData: TypeDocRoot = JSON.parse(fileContents)
+    const typeDocData = (await Bun.file(filePath).json()) as TypeDocRoot
     return parseTypeDocJSON(typeDocData)
   } catch (error) {
-    console.error('Failed to load TypeDoc JSON:', error)
+    logger.error('Failed to load TypeDoc JSON', 'TypeDoc', error)
     return []
   }
 }

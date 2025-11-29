@@ -88,7 +88,11 @@ const statusFilters = [
   }
 ] as const
 
-function SkeletonBar({ className }: { className?: string }) {
+export interface SkeletonBarProps {
+  className?: string
+}
+
+function SkeletonBar({ className }: SkeletonBarProps) {
   return (
     <span
       className={cn(
@@ -99,13 +103,12 @@ function SkeletonBar({ className }: { className?: string }) {
   )
 }
 
-function SkeletonText({
-  text,
-  className
-}: {
+export interface SkeletonTextProps {
   text: string
   className?: string
-}) {
+}
+
+function SkeletonText({ text, className }: SkeletonTextProps) {
   return (
     <span className={cn('relative inline-block', className)}>
       <span className="invisible">{text}</span>

@@ -2,7 +2,10 @@ import { TbTool } from 'react-icons/tb'
 import PaginatedCardList from '@/components/ui/PaginatedCardList'
 import type { AIReview } from '../types'
 
-interface FavoriteToolsProps {
+/**
+ * @public
+ */
+export interface FavoriteToolsProps {
   reviews: AIReview[]
 }
 

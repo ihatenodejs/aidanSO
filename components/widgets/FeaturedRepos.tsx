@@ -4,7 +4,10 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import type { FeaturedProject } from '@/lib/github'
 
-interface FeaturedReposProps {
+/**
+ * @public
+ */
+export interface FeaturedReposProps {
   projects: FeaturedProject[]
   className?: string
 }

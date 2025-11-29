@@ -1,4 +1,5 @@
 import { Server as SocketServer } from 'socket.io'
+import { logger } from '@/lib/utils/logger'
 
 interface TrackMetadata {
   track_name: string
@@ -41,6 +42,26 @@ interface NowPlayingData {
   message?: string
 }
 
+/**
+ * Service for fetching and caching real-time music playing data.
+ *
+ * @remarks
+ * Integrates with Last.fm and ListenBrainz APIs to track currently playing
+ * music with intelligent caching, rate limiting, and fallback support.
+ * Provides Socket.io integration for real-time updates to connected clients.
+ *
+ * @example
+ * ```ts
+ * const service = new NowPlayingService(ioServer, lastfmApiKey)
+ * const nowPlaying = await service.getNowPlaying()
+ * if (nowPlaying.status === 'success') {
+ *   console.log(`Now playing: ${nowPlaying.data.track}`)
+ * }
+ * ```
+ *
+ * @category Services
+ * @public
+ */
 export class NowPlayingService {
   private readonly io: SocketServer
   private readonly lastFmApiKey: string | undefined
@@ -85,7 +106,6 @@ export class NowPlayingService {
       this.io.to(socketId).emit('nowPlaying', data)
     }
 
-    // Check cache first
     if (this.cache && Date.now() - this.cache.timestamp < this.CACHE_TTL) {
       emit(this.cache.data)
       return
@@ -101,7 +121,6 @@ export class NowPlayingService {
       return
     }
 
-    // Start new request
     this.pendingRequest = this.performFetch(socketId)
     try {
       await this.pendingRequest
@@ -188,6 +207,7 @@ export class NowPlayingService {
         for (const result of lastFmResults) {
           if (result.status === 'fulfilled' && result.value) {
             lastFmData = result.value
+
             // Extract cover
             if (lastFmData.album?.image) {
               const images = lastFmData.album.image
@@ -221,7 +241,6 @@ export class NowPlayingService {
         }
       }
 
-      // Get album art
       let finalCoverArt = lastFmCoverArt
 
       if (!finalCoverArt) {
@@ -240,7 +259,11 @@ export class NowPlayingService {
               finalCoverArt = coverArtResponse.url
             }
           } catch (error) {
-            console.log('[!] Cover Art Archive direct fetch failed:', error)
+            logger.warning(
+              'Cover Art Archive direct fetch failed',
+              'NowPlayingService',
+              error
+            )
           }
         }
 
@@ -276,15 +299,20 @@ export class NowPlayingService {
                     finalCoverArt = coverArtResponse.url
                   }
                 } catch (error) {
-                  console.log(
-                    '[!] Cover Art Archive fallback fetch failed:',
+                  logger.warning(
+                    'Cover Art Archive fallback fetch failed',
+                    'NowPlayingService',
                     error
                   )
                 }
               }
             }
           } catch (error) {
-            console.log('[!] MusicBrainz search failed:', error)
+            logger.warning(
+              'MusicBrainz search failed',
+              'NowPlayingService',
+              error
+            )
           }
         }
       }
@@ -300,11 +328,10 @@ export class NowPlayingService {
         message: 'Complete'
       }
 
-      // Cache successful result
       this.cache = { data: result, timestamp: Date.now() }
       emit(result)
     } catch (error) {
-      console.error('[!] Error in performFetch:', error)
+      logger.error('Error in performFetch', 'NowPlayingService', error)
       const errorResult: NowPlayingData = {
         status: 'error',
         message:
@@ -328,7 +355,7 @@ export class NowPlayingService {
         return (await response.json()) as LastFmResponse
       }
     } catch (error) {
-      console.log('[!] Last.fm MBID fetch failed:', error)
+      logger.warning('Last.fm MBID fetch failed', 'NowPlayingService', error)
     }
 
     return null
@@ -358,7 +385,7 @@ export class NowPlayingService {
         return (await response.json()) as LastFmResponse
       }
     } catch (error) {
-      console.log('[!] Last.fm track fetch failed:', error)
+      logger.warning('Last.fm track fetch failed', 'NowPlayingService', error)
     }
 
     return null

@@ -1,4 +1,3 @@
-import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import type { DailyData, ExtendedCCData } from '../../../lib/types/ai'
@@ -14,8 +13,7 @@ const ccModelLabels: CheckDefinition = {
 
     let parsed: ExtendedCCData
     try {
-      const raw = await readFile(ccPath, 'utf8')
-      parsed = JSON.parse(raw) as ExtendedCCData
+      parsed = (await Bun.file(ccPath).json()) as ExtendedCCData
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)
       return {
@@ -97,8 +95,8 @@ function collectDailySeries(data: ExtendedCCData): Map<string, DailyData[]> {
 function isDailyContainer(value: unknown): value is { daily: DailyData[] } {
   return Boolean(
     value &&
-      typeof value === 'object' &&
-      Array.isArray((value as { daily?: unknown }).daily)
+    typeof value === 'object' &&
+    Array.isArray((value as { daily?: unknown }).daily)
   )
 }
 

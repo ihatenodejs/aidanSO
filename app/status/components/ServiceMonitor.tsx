@@ -79,7 +79,10 @@ const STATUS_FILTERS: Array<{ value: StatusFilter; label: string }> = [
   { value: 'down', label: getServiceStatusConfig('down').label }
 ]
 
-interface ServiceMonitorProps {
+/**
+ * @public
+ */
+export interface ServiceMonitorProps {
   services: ServiceStatusResult[]
 }
 

@@ -24,7 +24,10 @@ import {
 import type { ToolTheme } from '@/app/ai/theme'
 import { Formatter } from '@/lib/utils/formatting'
 
-interface ActivityProps {
+/**
+ * @public
+ */
+export interface ActivityProps {
   daily: DailyData[]
   theme: ToolTheme
   timeRange: TimeRangeKey
@@ -33,7 +36,7 @@ interface ActivityProps {
 export default function Activity({ daily, theme, timeRange }: ActivityProps) {
   const [viewMode, setViewMode] = useState<'heatmap' | 'chart'>('chart')
   const [selectedMetric, setSelectedMetric] = useState<'cost' | 'tokens'>(
-    'cost'
+    'tokens'
   )
 
   const dailyTrendData = useMemo(() => buildDailyTrendData(daily), [daily])
@@ -82,7 +85,8 @@ export default function Activity({ daily, theme, timeRange }: ActivityProps) {
         return [formatCurrency(value), label]
       }
 
-      return [`${formatTokens(value)} tokens`, label]
+      const tokenValue = value * 1000000
+      return [`${formatTokens(tokenValue)} tokens`, label]
     },
     [selectedMetric]
   )
@@ -229,20 +233,6 @@ export default function Activity({ daily, theme, timeRange }: ActivityProps) {
         <>
           <div className="mb-4 flex gap-2">
             <button
-              onClick={() => setSelectedMetric('cost')}
-              className={`rounded px-3 py-1 transition-colors ${selectedMetric === 'cost' ? '' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-              style={
-                selectedMetric === 'cost'
-                  ? {
-                      backgroundColor: theme.button.activeBackground,
-                      color: theme.button.activeText
-                    }
-                  : undefined
-              }
-            >
-              Cost
-            </button>
-            <button
               onClick={() => setSelectedMetric('tokens')}
               className={`rounded px-3 py-1 transition-colors ${selectedMetric === 'tokens' ? '' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
               style={
@@ -255,6 +245,20 @@ export default function Activity({ daily, theme, timeRange }: ActivityProps) {
               }
             >
               Tokens
+            </button>
+            <button
+              onClick={() => setSelectedMetric('cost')}
+              className={`rounded px-3 py-1 transition-colors ${selectedMetric === 'cost' ? '' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              style={
+                selectedMetric === 'cost'
+                  ? {
+                      backgroundColor: theme.button.activeBackground,
+                      color: theme.button.activeText
+                    }
+                  : undefined
+              }
+            >
+              Cost
             </button>
           </div>
           <div className="h-[300px] sm:h-[400px]">
@@ -271,8 +275,10 @@ export default function Activity({ daily, theme, timeRange }: ActivityProps) {
                 />
                 <YAxis
                   stroke="#9ca3af"
-                  tickFormatter={
-                    selectedMetric === 'cost' ? formatCurrency : formatTokens
+                  tickFormatter={(value) =>
+                    selectedMetric === 'cost'
+                      ? formatCurrency(value)
+                      : formatTokens(value * 1000000)
                   }
                   domain={[0, 'auto']}
                 />

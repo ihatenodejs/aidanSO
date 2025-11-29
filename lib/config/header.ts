@@ -47,6 +47,7 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
         {
           type: 'nested',
           label: 'Devices',
+          href: '/devices',
           icon: Smartphone,
           groups: [
             {
@@ -156,7 +157,6 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
     type: 'dropdown',
     id: 'resources',
     label: 'Resources',
-    href: '/docs',
     icon: BriefcaseBusiness,
     dropdown: {
       items: [
@@ -174,7 +174,7 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
         },
         {
           type: 'link',
-          label: 'Domains',
+          label: 'My Domains',
           href: '/domains',
           icon: LinkIcon
         },

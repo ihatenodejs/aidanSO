@@ -17,9 +17,24 @@ const LiveIndicator = () => {
       setConnected(false)
     })
 
+    socket.io.on('reconnect', () => {
+      setConnected(true)
+    })
+
+    socket.io.on('reconnect_attempt', () => {
+      setConnected(false)
+    })
+
+    socket.io.on('reconnect_failed', () => {
+      setConnected(false)
+    })
+
     return () => {
       socket.off('connect')
       socket.off('disconnect')
+      socket.io.off('reconnect')
+      socket.io.off('reconnect_attempt')
+      socket.io.off('reconnect_failed')
     }
   }, [])
 

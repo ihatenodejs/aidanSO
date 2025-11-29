@@ -1,6 +1,23 @@
 import type { DeviceSpec, DeviceType, DeviceWithMetrics } from '@/lib/types'
 import type { SortOrder } from '@/lib/types/service'
-import { devices as deviceData } from '@/lib/config/devices/pages'
+import type { ClientDevice } from '@/lib/types/client-device'
+import { devices as deviceData } from '@/lib/config/devices/client'
+
+/**
+ * Converts client device data to DeviceSpec format.
+ * Client devices use string icon identifiers while DeviceSpec uses React components.
+ * This service works with the base data structure and ignores icon differences.
+ */
+function convertClientDeviceToSpec(clientDevice: ClientDevice): DeviceSpec {
+  return clientDevice as unknown as DeviceSpec
+}
+
+/**
+ * Get all devices as DeviceSpec array
+ */
+function getAllDeviceSpecs(): DeviceSpec[] {
+  return Object.values(deviceData).map(convertClientDeviceToSpec)
+}
 
 /**
  * Statistics and aggregated metrics for the device portfolio.
@@ -156,7 +173,7 @@ export class DeviceService {
    * ```
    */
   static getAllDevices(): DeviceSpec[] {
-    return Object.values(deviceData)
+    return getAllDeviceSpecs()
   }
 
   /**
@@ -191,8 +208,10 @@ export class DeviceService {
    * ```
    */
   static getDeviceBySlug(slug: string): DeviceWithMetrics | null {
-    const device = deviceData[slug]
-    return device ? this.enrichDevice(device) : null
+    const clientDevice = deviceData[slug]
+    if (!clientDevice) return null
+    const device = convertClientDeviceToSpec(clientDevice)
+    return this.enrichDevice(device)
   }
 
   /**

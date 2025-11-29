@@ -10,7 +10,7 @@ import { IoIosPlay } from 'react-icons/io'
 import { TbDiscOff } from 'react-icons/tb'
 import { Progress } from '@/components/ui/progress'
 import Link from '@/components/objects/Link'
-import ScrollTxt from '@/components/objects/MusicText'
+import MusicText from '@/components/objects/MusicText'
 import { connectSocket, disconnectSocket } from '@/lib/socket'
 import { effects } from '@/lib/theme/effects'
 
@@ -57,7 +57,7 @@ const NowPlaying: React.FC = () => {
     const socket = connectSocket()
 
     socket.on('connect', () => {
-      console.log('Connected to server')
+      console.log('[i] Connected to WebSocket')
       socket.emit('requestNowPlaying')
       socket.emit('startAutoRefresh')
     })
@@ -67,7 +67,6 @@ const NowPlaying: React.FC = () => {
     })
 
     socket.on('nowPlaying', (data: NowPlayingData) => {
-      console.log('Received now playing data:', data)
       setNowPlaying((prevState) => ({
         ...prevState,
         ...data
@@ -87,11 +86,36 @@ const NowPlaying: React.FC = () => {
       setNowPlaying({ status: 'error', message: 'Connection failed' })
     })
 
+    socket.io.on('reconnect', (attemptNumber) => {
+      console.log(`[i] Reconnected after ${attemptNumber} attempts`)
+      socket.emit('requestNowPlaying')
+      socket.emit('startAutoRefresh')
+    })
+
+    socket.io.on('reconnect_attempt', (attemptNumber) => {
+      console.log(`[i] Reconnecting... (${attemptNumber}/5)`)
+      setNowPlaying({
+        status: 'loading',
+        message: `Reconnecting... (${attemptNumber}/5)`
+      })
+    })
+
+    socket.io.on('reconnect_failed', () => {
+      console.error('[!] Reconnection failed')
+      setNowPlaying({
+        status: 'error',
+        message: 'Unable to reconnect to server'
+      })
+    })
+
     return () => {
       socket.off('connect')
       socket.off('disconnect')
       socket.off('nowPlaying')
       socket.off('connect_error')
+      socket.io.off('reconnect')
+      socket.io.off('reconnect_attempt')
+      socket.io.off('reconnect_failed')
       disconnectSocket()
     }
   }, [])
@@ -174,18 +198,18 @@ const NowPlaying: React.FC = () => {
           style={{ background: effects.gradients.musicPlayer }}
         >
           <div className="pb-1 text-center leading-none">
-            <ScrollTxt
+            <MusicText
               text={nowPlaying.artist_name?.toUpperCase() || ''}
               type="artist"
               className="-mt-0.5"
             />
-            <ScrollTxt
+            <MusicText
               text={nowPlaying.track_name || ''}
               type="track"
               className="-mt-0.5"
             />
             {nowPlaying.release_name && (
-              <ScrollTxt
+              <MusicText
                 text={nowPlaying.release_name}
                 type="release"
                 className="-mt-1.5"
@@ -313,7 +337,7 @@ const NowPlaying: React.FC = () => {
                       />
                     </svg>
                   </button>
-                  <div className="mx-0.5 h-6 w-[1px] bg-gray-800"></div>
+                  <div className="mx-0.5 h-6 w-px bg-gray-800"></div>
                   <button className="overflow-hidden rounded-full p-1 transition-all duration-200 hover:brightness-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter">
                     <svg
                       width="38"
@@ -351,7 +375,7 @@ const NowPlaying: React.FC = () => {
                       />
                     </svg>
                   </button>
-                  <div className="mx-1 h-6 w-[1px] bg-gray-800"></div>
+                  <div className="mx-1 h-6 w-px bg-gray-800"></div>
                   <button className="overflow-hidden rounded-full p-1 transition-all duration-200 hover:brightness-110 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] hover:filter">
                     <svg
                       width="38"
@@ -394,11 +418,11 @@ const NowPlaying: React.FC = () => {
                 <div className="relative mt-1 flex w-full justify-center">
                   <div className="relative h-2 w-38 rounded-full bg-gray-800">
                     <div
-                      className="absolute inset-0 rounded-full bg-gradient-to-b from-white to-gray-600"
+                      className="absolute inset-0 rounded-full bg-linear-to-b from-white to-gray-600"
                       style={{ width: `${volume}%` }}
                     />
                     <div
-                      className="absolute top-1/2 h-3.5 w-3.5 -translate-y-1/2 transform rounded-full border border-gray-400 bg-gradient-to-b from-gray-200 via-gray-300 to-gray-500 shadow-inner"
+                      className="absolute top-1/2 h-3.5 w-3.5 -translate-y-1/2 transform rounded-full border border-gray-400 bg-linear-to-b from-gray-200 via-gray-300 to-gray-500 shadow-inner"
                       style={{
                         left: `calc(${volume}% - 8px)`,
                         backgroundImage:
@@ -424,7 +448,7 @@ const NowPlaying: React.FC = () => {
           {/* Home button */}
           <div className="flex justify-center py-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 bg-white shadow">
-              <div className="h-4 w-4 rounded-full border-1 border-[#D4C29A]"></div>
+              <div className="h-4 w-4 rounded-full border border-[#D4C29A]"></div>
             </div>
           </div>
         </div>

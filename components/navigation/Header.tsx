@@ -1,19 +1,23 @@
 'use client'
 
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  memo
+} from 'react'
 import Link from 'next/link'
 import { X, Menu, ChevronDown, ChevronRight } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn, throttle } from '@/lib/utils'
 import { colors, surfaces } from '@/lib/theme'
 import type {
   NavigationIcon,
-  NavigationMenuItem,
   NavigationDropdownConfig,
   NavigationDropdownGroup
 } from '@/lib/types/navigation'
 import { headerNavigationConfig } from '../../lib/config/header'
-
-const NAVIGATION_CONFIG: NavigationMenuItem[] = headerNavigationConfig
 
 interface NavItemProps {
   href: string
@@ -22,26 +26,39 @@ interface NavItemProps {
   onClick?: () => void
 }
 
-const NavItem = ({ href, icon, children, onClick }: NavItemProps) => (
-  <div className="nav-item">
-    <Link
-      href={href}
-      onClick={onClick}
-      className={cn('flex items-center', surfaces.button.nav)}
-    >
-      {React.createElement(icon, {
+const NavItem = memo(function NavItem({
+  href,
+  icon,
+  children,
+  onClick
+}: NavItemProps) {
+  const iconElement = useMemo(
+    () =>
+      React.createElement(icon, {
         className: 'text-md mr-2',
         strokeWidth: 2.5,
         size: 20
-      })}
-      {children}
-    </Link>
-  </div>
-)
+      }),
+    [icon]
+  )
+
+  return (
+    <div className="nav-item">
+      <Link
+        href={href}
+        onClick={onClick}
+        className={cn('flex items-center', surfaces.button.nav)}
+      >
+        {iconElement}
+        {children}
+      </Link>
+    </div>
+  )
+})
 
 interface DropdownNavItemProps {
   id: string
-  href: string
+  href?: string
   icon: NavigationIcon
   children: React.ReactNode
   dropdownContent: React.ReactNode
@@ -50,7 +67,7 @@ interface DropdownNavItemProps {
   onOpenChange?: (id: string | null, immediate?: boolean) => void
 }
 
-const DropdownNavItem = ({
+const DropdownNavItem = memo(function DropdownNavItem({
   id,
   href,
   icon,
@@ -59,8 +76,18 @@ const DropdownNavItem = ({
   isMobile = false,
   isOpen = false,
   onOpenChange
-}: DropdownNavItemProps) => {
+}: DropdownNavItemProps) {
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const iconElement = useMemo(
+    () =>
+      React.createElement(icon, {
+        className: 'text-md mr-2',
+        strokeWidth: 2.5,
+        size: 20
+      }),
+    [icon]
+  )
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -105,6 +132,25 @@ const DropdownNavItem = ({
     }
   }
 
+  const content = (
+    <>
+      <span className="flex flex-1 items-center">
+        {iconElement}
+        <span>{children}</span>
+      </span>
+      <ChevronDown
+        className={`ml-2 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+        strokeWidth={2.5}
+        size={16}
+      />
+    </>
+  )
+
+  const buttonClasses = cn(
+    'flex w-full items-center justify-between',
+    surfaces.button.nav
+  )
+
   return (
     <div
       className="nav-item relative"
@@ -112,28 +158,22 @@ const DropdownNavItem = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Link
-        href={href}
-        onClick={isMobile ? handleClick : undefined}
-        className={cn(
-          'flex w-full items-center justify-between',
-          surfaces.button.nav
-        )}
-      >
-        <span className="flex flex-1 items-center">
-          {React.createElement(icon, {
-            className: 'text-md mr-2',
-            strokeWidth: 2.5,
-            size: 20
-          })}
-          <span>{children}</span>
-        </span>
-        <ChevronDown
-          className={`ml-2 transform transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          strokeWidth={2.5}
-          size={16}
-        />
-      </Link>
+      {href ? (
+        <Link
+          href={href}
+          onClick={isMobile ? handleClick : undefined}
+          className={buttonClasses}
+        >
+          {content}
+        </Link>
+      ) : (
+        <button
+          onClick={isMobile ? handleClick : undefined}
+          className={buttonClasses}
+        >
+          {content}
+        </button>
+      )}
       {isOpen && (
         <>
           {!isMobile && (
@@ -152,27 +192,29 @@ const DropdownNavItem = ({
       )}
     </div>
   )
-}
+})
 
 interface NestedDropdownItemProps {
   children: React.ReactNode
   nestedContent: React.ReactNode
   icon: NavigationIcon
+  href?: string
   isMobile?: boolean
   itemKey: string
   activeNested: string | null
   onNestedChange: (key: string | null, immediate?: boolean) => void
 }
 
-const NestedDropdownItem = ({
+const NestedDropdownItem = memo(function NestedDropdownItem({
   children,
   nestedContent,
   icon: Icon,
+  href,
   isMobile = false,
   itemKey,
   activeNested,
   onNestedChange
-}: NestedDropdownItemProps) => {
+}: NestedDropdownItemProps) {
   const itemRef = useRef<HTMLDivElement>(null)
   const isOpen = activeNested === itemKey
 
@@ -203,26 +245,41 @@ const NestedDropdownItem = ({
     }
   }
 
+  const labelContent = (
+    <>
+      <span className="flex flex-1 items-center">
+        <Icon className="mr-3" strokeWidth={2.5} size={18} />
+        {children}
+      </span>
+      <ChevronRight
+        className={`transform transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
+        strokeWidth={2.5}
+        size={18}
+      />
+    </>
+  )
+
+  const mobileButtonClasses = cn(
+    'flex w-full items-center justify-between px-4 py-3 text-left text-sm',
+    surfaces.button.dropdownItem
+  )
+
   if (isMobile) {
     return (
       <div className="relative" ref={itemRef}>
-        <button
-          onClick={handleClick}
-          className={cn(
-            'flex w-full items-center justify-between px-4 py-3 text-left text-sm',
-            surfaces.button.dropdownItem
-          )}
-        >
-          <span className="flex flex-1 items-center">
-            <Icon className="mr-3" strokeWidth={2.5} size={18} />
-            {children}
-          </span>
-          <ChevronRight
-            className={`transform transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
-            strokeWidth={2.5}
-            size={18}
-          />
-        </button>
+        {href ? (
+          <Link
+            href={href}
+            onClick={handleClick}
+            className={mobileButtonClasses}
+          >
+            {labelContent}
+          </Link>
+        ) : (
+          <button onClick={handleClick} className={mobileButtonClasses}>
+            {labelContent}
+          </button>
+        )}
         {isOpen && (
           <div className="relative mt-2 ml-5 space-y-1 pr-4">
             {nestedContent}
@@ -232,6 +289,25 @@ const NestedDropdownItem = ({
     )
   }
 
+  const desktopLabelContent = (
+    <>
+      <span className="flex flex-1 items-center">
+        <Icon className="mr-3" strokeWidth={2.5} size={18} />
+        {children}
+      </span>
+      <ChevronDown
+        className={`transform transition-transform duration-200 ${isOpen ? '-rotate-90' : ''}`}
+        strokeWidth={2.5}
+        size={18}
+      />
+    </>
+  )
+
+  const desktopButtonClasses = cn(
+    'flex w-full items-center justify-between px-4 py-3 text-left text-sm',
+    isOpen ? 'bg-gray-700/40 text-white' : surfaces.button.dropdownItem
+  )
+
   return (
     <div
       className="relative"
@@ -239,23 +315,19 @@ const NestedDropdownItem = ({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <button
-        onClick={handleClick}
-        className={cn(
-          'flex w-full items-center justify-between px-4 py-3 text-left text-sm',
-          isOpen ? 'bg-gray-700/40 text-white' : surfaces.button.dropdownItem
-        )}
-      >
-        <span className="flex flex-1 items-center">
-          <Icon className="mr-3" strokeWidth={2.5} size={18} />
-          {children}
-        </span>
-        <ChevronDown
-          className={`transform transition-transform duration-200 ${isOpen ? '-rotate-90' : ''}`}
-          strokeWidth={2.5}
-          size={18}
-        />
-      </button>
+      {href ? (
+        <Link
+          href={href}
+          onClick={handleClick}
+          className={desktopButtonClasses}
+        >
+          {desktopLabelContent}
+        </Link>
+      ) : (
+        <button onClick={handleClick} className={desktopButtonClasses}>
+          {desktopLabelContent}
+        </button>
+      )}
       {isOpen && (
         <>
           <div className="absolute top-0 left-full z-50 h-full w-4" />
@@ -282,7 +354,7 @@ const NestedDropdownItem = ({
       )}
     </div>
   )
-}
+})
 
 const renderNestedGroups = (
   groups: NavigationDropdownGroup[],
@@ -378,6 +450,7 @@ const renderDropdownContent = (
           key={`nested-${item.label}`}
           itemKey={`nested-${item.label}`}
           icon={item.icon}
+          href={item.href}
           isMobile={isMobile}
           activeNested={activeNested}
           onNestedChange={onNestedChange}
@@ -390,7 +463,11 @@ const renderDropdownContent = (
   </div>
 )
 
-interface HeaderProps {
+/**
+ * @public
+ */
+export interface HeaderProps {
+  className?: string
   onMobileMenuChange?: (isOpen: boolean) => void
 }
 
@@ -405,6 +482,8 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
     null
   )
   const overlayOpenFrameRef = useRef<number | null>(null)
+
+  const navigationConfig = useMemo(() => headerNavigationConfig, [])
 
   const toggleMenu = useCallback(() => {
     setIsOpen((previous) => {
@@ -438,9 +517,11 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
       setIsMobile(window.innerWidth < 1024)
     }
 
+    const throttledCheckMobile = throttle(checkMobile, 150)
+
     checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    window.addEventListener('resize', throttledCheckMobile)
+    return () => window.removeEventListener('resize', throttledCheckMobile)
   }, [])
 
   useEffect(() => {
@@ -504,6 +585,29 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
     }
   }, [activeDropdown, isMobile])
 
+  const mobileMenuStyle = useMemo(
+    () => ({
+      backgroundColor: isMobile ? colors.backgrounds.cardSolid : undefined
+    }),
+    [isMobile]
+  )
+
+  const dropdownContents = useMemo(() => {
+    const contents: Record<string, React.ReactNode> = {}
+    navigationConfig.forEach((item) => {
+      if (item.type === 'dropdown') {
+        contents[item.id] = renderDropdownContent(
+          item.dropdown,
+          isMobile,
+          activeNested,
+          handleNestedChange,
+          closeMenu
+        )
+      }
+    })
+    return contents
+  }, [navigationConfig, isMobile, activeNested, handleNestedChange, closeMenu])
+
   return (
     <>
       {showDesktopOverlay && (
@@ -555,13 +659,9 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
               'lg:bg-transparent',
               isOpen ? 'flex' : 'hidden lg:flex'
             )}
-            style={{
-              backgroundColor: isMobile
-                ? colors.backgrounds.cardSolid
-                : undefined
-            }}
+            style={mobileMenuStyle}
           >
-            {NAVIGATION_CONFIG.map((item) => {
+            {navigationConfig.map((item) => {
               if (item.type === 'link') {
                 return (
                   <NavItem
@@ -581,13 +681,7 @@ export default function Header({ onMobileMenuChange }: HeaderProps) {
                   id={item.id}
                   href={item.href}
                   icon={item.icon}
-                  dropdownContent={renderDropdownContent(
-                    item.dropdown,
-                    isMobile,
-                    activeNested,
-                    handleNestedChange,
-                    closeMenu
-                  )}
+                  dropdownContent={dropdownContents[item.id]}
                   isMobile={isMobile}
                   isOpen={activeDropdown === item.id}
                   onOpenChange={handleDropdownChange}

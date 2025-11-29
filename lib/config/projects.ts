@@ -162,7 +162,7 @@ export const projects: Project[] = [
       renewals: [{ date: '2025-07-03', years: 1 }]
     },
     serviceInfo: {
-      trackStatus: true
+      trackStatus: false
     }
   },
   {
@@ -351,7 +351,7 @@ export const projects: Project[] = [
     domain: 'kowalski.social',
     serviceCategory: 'project',
     serviceInfo: {
-      trackStatus: true
+      trackStatus: false
     }
   },
   {

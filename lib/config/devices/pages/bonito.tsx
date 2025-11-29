@@ -11,11 +11,11 @@ import {
   Smartphone
 } from 'lucide-react'
 import { MdOutlineAndroid } from 'react-icons/md'
-import { RiTelegram2Fill } from 'react-icons/ri'
 import { VscTerminalLinux } from 'react-icons/vsc'
-import { Section, Row, Modules, Module } from '../components'
+import { Section, Row } from '../components'
 import { TbBrandMatrix } from 'react-icons/tb'
-import { SiMagisk } from 'react-icons/si'
+import { SiLineageos, SiProtonmail, SiProtoncalendar } from 'react-icons/si'
+import { FaYoutube } from 'react-icons/fa'
 
 export const meta = {
   slug: 'bonito',
@@ -36,6 +36,19 @@ export const meta = {
   ]
 }
 
+/**
+ * Content component for Bonito device page.
+ *
+ * @remarks
+ * Defines the structured content layout for the Bonito device showcase page,
+ * including hardware specifications, software information, and usage details.
+ * Uses the stub components defined in ../components.tsx for type safety.
+ *
+ * @returns JSX content tree for device page
+ *
+ * @category Device Pages
+ * @public
+ */
 export const Content = () => (
   <>
     <Section id="hardware" title="Hardware" icon={Smartphone}>
@@ -47,22 +60,16 @@ export const Content = () => (
     <Section id="software" title="Android" icon={MdOutlineAndroid}>
       <Row
         label="Android Version"
-        value="Pixel Experience 13 (Android 13)"
-        filterValue="13"
-        icon={MdOutlineAndroid}
-        href="https://get.pixelexperience.org/bonito"
+        value="LineageOS 22.2"
+        filterValue="15"
+        icon={SiLineageos}
+        href="https://wiki.lineageos.org/devices/bonito/"
       />
       <Row
         label="Kernel"
-        value="4.9.337-minimalistic"
+        value="4.9.337"
         icon={VscTerminalLinux}
         href="https://github.com/LineageOS/android_kernel_google_msm8953"
-      />
-      <Row
-        label="Root"
-        value="Magisk"
-        icon={SiMagisk}
-        href="https://github.com/topjohnwu/Magisk"
       />
     </Section>
 
@@ -75,26 +82,23 @@ export const Content = () => (
         href="https://f-droid.org/packages/io.element.android.x/"
       />
       <Row
-        label="Telegram"
-        value="Cherrygram"
-        icon={RiTelegram2Fill}
-        href="https://github.com/arslan4k1390/Cherrygram"
+        label="Email"
+        value="Proton Mail"
+        icon={SiProtonmail}
+        href="https://f-droid.org/packages/io.element.android.x/"
+      />
+      <Row
+        label="YouTube"
+        value="ReVanced"
+        icon={FaYoutube}
+        href="https://revanced.app"
+      />
+      <Row
+        label="Calendar"
+        value="Proton Calendar"
+        icon={SiProtoncalendar}
+        href="https://f-droid.org/packages/io.element.android.x/"
       />
     </Section>
-
-    <Modules id="modules" title="Modules" icon={Package}>
-      <Module
-        label="Shamiko"
-        href="https://github.com/LSPosed/LSPosed.github.io/releases"
-      />
-      <Module
-        label="Tricky Store"
-        href="https://modules.lol/module/5ec1cff-tricky-store"
-      />
-      <Module
-        label="Yuri Keybox Manager"
-        href="https://modules.lol/module/dpejoh-and-yuri-yurikey"
-      />
-    </Modules>
   </>
 )

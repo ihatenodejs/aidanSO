@@ -4,7 +4,10 @@ import { Header } from '../navigation'
 import MobileMenuBlur from './MobileMenuBlur'
 import { useMobileMenu } from './MobileMenuContext'
 
-interface LayoutClientProps {
+/**
+ * @public
+ */
+export interface LayoutClientProps {
   children: React.ReactNode
 }
 

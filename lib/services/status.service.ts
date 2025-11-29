@@ -40,7 +40,7 @@ import type { ErrorType } from '@/lib/types'
  * @category Services
  * @public
  */
-type ServiceCheckResult = {
+export type ServiceCheckResult = {
   status: ServiceStatus
   statusCode: number | null
   responseTime: number | null
@@ -49,6 +49,28 @@ type ServiceCheckResult = {
   checkedAt: Date
 }
 
+/**
+ * Service for monitoring application and external service health status.
+ *
+ * @remarks
+ * Provides centralized status checking for internal services and external endpoints
+ * with configurable timeouts and comprehensive error handling. Supports both
+ * individual service checks and aggregated application status reporting.
+ *
+ * @example
+ * ```ts
+ * // Get overall application status
+ * const status = StatusService.getStatus()
+ * console.log(`Overall: ${status.overall}`)
+ *
+ * // Check specific service
+ * const serviceStatus = await StatusService.checkService('https://api.example.com')
+ * console.log(`Response time: ${serviceStatus.responseTime}ms`)
+ * ```
+ *
+ * @category Services
+ * @public
+ */
 export class StatusService {
   /** Timeout for HTTP requests in milliseconds */
   private static readonly REQUEST_TIMEOUT = 5000

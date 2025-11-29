@@ -1,6 +1,9 @@
 import React from 'react'
 
-interface NameIconProps {
+/**
+ * @public
+ */
+export interface NameIconProps {
   className?: string
 }
 

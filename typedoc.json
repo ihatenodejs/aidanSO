@@ -1,13 +1,6 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": [
-    "lib/services",
-    "lib/utils",
-    "lib/types",
-    "lib/theme",
-    "lib/github.ts",
-    "server.ts"
-  ],
+  "entryPoints": ["lib", "app", "components", "tools", "server.ts"],
   "entryPointStrategy": "expand",
   "out": "public/docs/html",
   "json": "public/docs/api.json",

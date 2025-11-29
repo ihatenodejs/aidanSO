@@ -1,4 +1,5 @@
 import { describe, expect, it, mock } from 'bun:test'
+import { logger } from '@/lib/utils/logger'
 
 import type { CheckDefinition } from '../best-practices/types'
 import {
@@ -102,9 +103,9 @@ describe('check resolution', () => {
 
   it('filters checks and reports unknown ids', () => {
     const errorSpy = mock(() => {})
-    const originalError = console.error
+    const originalError = logger.error
 
-    console.error = errorSpy
+    logger.error = errorSpy as typeof logger.error
     try {
       const checks = resolveChecksToRun(
         new Set(['second', 'unknown']),
@@ -113,17 +114,21 @@ describe('check resolution', () => {
       )
       expect(checks).toHaveLength(1)
       expect(checks[0].id).toBe('second')
-      expect(errorSpy).toHaveBeenCalledWith('Unknown check id: unknown')
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Unknown check id: unknown',
+        'best-practices',
+        undefined
+      )
     } finally {
-      console.error = originalError
+      logger.error = originalError
     }
   })
 
   it('skips requested checks and reports unknown skip ids', () => {
     const errorSpy = mock(() => {})
-    const originalError = console.error
+    const originalError = logger.error
 
-    console.error = errorSpy
+    logger.error = errorSpy as typeof logger.error
     try {
       const checks = resolveChecksToRun(
         new Set(),
@@ -132,9 +137,13 @@ describe('check resolution', () => {
       )
       expect(checks).toHaveLength(1)
       expect(checks[0].id).toBe('second')
-      expect(errorSpy).toHaveBeenCalledWith('Unknown check id to skip: missing')
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Unknown check id to skip: missing',
+        'best-practices',
+        undefined
+      )
     } finally {
-      console.error = originalError
+      logger.error = originalError
     }
   })
 })

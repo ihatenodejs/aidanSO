@@ -10,6 +10,7 @@ import type {
   DomainSortOption
 } from '@/lib/types'
 import { sortOptions } from '@/lib/domains/config'
+import { Formatter } from '@/lib/utils/formatting'
 
 export default function DomainFilters({
   onSearchChange,
@@ -93,10 +94,11 @@ export default function DomainFilters({
     selectedRegistrars.length > 0
 
   return (
-    <div className="mb-8 space-y-4">
-      <div className="flex items-center gap-4">
+    <div className="space-y-4">
+      {/* Search and Filter Button Row */}
+      <div className="flex items-center gap-3">
         <div className="relative flex-1">
-          <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-500" />
+          <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
           <input
             type="text"
             value={search}
@@ -107,24 +109,33 @@ export default function DomainFilters({
         </div>
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 rounded-lg border px-4 py-2 transition-colors ${
+          className={`flex items-center gap-2 rounded-lg border px-4 py-2 whitespace-nowrap transition-colors ${
             showFilters || hasActiveFilters
               ? 'border-gray-700 bg-gray-800 text-white'
               : 'border-gray-800 bg-gray-900/50 text-gray-400 hover:border-gray-700 hover:text-gray-300'
           }`}
         >
           <Filter className="h-5 w-5" />
-          Filters
+          <span className="hidden sm:inline">Filters</span>
           {hasActiveFilters && (
-            <span className="ml-1 rounded-full bg-slate-500/20 px-2 py-0.5 text-xs text-slate-400">
-              Active
+            <span className="rounded-full bg-slate-500/20 px-2 py-0.5 text-xs text-slate-400">
+              <span className="hidden sm:inline">Active</span>
+              <span className="sm:hidden">
+                {selectedCategories.length +
+                  selectedStatuses.length +
+                  selectedRegistrars.length}
+              </span>
             </span>
           )}
         </button>
+      </div>
+
+      {/* Sort Dropdown */}
+      <div className="w-full">
         <select
           value={sortBy}
           onChange={(e) => handleSortChange(e.target.value as DomainSortOption)}
-          className="rounded-lg border border-gray-800 bg-gray-900/50 px-4 py-2 text-gray-200 focus:border-gray-700 focus:outline-none"
+          className="w-full rounded-lg border border-gray-800 bg-gray-900/50 px-4 py-2 text-gray-200 focus:border-gray-700 focus:outline-none"
         >
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -135,7 +146,7 @@ export default function DomainFilters({
       </div>
 
       {showFilters && (
-        <div className="space-y-4 rounded-lg border border-gray-800 bg-gray-900/30 p-4">
+        <div className="space-y-4 rounded-lg border-2 border-gray-700 bg-gray-200/5 p-4 transition-colors duration-300 hover:border-gray-600">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-gray-300">
               Filter Options
@@ -164,7 +175,7 @@ export default function DomainFilters({
                       : 'border-gray-700 bg-gray-800/50 text-gray-400 hover:border-gray-600'
                   }`}
                 >
-                  {category}
+                  {Formatter.capitalize(category)}
                 </button>
               ))}
             </div>
@@ -183,7 +194,7 @@ export default function DomainFilters({
                       : 'border-gray-700 bg-gray-800/50 text-gray-400 hover:border-gray-600'
                   }`}
                 >
-                  {status}
+                  {Formatter.capitalize(status)}
                 </button>
               ))}
             </div>

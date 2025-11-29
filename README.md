@@ -2,15 +2,33 @@
 
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
 
-aidanSO is the third version of my personal website, built with Next.js and Tailwind CSS.
+aidanSO is the third version of my personal website, built with Next.js 15, Tailwind CSS, and Bun.
 
-It was previously known as aidxnCC, though due to a better domain name being avaliable, I have renamed this project to aidanSO to match the new domain name, [aidan.so](https://aidan.so).
+It was previously known as aidxnCC, though due to a better domain name being available, I have renamed this project to aidanSO to match the new domain name, [aidan.so](https://aidan.so).
 
-## Deploy with Docker
+## Development
 
-Docker is the easiest way to deploy aidanSO. You can use the `docker-compose.yml.example` file for this.
+**Requirements:**
 
-Just create a `.env` file with the below variables, run `docker compose -d --build`, and you'll be all set.
+- [Bun](https://bun.sh)
+- TypeScript knowledge for development
+
+**Quick Start:**
+
+```bash
+bun install
+bun run dev
+```
+
+The development server will start on an available port (defaults to 3000, auto-increments if busy).
+
+## Deployment
+
+### Docker
+
+Docker is the easiest way to deploy aidanSO. You can use the `docker-compose.yml.example` file in `examples/` for this.
+
+Just create a `.env` file with the below variables, run `docker compose up -d --build`, and you'll be all set.
 
 ## Environment Variables
 
@@ -24,6 +42,8 @@ Just create a `.env` file with the below variables, run `docker compose -d --bui
 | `GITHUB_PAT`                     | No        | Fallback GitHub personal access token if `GITHUB_PROJECTS_PAT` is not set                  |
 | `PORT`                           | No        | Server port (defaults to `3000`)                                                           |
 | `NODE_ENV`                       | No        | Environment mode (`production` or `development`, automatically set by deployment platform) |
+| `WARNING_LEVEL`                  | No        | Logging level: `debug`, `info`, `warning`, or `error` (defaults to `info`)                 |
+| `NO_COLOR`                       | No        | Set to any value to disable colored terminal output                                        |
 | `NEXT_PUBLIC_DEFAULT_TIME_RANGE` | No        | Default time range for AI usage page (defaults to `3m`)                                    |
 
 ## MusicBrainz

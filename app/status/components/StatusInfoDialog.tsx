@@ -4,7 +4,10 @@ import { Server, Globe, AlertTriangle } from 'lucide-react'
 import { Dialog } from '@/components/ui/Dialog'
 import { surfaces, cn, colors } from '@/lib/theme'
 
-interface StatusInfoDialogProps {
+/**
+ * @public
+ */
+export interface StatusInfoDialogProps {
   isOpen: boolean
   onClose: () => void
 }

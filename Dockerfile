@@ -13,7 +13,15 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+RUN bun run build:devices
+RUN bun run docs:generate
 RUN bun run build
+
+FROM base AS runner-deps
+WORKDIR /app
+
+COPY package.json ./
+RUN bun install --production
 
 FROM base AS runner
 WORKDIR /app
@@ -21,16 +29,18 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN groupadd --system --gid 999 nodejs
-RUN useradd --system --uid 999 nextjs
+RUN groupadd --system --gid 999 nodejs && \
+  useradd --system --uid 999 nextjs
 
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/server.ts ./
 COPY --from=builder --chown=nextjs:nodejs /app/lib ./lib
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/bunfig.toml ./
+COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./
+COPY --from=runner-deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 USER nextjs
 

@@ -19,6 +19,9 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Build device data
+        run: bun run build:devices
+
       - name: Run Prettier check
         run: bun run format:check
 

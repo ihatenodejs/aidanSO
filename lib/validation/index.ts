@@ -1,4 +1,9 @@
-type Path = Array<string | number>
+/**
+ * Represents a path in a nested object structure for validation error reporting.
+ * @category Validation
+ * @public
+ */
+export type Path = Array<string | number>
 
 export interface ValidationIssue {
   path: string
@@ -9,6 +14,28 @@ export type ValidationResult<T> =
   | { success: true; value: T }
   | { success: false; issues: ValidationIssue[] }
 
+/**
+ * Custom error class for validation failures with detailed issue reporting.
+ *
+ * @remarks
+ * Extends the native Error class to provide structured validation feedback
+ * including specific issues, paths, and human-readable error messages.
+ * Used throughout the validation system for consistent error handling.
+ *
+ * @example
+ * ```ts
+ * try {
+ *   validateUserInput(data)
+ * } catch (error) {
+ *   if (error instanceof ValidationError) {
+ *     console.log('Validation failed:', error.issues)
+ *   }
+ * }
+ * ```
+ *
+ * @category Validation
+ * @public
+ */
 export class ValidationError extends Error {
   constructor(public issues: ValidationIssue[]) {
     super(formatIssues(issues))
@@ -76,9 +103,32 @@ function pathToString(path: Path): string {
 
 export interface StringSchemaOptions {
   minLength?: number
+  maxLength?: number
   trim?: boolean
 }
 
+/**
+ * Creates a string validation schema.
+ *
+ * @remarks
+ * Validates that a value is a string and optionally applies length constraints
+ * and trimming. Returns a schema that can be used with the validation system.
+ *
+ * @param options - Validation options for string schema
+ * @param options.minLength - Minimum allowed string length
+ * @param options.maxLength - Maximum allowed string length
+ * @param options.trim - Whether to trim whitespace before validation
+ * @returns String validation schema
+ *
+ * @example
+ * ```ts
+ * const emailSchema = string({ minLength: 5, maxLength: 100 })
+ * const result = emailSchema.safeParse('user@example.com')
+ * ```
+ *
+ * @category Validation
+ * @public
+ */
 export function string(options: StringSchemaOptions = {}): Schema<string> {
   return createSchema((value, path) => {
     if (typeof value !== 'string') {
@@ -93,6 +143,12 @@ export function string(options: StringSchemaOptions = {}): Schema<string> {
       ])
     }
 
+    if (options.maxLength !== undefined && output.length > options.maxLength) {
+      return failure([
+        makeIssue(path, `Expected string length ≤ ${options.maxLength}`)
+      ])
+    }
+
     return success(output)
   })
 }
@@ -102,6 +158,27 @@ export interface NumberSchemaOptions {
   max?: number
 }
 
+/**
+ * Creates a number validation schema.
+ *
+ * @remarks
+ * Validates that a value is a number (excluding NaN) and optionally applies
+ * range constraints. Returns a schema that can be used with validation system.
+ *
+ * @param options - Validation options for number schema
+ * @param options.min - Minimum allowed number value
+ * @param options.max - Maximum allowed number value
+ * @returns Number validation schema
+ *
+ * @example
+ * ```ts
+ * const ageSchema = number({ min: 0, max: 120 })
+ * const result = ageSchema.safeParse(25)
+ * ```
+ *
+ * @category Validation
+ * @public
+ */
 export function number(options: NumberSchemaOptions = {}): Schema<number> {
   return createSchema((value, path) => {
     if (typeof value !== 'number' || Number.isNaN(value)) {
@@ -120,6 +197,24 @@ export function number(options: NumberSchemaOptions = {}): Schema<number> {
   })
 }
 
+/**
+ * Creates a boolean validation schema.
+ *
+ * @remarks
+ * Validates that a value is a boolean type. Simple validation that
+ * ensures the value is strictly true or false (no truthy/falsy coercion).
+ *
+ * @returns Boolean validation schema
+ *
+ * @example
+ * ```ts
+ * const isActiveSchema = boolean()
+ * const result = isActiveSchema.safeParse(true)
+ * ```
+ *
+ * @category Validation
+ * @public
+ */
 export function boolean(): Schema<boolean> {
   return createSchema((value, path) => {
     if (typeof value !== 'boolean') {
@@ -236,7 +331,12 @@ export function union<S extends ReadonlyArray<Schema<unknown>>>(
 
 export type Shape = Record<string, Schema<unknown>>
 
-type Simplify<T> = { [K in keyof T]: T[K] }
+/**
+ * Utility type to simplify complex mapped types by removing unnecessary intersections.
+ * @category Validation
+ * @public
+ */
+export type Simplify<T> = { [K in keyof T]: T[K] }
 
 type OptionalKeys<S extends Shape> = {
   [K in keyof S]-?: undefined extends Infer<S[K]> ? K : never

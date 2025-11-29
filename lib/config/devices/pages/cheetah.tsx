@@ -36,11 +36,24 @@ export const meta = {
   ]
 }
 
+/**
+ * Content component for Cheetah device page.
+ *
+ * @remarks
+ * Defines the structured content layout for the Cheetah device showcase page,
+ * including hardware specifications, software information, and usage details.
+ * Uses the stub components defined in ../components.tsx for type safety.
+ *
+ * @returns JSX content tree for device page
+ *
+ * @category Device Pages
+ * @public
+ */
 export const Content = () => (
   <>
     <Section id="hardware" title="Hardware" icon={Smartphone}>
       <Row label="Chipset" value="Google Tensor G2" icon={Cpu} />
-      <Row label="RAM" value="12 GB LPDDR5" icon={MemoryStick} />
+      <Row label="RAM" value="12 GB" icon={MemoryStick} />
       <Row label="Storage" value="128 GB" icon={HardDrive} />
     </Section>
 
@@ -76,17 +89,17 @@ export const Content = () => (
       rating={{ value: 4.5, scale: 5, label: 'Personal score' }}
     >
       <Paragraph>
-        The jump from a Galaxy A32 5G was dramatic. Tensor silicon keeps the
-        phone responsive, especially with 12 GB of RAM backing daily
-        multitasking.
+        The jump from a Galaxy A32 5G was dramatic. The Tensor G2 keeps the
+        phone responsive, especially with 12 GB of RAM.
       </Paragraph>
       <Paragraph>
-        Battery life wavers when Play Integrity tweaks are active, but the photo
-        pipeline more than compensates—the Pixel still wins for quick captures.
+        Battery life wavers when I needed Play Integrity. However, the camera
+        quality more than compensates, making it one of my favorite phones.
       </Paragraph>
       <Paragraph>
-        Hardware quirks aside (RIP volume rocker), Android makes on-screen
-        controls painless, so the device stays an easy recommendation.
+        My volume rocker fell off, thoguh I was able to use an app for
+        displaying a virtual volume rocker. Despite this quirk and the shattered
+        back glass, I seriously can&apos;t complain about the experience.
       </Paragraph>
     </Paragraphs>
   </>

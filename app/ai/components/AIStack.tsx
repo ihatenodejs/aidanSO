@@ -7,7 +7,10 @@ import { Dialog } from '@/components/ui/Dialog'
 import { isInactiveTool, type AITool, type AIToolStatus } from '../types'
 import { cn } from '@/lib/theme'
 
-interface AIStackProps {
+/**
+ * @public
+ */
+export interface AIStackProps {
   tools: AITool[]
   title?: string
   subtitle?: string
@@ -37,16 +40,19 @@ const DEFAULT_TITLE = 'My AI Stack'
 const DEFAULT_SUBTITLE =
   'The AI tools I use as a part of my routine and workflow.'
 
-const infoLabelClasses =
-  'text-xs whitespace-nowrap rounded-md px-2 py-1.5 transition-colors hover:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-300 sm:text-sm'
-
-function formatPrice(price: number) {
+function formatPrice(price: number, period?: string) {
   if (price === 0) return 'Free'
-  if (Number.isInteger(price)) return `$${price}/mo`
-  return `$${price.toFixed(2)}/mo`
+  const periodSuffix =
+    period === 'quarterly'
+      ? '/quarter'
+      : period
+        ? `/${period.slice(0, 2)}`
+        : '/mo'
+  if (Number.isInteger(price)) return `$${price}${periodSuffix}`
+  return `$${price.toFixed(2)}${periodSuffix}`
 }
 
-interface ToolInfoDialogProps {
+export interface ToolInfoDialogProps {
   tool: AITool | null
   onClose: () => void
 }
@@ -75,8 +81,8 @@ function ToolInfoDialog({ tool, onClose }: ToolInfoDialogProps) {
   const priceLabel =
     tool.price !== undefined
       ? tool.discountedPrice !== undefined
-        ? `${formatPrice(tool.discountedPrice)} (from ${formatPrice(tool.price)})`
-        : formatPrice(tool.price)
+        ? `${formatPrice(tool.discountedPrice, tool.subscriptionPeriod)} (from ${formatPrice(tool.price, tool.subscriptionPeriod)})`
+        : formatPrice(tool.price, tool.subscriptionPeriod)
       : null
 
   return (
@@ -107,7 +113,13 @@ function ToolInfoDialog({ tool, onClose }: ToolInfoDialogProps) {
             {priceLabel && <InfoField label="Price">{priceLabel}</InfoField>}
             {tool.discountedPrice !== undefined && tool.price !== undefined && (
               <InfoField label="Original Price">
-                {formatPrice(tool.price)}
+                {formatPrice(tool.price, tool.subscriptionPeriod)}
+              </InfoField>
+            )}
+            {tool.subscriptionPeriod && (
+              <InfoField label="Billing Period">
+                {tool.subscriptionPeriod.charAt(0).toUpperCase() +
+                  tool.subscriptionPeriod.slice(1)}
               </InfoField>
             )}
           </div>
@@ -169,6 +181,101 @@ export default function AIStack({
 }: AIStackProps) {
   const [selectedTool, setSelectedTool] = React.useState<AITool | null>(null)
 
+  const toolsByCategory = tools.filter((tool) => tool.category === 'tool')
+  const providersByCategory = tools.filter(
+    (tool) => tool.category === 'provider'
+  )
+  const uncategorized = tools.filter((tool) => !tool.category)
+  const shouldSplit =
+    toolsByCategory.length > 0 && providersByCategory.length > 0
+  const renderToolCards = (toolsToRender: AITool[]) => (
+    <>
+      {toolsToRender.map((tool) => (
+        <div
+          key={tool.name}
+          className="flex flex-col rounded-lg border border-gray-700 p-3 transition-all duration-300 hover:border-gray-500 sm:p-4"
+        >
+          <div className="mb-2 flex flex-1 items-start justify-between sm:mb-3">
+            <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
+              {tool.icon && (
+                <tool.icon className="shrink-0 text-xl text-gray-300 sm:text-2xl" />
+              )}
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="truncate text-sm font-semibold text-gray-200 sm:text-base">
+                    {tool.name}
+                  </h3>
+                  {tool.price !== undefined && (
+                    <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+                      {tool.discountedPrice !== undefined &&
+                      tool.price !== tool.discountedPrice ? (
+                        <>
+                          <span className="text-xs text-gray-500 line-through sm:text-sm">
+                            {formatPrice(tool.price, tool.subscriptionPeriod)}
+                          </span>
+                          <span className="text-xs text-gray-200 sm:text-sm">
+                            {formatPrice(
+                              tool.discountedPrice,
+                              tool.subscriptionPeriod
+                            )}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-xs text-gray-200 sm:text-sm">
+                          {formatPrice(tool.price, tool.subscriptionPeriod)}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <p className="line-clamp-2 text-xs text-gray-400 sm:text-sm">
+                  {tool.description}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-auto flex flex-col gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
+            <span
+              className={cn(
+                'w-fit rounded-full border px-2 py-0.5 text-xs sm:py-1',
+                statusClasses[tool.status]
+              )}
+            >
+              {statusLabels[tool.status]}
+            </span>
+            <div className="flex flex-wrap items-center">
+              {tool.link && (
+                <Link
+                  href={tool.link}
+                  className="mr-3 text-xs whitespace-nowrap hover:text-blue-300 sm:text-sm"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Visit →
+                </Link>
+              )}
+              {(tool.usage || tool.hasUsage) && (
+                <Link
+                  href={tool.usage ?? '/ai/usage'}
+                  className={`text-xs whitespace-nowrap hover:text-blue-300 sm:text-sm ${tool.link ? 'mr-3' : ''}`}
+                >
+                  Usage →
+                </Link>
+              )}
+              <button
+                type="button"
+                onClick={() => setSelectedTool(tool)}
+                className="text-xs whitespace-nowrap text-blue-400 hover:text-blue-300 hover:underline sm:text-sm"
+              >
+                Info →
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  )
+
   return (
     <>
       <section className="rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600 sm:p-6 lg:p-8">
@@ -181,91 +288,35 @@ export default function AIStack({
         </div>
         {tools.length === 0 ? (
           <p className="text-sm text-gray-400">{emptyMessage}</p>
+        ) : shouldSplit ? (
+          <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
+            {/* Tools sub-card */}
+            <div className="flex-1 rounded-lg border border-gray-700 p-3 transition-colors duration-300 hover:border-gray-600 sm:p-4">
+              <h3 className="mb-3 text-lg font-semibold text-gray-200">
+                Tools
+              </h3>
+              <div className="grid grid-cols-1 gap-3">
+                {renderToolCards(toolsByCategory)}
+              </div>
+            </div>
+
+            {/* Providers sub-card */}
+            <div className="flex-1 rounded-lg border border-gray-700 p-3 transition-colors duration-300 hover:border-gray-600 sm:p-4">
+              <h3 className="mb-3 text-lg font-semibold text-gray-200">
+                Providers
+              </h3>
+              <div className="grid grid-cols-1 gap-3">
+                {renderToolCards(providersByCategory)}
+              </div>
+            </div>
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {tools.map((tool) => (
-              <div
-                key={tool.name}
-                className="flex flex-col rounded-lg border border-gray-700 p-3 transition-all duration-300 hover:border-gray-500 sm:p-4"
-              >
-                <div className="mb-2 flex flex-1 items-start justify-between sm:mb-3">
-                  <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
-                    {tool.icon && (
-                      <tool.icon className="shrink-0 text-xl text-gray-300 sm:text-2xl" />
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <h3 className="truncate text-sm font-semibold text-gray-200 sm:text-base">
-                          {tool.name}
-                        </h3>
-                        {tool.price !== undefined && (
-                          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-                            {tool.discountedPrice !== undefined &&
-                            tool.price !== tool.discountedPrice ? (
-                              <>
-                                <span className="text-xs text-gray-500 line-through sm:text-sm">
-                                  {formatPrice(tool.price)}
-                                </span>
-                                <span className="text-xs text-gray-200 sm:text-sm">
-                                  {formatPrice(tool.discountedPrice)}
-                                </span>
-                              </>
-                            ) : (
-                              <span className="text-xs text-gray-200 sm:text-sm">
-                                {formatPrice(tool.price)}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                      <p className="line-clamp-2 text-xs text-gray-400 sm:text-sm">
-                        {tool.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-auto flex flex-col gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                  <span
-                    className={cn(
-                      'w-fit rounded-full border px-2 py-0.5 text-xs sm:py-1',
-                      statusClasses[tool.status]
-                    )}
-                  >
-                    {statusLabels[tool.status]}
-                  </span>
-                  <div className="flex flex-wrap items-center">
-                    {tool.link && (
-                      <Link
-                        href={tool.link}
-                        className="text-xs whitespace-nowrap hover:text-blue-300 sm:text-sm"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Visit →
-                      </Link>
-                    )}
-                    {(tool.usage || tool.hasUsage) && (
-                      <Link
-                        href={tool.usage ?? '/ai/usage'}
-                        className="mx-2 text-xs whitespace-nowrap hover:text-blue-300 sm:text-sm"
-                      >
-                        Usage →
-                      </Link>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedTool(tool)}
-                      className={cn(
-                        'text-blue-300 hover:text-blue-200',
-                        infoLabelClasses
-                      )}
-                    >
-                      Info →
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {renderToolCards([
+              ...toolsByCategory,
+              ...providersByCategory,
+              ...uncategorized
+            ])}
           </div>
         )}
       </section>

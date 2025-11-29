@@ -46,6 +46,19 @@ export const meta = {
   ]
 }
 
+/**
+ * Content component for JM21 device page.
+ *
+ * @remarks
+ * Defines the structured content layout for the JM21 device showcase page,
+ * including hardware specifications, software information, and usage details.
+ * Uses the stub components defined in ../components.tsx for type safety.
+ *
+ * @returns JSX content tree for device page
+ *
+ * @category Device Pages
+ * @public
+ */
 export const Content = () => (
   <>
     <Section id="core-specs" title="Hardware" icon={Cpu}>

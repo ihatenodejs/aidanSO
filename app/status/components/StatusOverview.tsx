@@ -5,7 +5,10 @@ import { Clock } from 'lucide-react'
 import type { SystemHealth } from '@/lib/types'
 import { getHealthColor, getHealthMessage } from '../utils'
 
-interface StatusOverviewProps {
+/**
+ * @public
+ */
+export interface StatusOverviewProps {
   health: SystemHealth
   checkedAt: Date
   lastUpdated?: Date

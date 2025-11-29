@@ -129,7 +129,6 @@ function StatItem({ item, groupIcon }: StatItemProps): ReactElement {
 }
 
 function SectionCard({ section }: SectionCardProps): ReactElement {
-  const Icon = section.icon
   const shouldSpanWide =
     !!section.paragraphs?.length &&
     (!section.rows || section.paragraphs.length > 1)
@@ -137,13 +136,15 @@ function SectionCard({ section }: SectionCardProps): ReactElement {
   return (
     <article
       className={`flex flex-col gap-4 rounded-2xl border border-gray-800 bg-gray-900/60 p-5 backdrop-blur-sm ${
-        shouldSpanWide ? 'lg:col-span-2 xl:col-span-2' : ''
+        shouldSpanWide ? 'lg:col-span-2 xl:col-span-3' : ''
       }`}
     >
       <header className="flex items-center gap-3">
-        <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-800 text-gray-300">
-          <Icon className="h-5 w-5" />
-        </span>
+        {section.icon ? (
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gray-800 text-gray-300">
+            <section.icon className="h-5 w-5" />
+          </span>
+        ) : null}
         <div>
           <h3 className="text-lg font-semibold text-gray-100">
             {section.title}

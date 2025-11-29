@@ -1,9 +1,12 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { useMobileMenu } from './MobileMenuContext'
+import { useMobileMenuState } from './MobileMenuContext'
 
-interface MobileMenuBlurProps {
+/**
+ * @public
+ */
+export interface MobileMenuBlurProps {
   isBlurred?: boolean
   children: React.ReactNode
   className?: string
@@ -14,8 +17,8 @@ export default function MobileMenuBlur({
   children,
   className
 }: MobileMenuBlurProps) {
-  const { isOpen } = useMobileMenu()
-  const shouldBlur = isBlurred !== undefined ? isBlurred : isOpen
+  const contextIsOpen = useMobileMenuState()
+  const shouldBlur = isBlurred !== undefined ? isBlurred : contextIsOpen
 
   return (
     <div

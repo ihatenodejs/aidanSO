@@ -1,9 +1,11 @@
 import React from 'react'
 
-interface KowalskiIconProps {
-  className?: string
-  strokeWidth?: number
+/**
+ * @public
+ */
+export interface KowalskiIconProps {
   size?: number
+  className?: string
 }
 
 export default function KowalskiIcon({

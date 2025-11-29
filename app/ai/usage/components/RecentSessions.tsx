@@ -1,19 +1,42 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { DailyData } from '@/lib/types'
 import { getModelLabel } from './utils'
 import type { ToolTheme } from '@/app/ai/theme'
 
-interface RecentSessionsProps {
+/**
+ * @public
+ */
+export interface RecentSessionsProps {
   daily: DailyData[]
   theme: ToolTheme
 }
 
 export default function RecentSessions({ daily, theme }: RecentSessionsProps) {
+  const [maxSessions, setMaxSessions] = useState(5)
+
+  useEffect(() => {
+    const updateMaxSessions = () => {
+      if (window.innerWidth < 1024) {
+        setMaxSessions(5)
+        return
+      }
+      setMaxSessions(8)
+    }
+
+    updateMaxSessions()
+    window.addEventListener('resize', updateMaxSessions)
+
+    return () => {
+      window.removeEventListener('resize', updateMaxSessions)
+    }
+  }, [])
+
   const sessions = daily.filter(
     (day) => day.totalTokens > 0 || day.totalCost > 0
   )
-  const rows = sessions.slice(-5).reverse()
+  const rows = sessions.slice(-maxSessions).reverse()
 
   return (
     <section className="rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600 sm:p-6 lg:p-8">

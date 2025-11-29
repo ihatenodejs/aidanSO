@@ -2,7 +2,10 @@ import { default as NextLink } from 'next/link'
 import { cn } from '@/lib/theme'
 import { externalLinkProps } from '@/lib/utils/styles'
 
-interface LinkProps {
+/**
+ * @public
+ */
+export interface LinkProps {
   href: string
   className?: string
   target?: string

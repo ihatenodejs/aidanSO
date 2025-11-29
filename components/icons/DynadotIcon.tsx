@@ -1,6 +1,10 @@
 import React from 'react'
 
-interface DynadotIconProps {
+/**
+ * @public
+ */
+export interface DynadotIconProps {
+  size?: number
   className?: string
 }
 

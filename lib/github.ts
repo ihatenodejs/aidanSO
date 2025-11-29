@@ -36,6 +36,7 @@
 import { cache } from 'react'
 import { unstable_cache } from 'next/cache'
 import { featuredRepos } from '@/lib/config/featured-repos'
+import { logger } from '@/lib/utils/logger'
 
 /** Default GitHub username when not configured via environment variables */
 const DEFAULT_GITHUB_USER = 'ihatenodejs'
@@ -260,8 +261,9 @@ const fetchRecentRepos = async (
     })
 
     if (!response.ok) {
-      console.error(
-        `Failed to fetch GitHub repos for ${username}: ${response.status} ${response.statusText}`
+      logger.error(
+        `Failed to fetch GitHub repos for ${username}: ${response.status} ${response.statusText}`,
+        'GitHub'
       )
       return []
     }
@@ -275,8 +277,9 @@ const fetchRecentRepos = async (
       updatedAt: repo.updated_at
     }))
   } catch (error) {
-    console.error(
-      `Unexpected error fetching GitHub repos for ${username}:`,
+    logger.error(
+      `Unexpected error fetching GitHub repos for ${username}`,
+      'GitHub',
       error
     )
     return []
@@ -359,8 +362,9 @@ const fetchGitHubRepoMetrics = async (
     )
 
     if (!response.ok) {
-      console.error(
-        `Failed to fetch GitHub repo ${owner}/${repo}: ${response.status}`
+      logger.error(
+        `Failed to fetch GitHub repo ${owner}/${repo}: ${response.status}`,
+        'GitHub'
       )
       return null
     }
@@ -372,7 +376,7 @@ const fetchGitHubRepoMetrics = async (
       forks: data.forks_count ?? 0
     }
   } catch (error) {
-    console.error(`Error fetching GitHub repo ${owner}/${repo}:`, error)
+    logger.error(`Error fetching GitHub repo ${owner}/${repo}`, 'GitHub', error)
     return null
   }
 }
@@ -424,8 +428,9 @@ const fetchForgejoRepoMetrics = async (
     })
 
     if (!response.ok) {
-      console.error(
-        `Failed to fetch Forgejo repo ${owner}/${repo} from ${forgejoBaseUrl}: ${response.status}`
+      logger.error(
+        `Failed to fetch Forgejo repo ${owner}/${repo} from ${forgejoBaseUrl}: ${response.status}`,
+        'Forgejo'
       )
       return null
     }
@@ -437,8 +442,9 @@ const fetchForgejoRepoMetrics = async (
       forks: data.forks_count ?? 0
     }
   } catch (error) {
-    console.error(
-      `Error fetching Forgejo repo ${owner}/${repo} from ${forgejoBaseUrl}:`,
+    logger.error(
+      `Error fetching Forgejo repo ${owner}/${repo} from ${forgejoBaseUrl}`,
+      'Forgejo',
       error
     )
     return null

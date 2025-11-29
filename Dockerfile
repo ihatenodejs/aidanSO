@@ -38,6 +38,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/server.ts ./
 COPY --from=builder --chown=nextjs:nodejs /app/lib ./lib
+COPY --from=builder --chown=nextjs:nodejs /app/bunfig.toml ./
+COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./
 COPY --from=runner-deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 USER nextjs

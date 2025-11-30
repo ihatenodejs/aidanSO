@@ -9,6 +9,7 @@
  */
 
 import React from 'react'
+import type { ClientDeviceWithMetrics } from './client-device'
 
 /**
  * Icon component type for device-related icons.
@@ -458,7 +459,7 @@ export interface DevicePageShellProps {
  */
 export interface DeviceHeroProps {
   /** Device data for hero section */
-  device: DeviceSpec | import('./client-device').ClientDeviceWithMetrics
+  device: DeviceSpec | ClientDeviceWithMetrics
 }
 
 /**

@@ -6,22 +6,24 @@
 
 import { join } from 'node:path'
 import { transformDevicePage } from '../lib/config/devices/transformer'
-import type { DeviceCollection } from '../lib/types'
+import type { DeviceCollection, DeviceIcon } from '../lib/types'
 import { logger } from '../lib/utils/logger'
 
 /**
  * Get icon identifier from component reference
  * Build-time version that uses component name properties
  */
-function getIconId(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  icon?: any,
-  context?: string
-): string {
+function getIconId(icon?: DeviceIcon | string, context?: string): string {
   if (!icon) return ''
   if (typeof icon === 'string') return icon
 
-  const componentName = icon.displayName || icon.name || icon.render?.name || ''
+  const component = icon as React.ComponentType & {
+    displayName?: string
+    name?: string
+    render?: { name?: string }
+  }
+  const componentName =
+    component.displayName || component.name || component.render?.name || ''
 
   if (!componentName && context) {
     logger.warning(

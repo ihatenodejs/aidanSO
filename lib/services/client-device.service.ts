@@ -1,6 +1,14 @@
 /**
- * Client-side device service for use in browser components
- * Works with client-safe device data that doesn't include React components
+ * Client-side device service for use in browser components.
+ *
+ * @remarks
+ * Works with client-safe device data that doesn't include React components.
+ * Provides filtering, sorting, and enrichment capabilities for device data
+ * without requiring server-side dependencies.
+ *
+ * @module services/client-device
+ * @category Services
+ * @public
  */
 
 import type { DeviceType } from '@/lib/types'

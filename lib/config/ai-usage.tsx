@@ -29,7 +29,7 @@ const rawAiTools = [
     name: 'ChatGPT Business',
     icon: OpenAI,
     description: 'Feature-rich and budget-friendly (for now)',
-    status: 'unused',
+    status: 'cancelled',
     reason: 'Too expensive for the output quality',
     hasUsage: true,
     link: 'https://chatgpt.com/',

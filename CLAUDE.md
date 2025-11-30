@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Tech Stack
 
 - **Runtime**: Bun (not Node.js) - all scripts use `bun run`
-- **Framework**: Next.js 16.0.3 with App Router and React 19
+- **Framework**: Next.js 16.0.5 with App Router and React 19.2.0
 - **Language**: TypeScript with strict mode
 - **Styling**: Tailwind CSS v4 with custom theme system
 - **Server**: Custom Bun server with Socket.io
@@ -31,7 +31,7 @@ bun run build
 # Production build + start (requires pre-built application)
 bun run start
 
-# Pre-build device data (runs automatically during full build)
+# Pre-build device data (runs automatically during full build and postinstall)
 bun run build:devices
 ```
 
@@ -80,13 +80,16 @@ bun run best-practices:ci
 bun run best-practices --list
 
 # Run specific checks only
-bun run best-practices --only=cc-model-labels,ai-config-validator
+bun run best-practices --only=cc-model-labels,ai-config-validator,page-load-performance,device-icons,jsdoc-validator
 
 # Get JSON output from checks
 bun run best-practices --json
 
 # Show help for best-practices tool
 bun run best-practices --help
+
+# Alias for best-practices command
+bun run check:best
 
 # Run React Scan for performance analysis
 bun run scan
@@ -109,6 +112,13 @@ bun run sync:usage --dry-run
 
 # Sync specific time period
 bun run sync:usage --period monthly
+bun run sync:usage --period yearly
+
+# Sync specific date range
+bun run sync:usage --start 2025-01-01 --end 2025-12-31
+
+# Skip syncing from providers (use cached data)
+bun run sync:usage --no-sync
 
 # Get help for sync tool
 bun run sync:usage --help
@@ -764,18 +774,30 @@ WARNING_LEVEL=info            # Logging level: debug, info, warning, or error (d
 NO_COLOR=                     # Set to any value to disable colored terminal output
 
 # Application Defaults
-NEXT_PUBLIC_DEFAULT_TIME_RANGE=3m  # Default time range for AI usage page (3m = 3 months)
+NEXT_PUBLIC_DEFAULT_TIME_RANGE=3m  # Default time range for AI usage page (1m=1month, 3m=3months, 6m=6months, 1y=1year, all=all time)
 ```
 
 ### Docker Deployment
 
-Use the `examples/docker-compose.yml` file as a template. Create a `.env` file with required variables and run:
+Two Docker Compose files are available:
+
+**Root `docker-compose.yml`** (Production):
 
 ```bash
 docker compose up -d --build
 ```
 
-**Note**: A production `docker-compose.yml` exists in the root directory and uses port 3001:3000 mapping.
+- Uses port 3001:3000 mapping
+- Sets NODE_ENV=production
+- Auto-restart enabled
+
+**`examples/docker-compose.yml`** (Development template):
+
+```bash
+docker compose -f examples/docker-compose.yml up -d --build
+```
+
+Create a `.env` file with required variables for either configuration.
 
 ## Important Conventions
 
@@ -828,6 +850,16 @@ function ClientComponent({ initialData }) {
   // Interactive logic
 }
 ```
+
+### 5. Package Scripts & Build Process
+
+The project includes several automated build processes:
+
+- **`bun run dev`**: Automatically runs `build:devices` before starting dev server
+- **`bun run build`**: Runs `build:devices` then Next.js build
+- **`bun run postinstall`**: Automatically runs `build:devices` after `bun install`
+
+This ensures device data is always available for both development and production deployments.
 
 ### 5. Logging & Error Handling
 

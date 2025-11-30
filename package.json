@@ -3,10 +3,11 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "dev": "bun run server.ts",
+    "dev": "bun run build:devices && bun run server.ts",
     "build:devices": "bun tools/build-device-data.ts",
     "build": "bun run build:devices && next build",
     "start": "NODE_ENV=production bun run server.ts",
+    "postinstall": "bun run build:devices",
     "docs:generate": "typedoc",
     "docs:watch": "typedoc --watch",
     "typecheck": "bunx tsc --noEmit",

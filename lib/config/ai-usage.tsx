@@ -5,6 +5,7 @@ import {
   Perplexity,
   Windsurf,
   OpenAI,
+  Kimi,
   Qwen,
   ZAI,
   V0
@@ -68,6 +69,18 @@ const rawAiTools = [
     link: 'https://gemini.google.com/',
     price: 20,
     discountedPrice: 0,
+    subscriptionPeriod: 'monthly',
+    category: 'provider'
+  },
+  {
+    name: 'Kimi Pro/Kimi for Coding',
+    icon: Kimi,
+    description: 'Agentic coding with Kimi CLI',
+    status: 'active',
+    link: 'https://kimi.com/',
+    price: 20,
+    discountedPrice: 0,
+    subscriptionPeriod: 'monthly',
     category: 'provider'
   },
   {

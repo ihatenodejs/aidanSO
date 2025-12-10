@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY package.json ./
 COPY tools ./tools
+COPY lib ./lib
 RUN bun install
 
 FROM base AS builder
@@ -23,6 +24,7 @@ WORKDIR /app
 
 COPY package.json ./
 COPY tools ./tools
+COPY lib ./lib
 RUN bun install --production
 
 FROM base AS runner

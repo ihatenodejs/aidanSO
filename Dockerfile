@@ -4,6 +4,7 @@ FROM base AS deps
 WORKDIR /app
 
 COPY package.json ./
+COPY tools ./tools
 RUN bun install
 
 FROM base AS builder
@@ -21,6 +22,7 @@ FROM base AS runner-deps
 WORKDIR /app
 
 COPY package.json ./
+COPY tools ./tools
 RUN bun install --production
 
 FROM base AS runner

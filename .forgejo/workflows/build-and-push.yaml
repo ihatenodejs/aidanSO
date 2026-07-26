@@ -19,11 +19,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME="git-registry.p0ntus.com/p0ntus/aidanso"
+          IMAGE_NAME="git-registry.p0ntus.com/${{ gitea.repository_owner }}/aidanso"
           docker build -t "${IMAGE_NAME}:latest" -t "${IMAGE_NAME}:${{ gitea.sha }}" .
 
       - name: Push Docker image
         run: |
-          IMAGE_NAME="git-registry.p0ntus.com/p0ntus/aidanso"
+          IMAGE_NAME="git-registry.p0ntus.com/${{ gitea.repository_owner }}/aidanso"
           docker push "${IMAGE_NAME}:latest"
           docker push "${IMAGE_NAME}:${{ gitea.sha }}"

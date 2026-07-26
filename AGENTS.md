@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-- `app/` is the Next.js App Router. Route groups (`ai/`, `status/`, `device/`, `docs/`, etc.) bundle their own `page.tsx`, `layout.tsx`, and API handlers under `app/api/**/route.ts`.
+- `app/` is the Next.js App Router. Route groups (`ai/`, `status/`, `device/`, etc.) bundle their own `page.tsx`, `layout.tsx`, and API handlers under `app/api/**/route.ts`.
 - `components/` holds reusable React 19 UI, organized by domain (e.g., `components/device`, `components/navigation/footer`). Stick to PascalCase filenames.
 - `lib/` centralizes configuration, shared services (e.g., `now-playing-server.ts`, `services/DeviceService`), themes, and utilities (`lib/utils.ts` exports the Tailwind-aware `cn` helper).
 - Tests currently live alongside features (`app/ai/usage/__tests__`, `components/navigation/footer/__tests__`, `tools/__tests__`); copy that pattern for new coverage.

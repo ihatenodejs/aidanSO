@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { TbBrandGithub, TbCopyrightOff } from 'react-icons/tb'
-
+import { SiForgejo } from 'react-icons/si'
 import RandomFooterMsg from '../../objects/RandomFooterMsg'
 import ProfilePicture from '../../objects/ProfilePicture'
 
@@ -22,7 +22,7 @@ import {
   FOOTER_CONTACT_LINK_IDS,
   FOOTER_DESCRIPTION,
   FOOTER_DONATION_GROUP_IDS,
-  FOOTER_ROLES,
+  FOOTER_ROLE,
   footerNavigationLinks
 } from '../../../lib/config/footer'
 import SystemStatusClient from './SystemStatusClient'
@@ -88,28 +88,11 @@ const FooterSection = ({ title, children }: FooterSectionProps) => (
   </div>
 )
 
-const getRoleByIndex = (index: number | undefined): string => {
-  if (
-    !FOOTER_ROLES.length ||
-    typeof index !== 'number' ||
-    Number.isNaN(index)
-  ) {
-    return FOOTER_ROLES[0] ?? 'Chief Synergy Evangelist'
-  }
-
-  const safeIndex =
-    ((Math.floor(index) % FOOTER_ROLES.length) + FOOTER_ROLES.length) %
-    FOOTER_ROLES.length
-  return (
-    FOOTER_ROLES[safeIndex] ?? FOOTER_ROLES[0] ?? 'Chief Synergy Evangelist'
-  )
-}
-
 export default async function Footer({
   footerMessageIndex,
   className
 }: FooterProps) {
-  const role = getRoleByIndex(footerMessageIndex)
+  const role = FOOTER_ROLE
   const { username: githubUsername, repos: githubRepos } =
     await getRecentGitHubRepos()
   const footerContactLinks = getContactLinks(FOOTER_CONTACT_LINK_IDS)
@@ -139,7 +122,7 @@ export default async function Footer({
             <FooterLink
               key={repo.id}
               href={repo.url}
-              icon={TbBrandGithub}
+              icon={repo.platform === 'forgejo' ? SiForgejo : TbBrandGithub}
               external
             >
               <span className="truncate" title={repo.name}>

@@ -152,8 +152,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
 
 DialogContent.displayName = 'DialogContent'
 
-interface DialogCloseProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: React.ComponentType<{ className?: string; size?: number }>
 }
 

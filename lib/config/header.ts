@@ -10,14 +10,15 @@ import {
   Briefcase,
   Package,
   Cloud,
-  FileText,
   ChartLine,
   BriefcaseBusiness,
   Activity,
-  Bot
+  Bot,
+  Trophy
 } from 'lucide-react'
-import { TbUser } from 'react-icons/tb'
+import { TbUser, TbDeviceGamepad2, TbBowlSpoon } from 'react-icons/tb'
 import KowalskiIcon from '@/components/icons/KowalskiIcon'
+import CommandCodeIcon from '@/components/icons/CommandCodeIcon'
 import GoogleIcon from '@/components/icons/GoogleIcon'
 
 import type { NavigationMenuItem } from '@/lib/types/navigation'
@@ -95,8 +96,22 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
               links: [
                 {
                   type: 'link',
+                  label: 'commandcode-proxy',
+                  href: 'https://github.com/ihatenodejs/commandcode-proxy',
+                  icon: CommandCodeIcon,
+                  external: true
+                },
+                {
+                  type: 'link',
+                  label: 'cereal',
+                  href: 'https://github.com/ihatenodejs/cereal',
+                  icon: TbBowlSpoon,
+                  external: true
+                },
+                {
+                  type: 'link',
                   label: 'modules',
-                  href: 'https://modules.lol/',
+                  href: 'https://github.com/abocn/modules',
                   icon: Package,
                   external: true
                 },
@@ -110,7 +125,7 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
                 {
                   type: 'link',
                   label: 'Kowalski',
-                  href: 'https://kowalski.social/',
+                  href: 'https://github.com/lucmsilva651/Kowalski',
                   icon: KowalskiIcon,
                   external: true
                 },
@@ -125,7 +140,7 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
                   type: 'link',
                   label: 'p0ntus',
                   href: 'https://p0ntus.com/',
-                  icon: Cloud,
+                  icon: TbDeviceGamepad2,
                   external: true
                 }
               ]
@@ -145,6 +160,12 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
       items: [
         {
           type: 'link',
+          label: 'Ranking',
+          href: '/ai',
+          icon: Trophy
+        },
+        {
+          type: 'link',
           label: 'Usage',
           href: '/ai/usage',
           icon: ChartLine
@@ -156,16 +177,10 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
     type: 'dropdown',
     id: 'resources',
     label: 'Resources',
-    href: '/docs',
+    href: '/status',
     icon: BriefcaseBusiness,
     dropdown: {
       items: [
-        {
-          type: 'link',
-          label: 'Docs',
-          href: '/docs',
-          icon: FileText
-        },
         {
           type: 'link',
           label: 'Status',

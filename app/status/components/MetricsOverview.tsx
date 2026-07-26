@@ -151,8 +151,8 @@ export default function MetricsOverview({
                   border: `1px solid ${colors.borders.default}`,
                   borderRadius: '8px'
                 }}
-                formatter={(value: number, name: string) => [
-                  `${value}ms`,
+                formatter={(value, name) => [
+                  `${Number(value) || 0}ms`,
                   name === 'browser' ? 'Browser' : 'Server'
                 ]}
               />

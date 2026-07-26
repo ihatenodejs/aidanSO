@@ -1,10 +1,5 @@
 export type ProviderId =
-  | 'all'
-  | 'claudeCode'
-  | 'codex'
-  | 'opencode'
-  | 'qwen'
-  | 'gemini'
+  'all' | 'claudeCode' | 'codex' | 'opencode' | 'qwen' | 'gemini'
 
 export interface HeatmapPalette {
   empty: string

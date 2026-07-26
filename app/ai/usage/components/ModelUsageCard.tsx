@@ -12,7 +12,7 @@ import { buildModelUsageData, formatCurrency } from './utils'
 import type { ToolTheme } from '@/app/ai/theme'
 
 type ModelTooltipProps = TooltipProps<ValueType, NameType> & {
-  payload?: Payload<ValueType, NameType>[]
+  payload?: readonly Payload<ValueType, NameType>[]
 }
 
 interface ModelUsageCardProps {
@@ -34,8 +34,7 @@ export default function ModelUsageCard({
 
     const [firstEntry] = payload
     const dataPoint = (firstEntry?.payload ?? null) as
-      | (typeof modelUsageData)[number]
-      | null
+      (typeof modelUsageData)[number] | null
     const rawValue = Number(firstEntry?.value ?? 0)
     const formattedCost = formatCurrency(rawValue)
     const percentage = dataPoint?.percentage ?? 0

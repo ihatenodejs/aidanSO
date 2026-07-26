@@ -11,7 +11,9 @@ import { DomainService } from '@/lib/services'
 import {
   getDaysUntilExpiration,
   getOwnershipDuration,
-  getOwnershipMonths
+  getOwnershipMonths,
+  isExpired,
+  isExpiringSoon
 } from '@/lib/domains/utils'
 import type {
   DomainCategory,
@@ -89,9 +91,8 @@ export default function Domains() {
   ])
 
   const stats = useMemo(() => {
-    const expiringSoon = domains.filter(
-      (d) => getDaysUntilExpiration(d) <= 90
-    ).length
+    const expired = domains.filter((d) => isExpired(d)).length
+    const expiringSoon = domains.filter((d) => isExpiringSoon(d)).length
     const totalDomains = domains.length
     const activeDomains = domains.filter((d) => d.status === 'active').length
     const avgOwnershipYears =
@@ -102,6 +103,7 @@ export default function Domains() {
       domains.length
 
     return {
+      expired,
       expiringSoon,
       totalDomains,
       activeDomains,
@@ -113,7 +115,7 @@ export default function Domains() {
   return (
     <PageShell variant="centered" maxWidth="7xl">
       <div className="flex flex-col items-center text-center">
-        <PageHeader icon={<Link size={60} />} title="My Domain Portfolio" />
+        <PageHeader icon={<Link size={60} />} title="My Domains" />
         <div className="flex flex-col items-center space-y-2 p-4 pt-8">
           <TbCurrencyDollarOff size={26} className="text-gray-500" />
           <span className="mt-1 mb-0 text-center font-medium text-gray-400">
@@ -124,7 +126,7 @@ export default function Domains() {
           </span>
         </div>
 
-        <div className="grid w-full max-w-3xl grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="grid w-full max-w-4xl grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           <div className="rounded-lg border border-gray-800 bg-gray-900/50 p-4 backdrop-blur-sm">
             <div className="text-2xl font-bold text-gray-300">
               {stats.totalDomains}
@@ -145,6 +147,15 @@ export default function Domains() {
               {stats.expiringSoon}
             </div>
             <div className="text-sm text-gray-500">Expiring Soon</div>
+          </div>
+          <div className="rounded-lg border border-gray-800 bg-gray-900/50 p-4 backdrop-blur-sm">
+            <div className="flex items-center justify-center gap-1 text-2xl font-bold text-gray-300">
+              {stats.expired > 0 && (
+                <AlertCircle className="text-orange-500" />
+              )}
+              {stats.expired}
+            </div>
+            <div className="text-sm text-gray-500">Expired</div>
           </div>
           <div className="rounded-lg border border-gray-800 bg-gray-900/50 p-4 backdrop-blur-sm">
             <div className="flex items-center justify-center gap-1 text-2xl font-bold text-gray-300">

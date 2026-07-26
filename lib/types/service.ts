@@ -341,15 +341,7 @@ export interface ServiceResult<T> {
  * @public
  */
 export type FilterOperator =
-  | 'eq'
-  | 'ne'
-  | 'gt'
-  | 'gte'
-  | 'lt'
-  | 'lte'
-  | 'in'
-  | 'nin'
-  | 'exists'
+  'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'exists'
 
 /**
  * Advanced filter expression with operators.

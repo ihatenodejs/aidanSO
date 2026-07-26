@@ -43,8 +43,8 @@ export default function StatusInfoDialog({
           <div
             className={cn('rounded-lg border-l-4 p-4')}
             style={{
-              borderColor: colors.accents.docsBorder,
-              backgroundColor: colors.accents.docsBg
+              borderColor: 'rgba(59, 130, 246, 0.25)',
+              backgroundColor: colors.accents.linkBg
             }}
           >
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-gray-200">
@@ -73,7 +73,7 @@ export default function StatusInfoDialog({
             <div className="mb-3 flex items-center gap-2">
               <div
                 className="rounded-lg p-1.5"
-                style={{ backgroundColor: colors.accents.docsBg }}
+                style={{ backgroundColor: colors.accents.linkBg }}
               >
                 <Server size={18} style={{ color: colors.accents.link }} />
               </div>
@@ -115,7 +115,7 @@ export default function StatusInfoDialog({
             <div className="mb-3 flex items-center gap-2">
               <div
                 className="rounded-lg p-1.5"
-                style={{ backgroundColor: colors.accents.docsBg }}
+                style={{ backgroundColor: colors.accents.linkBg }}
               >
                 <Globe size={18} style={{ color: colors.accents.link }} />
               </div>

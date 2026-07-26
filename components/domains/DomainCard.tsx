@@ -5,6 +5,7 @@ import {
   getDaysUntilExpiration,
   getOwnershipDuration,
   getOwnershipMonths,
+  isExpired,
   isExpiringSoon,
   formatDate,
   getNextRenewalDate
@@ -20,6 +21,7 @@ export default function DomainCard({ domain }: DomainCardProps) {
   const daysUntilExpiration = getDaysUntilExpiration(domain)
   const ownershipYears = getOwnershipDuration(domain)
   const ownershipMonths = getOwnershipMonths(domain)
+  const expired = isExpired(domain)
   const expiringSoon = isExpiringSoon(domain)
   const statusVisual = domainVisualConfig.status[domain.status]
   const categoryVisual = domainVisualConfig.category[domain.category]
@@ -28,9 +30,11 @@ export default function DomainCard({ domain }: DomainCardProps) {
   return (
     <Link href={`/domains/${domain.domain}`}>
       <div className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border border-gray-800 bg-gray-900/50 backdrop-blur-sm transition-all hover:border-gray-700 hover:shadow-xl hover:shadow-black/20">
-        {expiringSoon && (
+        {expired ? (
+          <div className="absolute top-0 right-0 left-0 h-1 bg-orange-500"></div>
+        ) : expiringSoon ? (
           <div className="absolute top-0 right-0 left-0 h-1 bg-gray-500"></div>
-        )}
+        ) : null}
 
         <div className="flex flex-1 flex-col p-6">
           <div className="mb-3 flex items-start justify-between">
@@ -81,14 +85,18 @@ export default function DomainCard({ domain }: DomainCardProps) {
                   <Calendar className="h-3.5 w-3.5 text-gray-500" />
                   <span
                     className={
-                      expiringSoon
-                        ? 'font-medium text-gray-300'
-                        : 'text-gray-400'
+                      expired
+                        ? 'font-medium text-orange-400'
+                        : expiringSoon
+                          ? 'font-medium text-gray-300'
+                          : 'text-gray-400'
                     }
                   >
-                    {expiringSoon
-                      ? `${daysUntilExpiration}d left`
-                      : formatDate(expirationDate)}
+                    {expired
+                      ? `Expired ${formatDate(expirationDate)}`
+                      : expiringSoon
+                        ? `${daysUntilExpiration}d left`
+                        : formatDate(expirationDate)}
                   </span>
                 </div>
               </div>

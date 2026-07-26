@@ -49,10 +49,16 @@ export class DomainService {
     return new Date(domain.renewals[0].date)
   }
 
+  private static getOwnershipEndDate(domain: Domain): Date {
+    const expirationDate = this.computeExpirationDate(domain)
+    const now = new Date()
+    return now.getTime() > expirationDate.getTime() ? expirationDate : now
+  }
+
   private static computeOwnershipDays(domain: Domain): number {
     const registrationDate = this.computeRegistrationDate(domain)
-    const now = new Date()
-    const diffTime = Math.abs(now.getTime() - registrationDate.getTime())
+    const endDate = this.getOwnershipEndDate(domain)
+    const diffTime = Math.max(0, endDate.getTime() - registrationDate.getTime())
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   }
 
@@ -63,12 +69,12 @@ export class DomainService {
 
   private static computeOwnershipMonths(domain: Domain): number {
     const registrationDate = this.computeRegistrationDate(domain)
-    const now = new Date()
+    const endDate = this.getOwnershipEndDate(domain)
 
-    let months = (now.getFullYear() - registrationDate.getFullYear()) * 12
-    months += now.getMonth() - registrationDate.getMonth()
+    let months = (endDate.getFullYear() - registrationDate.getFullYear()) * 12
+    months += endDate.getMonth() - registrationDate.getMonth()
 
-    if (now.getDate() < registrationDate.getDate()) {
+    if (endDate.getDate() < registrationDate.getDate()) {
       months--
     }
 
@@ -93,11 +99,16 @@ export class DomainService {
     return Math.min(100, Math.max(0, (ownershipDays / totalDays) * 100))
   }
 
+  private static isExpired(domain: Domain): boolean {
+    return this.computeDaysUntilExpiration(domain) < 0
+  }
+
   private static isExpiringSoon(
     domain: Domain,
     thresholdDays: number = 90
   ): boolean {
-    return this.computeDaysUntilExpiration(domain) <= thresholdDays
+    const days = this.computeDaysUntilExpiration(domain)
+    return days >= 0 && days <= thresholdDays
   }
 
   private static extractTLD(domain: Domain): string {
@@ -135,6 +146,7 @@ export class DomainService {
       ownershipMonths: this.computeOwnershipMonths(domain),
       daysUntilExpiration: this.computeDaysUntilExpiration(domain),
       renewalProgressPercent: this.computeRenewalProgressPercent(domain),
+      isExpired: this.isExpired(domain),
       isExpiringSoon: this.isExpiringSoon(domain),
       nextRenewalDate: expirationDate,
       tld: this.extractTLD(domain)
@@ -414,6 +426,7 @@ export class DomainService {
       active: enriched.filter((d) => d.status === 'active').length,
       parked: enriched.filter((d) => d.status === 'parked').length,
       reserved: enriched.filter((d) => d.status === 'reserved').length,
+      expired: enriched.filter((d) => d.isExpired).length,
       expiringSoon: enriched.filter((d) => d.isExpiringSoon).length,
       autoRenew: enriched.filter((d) => d.autoRenew).length,
       byCategory: {
@@ -457,6 +470,8 @@ export interface DomainPortfolioStats {
   parked: number
   /** Number of reserved domains */
   reserved: number
+  /** Number of expired domains */
+  expired: number
   /** Number of domains expiring within 90 days */
   expiringSoon: number
   /** Number of domains with auto-renew enabled */

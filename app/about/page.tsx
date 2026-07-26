@@ -84,11 +84,7 @@ export default async function About() {
             I own a channel called{' '}
             <Link href="https://t.me/PontusHub">PontusHub</Link> on Telegram,
             where I post updates about my projects, along with commentary and
-            info about my projects related to the Android rooting community. You
-            can find us mainly on Matrix as:{' '}
-            <Link href="https://matrix.to/#/#pontushub:dontbeevil.lol">
-              #pontushub:dontbeevil.lol
-            </Link>
+            info about my projects related to the Android rooting community.
           </p>
         </>
       )

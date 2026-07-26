@@ -1,12 +1,7 @@
 import type { NavigationIcon } from '@/lib/types/navigation'
-import {
-  TbBrandGithub,
-  TbBrandTelegram,
-  TbBrandMatrix,
-  TbMail,
-  TbPhone
-} from 'react-icons/tb'
+import { TbBrandGithub, TbMail, TbPhone } from 'react-icons/tb'
 import { SiForgejo } from 'react-icons/si'
+import { RiTelegram2Line } from 'react-icons/ri'
 
 export type ContactLink = {
   id: string
@@ -41,17 +36,8 @@ export const contactLinks: ContactLink[] = [
     id: 'telegram',
     label: '@p0ntu5',
     href: 'https://t.me/p0ntu5',
-    icon: TbBrandTelegram,
+    icon: RiTelegram2Line,
     ariaLabel: 'Telegram',
-    external: true,
-    target: '_blank'
-  },
-  {
-    id: 'matrix',
-    label: '@aidan:dontbeevil.lol',
-    href: 'https://matrix.to/#/@aidan:dontbeevil.lol',
-    icon: TbBrandMatrix,
-    ariaLabel: 'Matrix',
     external: true,
     target: '_blank'
   },

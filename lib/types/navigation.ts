@@ -30,8 +30,7 @@ export type NavigationDropdownNestedItem = {
 }
 
 export type NavigationDropdownItem =
-  | NavigationDropdownLinkItem
-  | NavigationDropdownNestedItem
+  NavigationDropdownLinkItem | NavigationDropdownNestedItem
 
 export type NavigationDropdownConfig = {
   items: NavigationDropdownItem[]
@@ -52,8 +51,7 @@ export type NavigationMenuDropdownItem = {
 }
 
 export type NavigationMenuItem =
-  | NavigationMenuLinkItem
-  | NavigationMenuDropdownItem
+  NavigationMenuLinkItem | NavigationMenuDropdownItem
 
 export type FooterMenuRenderContext = {
   githubUsername: string

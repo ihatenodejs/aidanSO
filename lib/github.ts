@@ -40,6 +40,9 @@ import { featuredRepos } from '@/lib/config/featured-repos'
 /** Default GitHub username when not configured via environment variables */
 const DEFAULT_GITHUB_USER = 'ihatenodejs'
 
+/** Default Forgejo username when not configured via environment variables */
+const DEFAULT_FORGEJO_USER = 'aidan'
+
 /** Default Forgejo instance URL */
 const DEFAULT_FORGEJO_URL = 'git.p0ntus.com'
 
@@ -106,6 +109,7 @@ interface ForgejoRepoApi {
   id: number
   name: string
   html_url: string
+  updated_at?: string
   stars_count?: number
   forks_count?: number
 }
@@ -116,14 +120,16 @@ interface ForgejoRepoApi {
  * @public
  */
 export interface GitHubRepoSummary {
-  /** Repository ID from GitHub API */
-  id: number
+  /** Repository ID from GitHub or Forgejo API */
+  id: number | string
   /** Repository name */
   name: string
   /** Full URL to repository */
   url: string
   /** ISO 8601 timestamp of last update */
   updatedAt: string
+  /** Source platform */
+  platform?: 'github' | 'forgejo'
 }
 
 /**
@@ -188,6 +194,45 @@ const resolveConfiguredUser = (): string => {
   }
 
   const trimmed = configured.trim()
+  return trimmed.length ? trimmed : fallback
+}
+/**
+ * Resolves Forgejo username from environment variables or uses default.
+ *
+ * @returns Forgejo username to use for API requests
+ * @internal
+ */
+const resolveConfiguredForgejoUser = (): string => {
+  const configured =
+    process.env.FORGEJO_PROJECTS_USER ?? process.env.FORGEJO_USERNAME
+  const fallback = DEFAULT_FORGEJO_USER
+
+  if (!configured) {
+    return fallback
+  }
+
+  const trimmed = configured.trim()
+  return trimmed.length ? trimmed : fallback
+}
+
+/**
+ * Resolves Forgejo instance URL from environment variables or uses default.
+ *
+ * @returns Forgejo instance base URL
+ * @internal
+ */
+const resolveConfiguredForgejoUrl = (): string => {
+  const configured = process.env.FORGEJO_URL
+  const fallback = DEFAULT_FORGEJO_URL
+
+  if (!configured) {
+    return fallback
+  }
+
+  const trimmed = configured
+    .trim()
+    .replace(/^https?:\/\//, '')
+    .replace(/\/.*$/, '')
   return trimmed.length ? trimmed : fallback
 }
 
@@ -269,10 +314,11 @@ const fetchRecentRepos = async (
     const data = (await response.json()) as GitHubRepoApi[]
 
     return data.slice(0, REPO_LIMIT).map((repo) => ({
-      id: repo.id,
+      id: `github-${repo.id}`,
       name: repo.name,
       url: repo.html_url,
-      updatedAt: repo.updated_at
+      updatedAt: repo.updated_at,
+      platform: 'github'
     }))
   } catch (error) {
     console.error(
@@ -300,6 +346,72 @@ const getCachedRecentRepos = unstable_cache(
     tags: ['github-repos']
   }
 )
+/**
+ * Fetches recently updated repositories for a Forgejo user.
+ *
+ * @param username - Forgejo username to fetch repositories for
+ * @param forgejoBaseUrl - Forgejo instance base URL
+ * @returns Array of repository summaries, sorted by most recently updated
+ *
+ * @internal
+ */
+const fetchRecentForgejoRepos = async (
+  username: string,
+  forgejoBaseUrl: string = DEFAULT_FORGEJO_URL
+): Promise<GitHubRepoSummary[]> => {
+  const apiUrl = `https://${forgejoBaseUrl}/api/v1/users/${username}/repos?sort=updated&limit=${REPO_LIMIT}`
+
+  try {
+    const response = await fetchWithTimeout(apiUrl, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'aidan.so'
+      },
+      next: {
+        revalidate: REVALIDATE_SECONDS,
+        tags: [`forgejo-repos-${forgejoBaseUrl}-${username}`]
+      }
+    })
+
+    if (!response.ok) {
+      console.error(
+        `Failed to fetch Forgejo repos for ${username} on ${forgejoBaseUrl}: ${response.status} ${response.statusText}`
+      )
+      return []
+    }
+
+    const data = (await response.json()) as ForgejoRepoApi[]
+
+    return data.slice(0, REPO_LIMIT).map((repo) => ({
+      id: `forgejo-${repo.id}`,
+      name: repo.name,
+      url: repo.html_url,
+      updatedAt: repo.updated_at ?? new Date(0).toISOString(),
+      platform: 'forgejo'
+    }))
+  } catch (error) {
+    console.error(
+      `Unexpected error fetching Forgejo repos for ${username} on ${forgejoBaseUrl}:`,
+      error
+    )
+    return []
+  }
+}
+
+/**
+ * Server-side cached wrapper for fetchRecentForgejoRepos.
+ *
+ * @internal
+ */
+const getCachedRecentForgejoRepos = unstable_cache(
+  async (username: string, forgejoBaseUrl: string = DEFAULT_FORGEJO_URL) =>
+    fetchRecentForgejoRepos(username, forgejoBaseUrl),
+  ['forgejo-recent-repos'],
+  {
+    revalidate: REVALIDATE_SECONDS,
+    tags: ['forgejo-repos']
+  }
+)
 
 /**
  * Retrieves recently updated GitHub repositories for the configured user.
@@ -325,11 +437,23 @@ const getCachedRecentRepos = unstable_cache(
  */
 export const getRecentGitHubRepos = cache(async () => {
   const username = resolveConfiguredUser()
-  const repos = await getCachedRecentRepos(username)
+  const forgejoUsername = resolveConfiguredForgejoUser()
+  const forgejoUrl = resolveConfiguredForgejoUrl()
+
+  const [githubRepos, forgejoRepos] = await Promise.all([
+    getCachedRecentRepos(username),
+    getCachedRecentForgejoRepos(forgejoUsername, forgejoUrl)
+  ])
+
+  const combined = [...githubRepos, ...forgejoRepos]
+
+  combined.sort(
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  )
 
   return {
     username,
-    repos
+    repos: combined.slice(0, REPO_LIMIT)
   }
 })
 

@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { TbStack2 } from 'react-icons/tb'
+import { TbArrowRight, TbArrowUpRight, TbStack2 } from 'react-icons/tb'
 import Link from '@/components/objects/Link'
 import { Dialog } from '@/components/ui/Dialog'
 import { isInactiveTool, type AITool, type AIToolStatus } from '../types'
@@ -36,9 +36,6 @@ const statusLabels: Record<AIToolStatus, string> = {
 const DEFAULT_TITLE = 'My AI Stack'
 const DEFAULT_SUBTITLE =
   'The AI tools I use as a part of my routine and workflow.'
-
-const infoLabelClasses =
-  'text-xs whitespace-nowrap rounded-md px-2 py-1.5 transition-colors hover:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-300 sm:text-sm'
 
 function formatPrice(price: number) {
   if (price === 0) return 'Free'
@@ -131,19 +128,19 @@ function ToolInfoDialog({ tool, onClose }: ToolInfoDialogProps) {
             {tool.link && (
               <Link
                 href={tool.link}
-                className="text-blue-400 hover:underline"
+                className="flex items-center gap-1 text-blue-400 hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Visit ↗
+                Visit <TbArrowUpRight size={14} className="sm:size-4" />
               </Link>
             )}
             {(tool.usage || tool.hasUsage) && (
               <Link
                 href={tool.usage ?? '/ai/usage'}
-                className="text-blue-400 hover:underline"
+                className="flex items-center gap-1 text-blue-400 hover:underline"
               >
-                Usage →
+                Usage <TbArrowRight size={14} className="sm:size-4" />
               </Link>
             )}
           </div>
@@ -237,30 +234,29 @@ export default function AIStack({
                     {tool.link && (
                       <Link
                         href={tool.link}
-                        className="text-xs whitespace-nowrap hover:text-blue-300 sm:text-sm"
+                        className="flex items-center gap-1 text-xs whitespace-nowrap hover:text-blue-300 sm:text-sm"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Visit →
+                        Visit <TbArrowUpRight size={14} className="sm:size-4" />
                       </Link>
                     )}
                     {(tool.usage || tool.hasUsage) && (
                       <Link
                         href={tool.usage ?? '/ai/usage'}
-                        className="mx-2 text-xs whitespace-nowrap hover:text-blue-300 sm:text-sm"
+                        className="ml-2 flex items-center gap-1 text-xs whitespace-nowrap hover:text-blue-300 sm:text-sm"
                       >
-                        Usage →
+                        Usage <TbArrowRight size={14} className="sm:size-4" />
                       </Link>
                     )}
                     <button
                       type="button"
                       onClick={() => setSelectedTool(tool)}
                       className={cn(
-                        'text-blue-300 hover:text-blue-200',
-                        infoLabelClasses
+                        'ml-2 flex items-center gap-1 text-xs whitespace-nowrap text-blue-400 hover:text-blue-300 hover:underline sm:text-sm'
                       )}
                     >
-                      Info →
+                      Info <TbArrowRight size={14} className="sm:size-4" />
                     </button>
                   </div>
                 </div>

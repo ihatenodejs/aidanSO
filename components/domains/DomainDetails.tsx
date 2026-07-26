@@ -5,6 +5,7 @@ import {
   getOwnershipDuration,
   getOwnershipMonths,
   formatDate,
+  isExpired,
   isExpiringSoon,
   getRenewalProgress,
   getOwnershipDays
@@ -28,6 +29,7 @@ export default function DomainDetails({ domain }: DomainDetailsProps) {
   const ownershipYears = getOwnershipDuration(domain)
   const ownershipMonths = getOwnershipMonths(domain)
   const ownershipDays = getOwnershipDays(domain)
+  const expired = isExpired(domain)
   const expiringSoon = isExpiringSoon(domain)
   const renewalProgress = getRenewalProgress(domain)
   const registrarConfig = registrars[domain.registrar]
@@ -107,11 +109,13 @@ export default function DomainDetails({ domain }: DomainDetailsProps) {
             </span>
             <span
               className={`font-medium ${
-                expiringSoon
-                  ? 'text-gray-300'
-                  : renewalProgress > 75
-                    ? 'text-slate-400'
-                    : 'text-gray-400'
+                expired
+                  ? 'text-orange-400'
+                  : expiringSoon
+                    ? 'text-gray-300'
+                    : renewalProgress > 75
+                      ? 'text-slate-400'
+                      : 'text-gray-400'
               }`}
             >
               {formatDate(expirationDate)}
@@ -127,23 +131,44 @@ export default function DomainDetails({ domain }: DomainDetailsProps) {
             <div className="text-xs text-gray-500">Period Used</div>
           </div>
           <div
-            className={`rounded-lg p-2 ${expiringSoon ? 'bg-gray-800/70' : 'bg-gray-800/50'}`}
+            className={`rounded-lg p-2 ${
+              expired
+                ? 'bg-orange-500/10'
+                : expiringSoon
+                  ? 'bg-gray-800/70'
+                  : 'bg-gray-800/50'
+            }`}
           >
             <div
-              className={`text-lg font-bold ${expiringSoon ? 'text-gray-300' : 'text-slate-400'}`}
+              className={`text-lg font-bold ${
+                expired
+                  ? 'text-orange-400'
+                  : expiringSoon
+                    ? 'text-gray-300'
+                    : 'text-slate-400'
+              }`}
             >
-              {daysUntilExpiration}
+              {expired ? 'Expired' : daysUntilExpiration}
             </div>
-            <div className="text-xs text-gray-500">Days Left</div>
+            <div className="text-xs text-gray-500">
+              {expired ? 'Status' : 'Days Left'}
+            </div>
           </div>
         </div>
 
-        {expiringSoon && (
+        {expired ? (
+          <div className="mt-3 flex items-center gap-2 rounded-lg border border-orange-500/30 bg-orange-500/10 p-3">
+            <AlertCircle className="h-4 w-4 text-orange-400" />
+            <span className="text-sm text-orange-400">
+              Domain expired on {formatDate(expirationDate)}
+            </span>
+          </div>
+        ) : expiringSoon ? (
           <div className="mt-3 flex items-center gap-2 rounded-lg border border-gray-700 bg-gray-800/50 p-3">
             <AlertCircle className="h-4 w-4 text-gray-400" />
             <span className="text-sm text-gray-400">Domain expires soon</span>
           </div>
-        )}
+        ) : null}
       </div>
 
       <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 backdrop-blur-sm">

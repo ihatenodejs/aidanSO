@@ -102,13 +102,36 @@ export const projects: Project[] = [
     domain: 'p0ntus.com',
     serviceCategory: 'project',
     domainInfo: {
-      usage: 'My active cloud services project',
+      usage: 'Roblox account store',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'active',
       category: 'service',
-      tags: ['cloud', 'services'],
-      renewals: [{ date: '2024-11-14', years: 1 }]
+      tags: ['store', 'services', 'nextjs'],
+      renewals: [
+        { date: '2024-11-14', years: 1 },
+        { date: '2025-11-14', years: 1 }
+      ]
+    },
+    serviceInfo: {
+      trackStatus: true
+    }
+  },
+  {
+    id: 'git.p0ntus.com',
+    domain: 'git.p0ntus.com',
+    serviceCategory: 'project',
+    domainInfo: {
+      usage: 'Self-hosted Forgejo',
+      registrar: 'Spaceship',
+      autoRenew: false,
+      status: 'active',
+      category: 'service',
+      tags: ['git', 'services'],
+      renewals: [
+        { date: '2024-11-14', years: 1 },
+        { date: '2025-11-14', years: 1 }
+      ]
     },
     serviceInfo: {
       trackStatus: true
@@ -327,7 +350,7 @@ export const projects: Project[] = [
     domain: 'auth.librecloud.cc',
     serviceCategory: 'project',
     serviceInfo: {
-      trackStatus: true
+      trackStatus: false
     }
   },
   {
@@ -335,15 +358,7 @@ export const projects: Project[] = [
     domain: 'paste.librecloud.cc',
     serviceCategory: 'project',
     serviceInfo: {
-      trackStatus: true
-    }
-  },
-  {
-    id: 'git.p0ntus.com',
-    domain: 'git.p0ntus.com',
-    serviceCategory: 'project',
-    serviceInfo: {
-      trackStatus: true
+      trackStatus: false
     }
   },
   {
@@ -351,7 +366,7 @@ export const projects: Project[] = [
     domain: 'kowalski.social',
     serviceCategory: 'project',
     serviceInfo: {
-      trackStatus: true
+      trackStatus: false
     }
   },
   {
@@ -368,7 +383,7 @@ export const projects: Project[] = [
     domain: 'memos.librecloud.cc',
     serviceCategory: 'project',
     serviceInfo: {
-      trackStatus: true
+      trackStatus: false
     }
   }
 ]

@@ -394,11 +394,24 @@ export function getDaysUntilExpiration(domain: Domain): number {
  * @category Domains
  * @public
  */
+/**
+ * Checks whether a domain has expired (expiration date is in the past).
+ *
+ * @param domain - Domain object with renewal history
+ * @returns True if the domain's expiration date has passed (days until expiration < 0)
+ * @category Domains
+ * @public
+ */
+export function isExpired(domain: Domain): boolean {
+  return getDaysUntilExpiration(domain) < 0
+}
+
 export function isExpiringSoon(
   domain: Domain,
   thresholdDays: number = 90
 ): boolean {
-  return getDaysUntilExpiration(domain) <= thresholdDays
+  const days = getDaysUntilExpiration(domain)
+  return days >= 0 && days <= thresholdDays
 }
 
 /**

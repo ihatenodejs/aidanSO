@@ -167,10 +167,8 @@ export default function ModelUsageOverTime({
                 color: '#9ca3af',
                 padding: '4px 0'
               }}
-              labelFormatter={(value: string) =>
-                formatTooltipDate(String(value))
-              }
-              formatter={(value: number) => formatTokens(value * 1000)}
+              labelFormatter={(value) => formatTooltipDate(String(value))}
+              formatter={(value) => formatTokens((Number(value) || 0) * 1000)}
               cursor={{ stroke: '#374151', strokeWidth: 1 }}
               wrapperStyle={{ pointerEvents: 'none' }}
             />

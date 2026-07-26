@@ -1,6 +1,7 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, type ReactNode } from 'react'
+
 import {
   AreaChart,
   Area,
@@ -11,6 +12,10 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts'
+import type {
+  ValueType,
+  NameType
+} from 'recharts/types/component/DefaultTooltipContent'
 import { DailyData, TimeRangeKey } from '@/lib/types'
 import {
   buildDailyTrendData,
@@ -59,12 +64,12 @@ export default function Activity({ daily, theme, timeRange }: ActivityProps) {
   )
 
   const tooltipLabelFormatter = useCallback(
-    (value: string) => formatTooltipDate(String(value)),
+    (value: ReactNode) => formatTooltipDate(String(value)),
     []
   )
 
   const tooltipFormatter = useCallback(
-    (value: number | string, name: string) => {
+    (value: ValueType | undefined, name: NameType | undefined) => {
       const isTrend = name === 'Trend'
       const label = isTrend
         ? selectedMetric === 'cost'

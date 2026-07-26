@@ -97,8 +97,8 @@ function collectDailySeries(data: ExtendedCCData): Map<string, DailyData[]> {
 function isDailyContainer(value: unknown): value is { daily: DailyData[] } {
   return Boolean(
     value &&
-      typeof value === 'object' &&
-      Array.isArray((value as { daily?: unknown }).daily)
+    typeof value === 'object' &&
+    Array.isArray((value as { daily?: unknown }).daily)
   )
 }
 

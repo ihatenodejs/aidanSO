@@ -105,7 +105,7 @@ export default function TokenComposition({
                 color: '#9ca3af',
                 padding: '2px 0'
               }}
-              formatter={(value: number) => formatTooltipValue(value)}
+              formatter={(value) => formatTooltipValue(Number(value) || 0)}
               cursor={{ fill: 'rgba(156, 163, 175, 0.1)' }}
               wrapperStyle={{ pointerEvents: 'none' }}
             />

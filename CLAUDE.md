@@ -38,8 +38,6 @@ bun run best-practices:ci # Run best practices (skips page-load-performance)
 
 # Analysis & Monitoring
 bun run scan              # Run React Scan for performance analysis
-bun run docs:generate     # Generate TypeDoc documentation
-bun run docs:watch        # Watch and regenerate docs on changes
 
 # AI Usage Data
 bun run sync:usage        # Sync AI usage data from agent-exporter

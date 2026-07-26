@@ -197,24 +197,6 @@ export const accents = {
   /** AI/Claude high contrast background - #1a100d */
   aiContrast: '#1a100d',
 
-  /** Type/interface color for docs (purple-500) - #a855f7 */
-  type: '#a855f7',
-  /** Type badge background (purple-500/10) - rgba(168, 85, 247, 0.1) */
-  typeBg: 'rgba(168, 85, 247, 0.1)',
-
-  /** Documentation primary accent (blue-400) - #60a5fa */
-  docs: '#60a5fa',
-  /** Documentation card background (blue-500/8) - rgba(59, 130, 246, 0.08) */
-  docsBg: 'rgba(59, 130, 246, 0.08)',
-  /** Documentation border (blue-500/25) - rgba(59, 130, 246, 0.25) */
-  docsBorder: 'rgba(59, 130, 246, 0.25)',
-  /** Documentation glow/shadow (blue-500/12) - rgba(59, 130, 246, 0.12) */
-  docsGlow: 'rgba(59, 130, 246, 0.12)',
-  /** Documentation icon background (blue-500/20) - rgba(59, 130, 246, 0.2) */
-  docsIconBg: 'rgba(59, 130, 246, 0.2)',
-  /** Documentation blur effect (blue-500 solid) - #3b82f6 */
-  docsBlur: '#3b82f6',
-
   /** Success state color (green) - #10b981 */
   success: '#10b981',
   /** Success state background tint (green/10) - rgba(16, 185, 129, 0.1) */

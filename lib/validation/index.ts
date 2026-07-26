@@ -6,8 +6,7 @@ export interface ValidationIssue {
 }
 
 export type ValidationResult<T> =
-  | { success: true; value: T }
-  | { success: false; issues: ValidationIssue[] }
+  { success: true; value: T } | { success: false; issues: ValidationIssue[] }
 
 export class ValidationError extends Error {
   constructor(public issues: ValidationIssue[]) {

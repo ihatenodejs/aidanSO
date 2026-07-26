@@ -225,8 +225,8 @@ export function isValidCheckDefinition(
 
   return Boolean(
     typeof candidate.id === 'string' &&
-      typeof candidate.description === 'string' &&
-      typeof candidate.run === 'function'
+    typeof candidate.description === 'string' &&
+    typeof candidate.run === 'function'
   )
 }
 

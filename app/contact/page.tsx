@@ -1,9 +1,10 @@
 'use client'
 
 import Button from '@/components/objects/Button'
+import { getContactLinks } from '@/lib/config/contact'
+
 import PageHeader from '@/components/objects/PageHeader'
 import PageShell from '@/components/layout/PageShell'
-import { getContactLinks } from '@/lib/config/contact'
 import { Phone } from 'lucide-react'
 
 interface ContactSection {
@@ -21,14 +22,17 @@ export default function Contact() {
       ]
     }
   ]
-
-  const contactLinks = getContactLinks()
+  const contactLinks = getContactLinks([
+    'github',
+    'forgejo',
+    'telegram',
+    'email'
+  ])
 
   return (
     <PageShell variant="centered" maxWidth="2xl" innerClassName="text-center">
       <PageHeader icon={<Phone size={60} />} title="Contact" />
-
-      <div className="flex flex-wrap justify-center gap-3">
+      <div className="mb-6 flex flex-wrap justify-center gap-3">
         {contactLinks.map((contact) => {
           const Icon = contact.icon
           const target =
@@ -47,7 +51,6 @@ export default function Contact() {
           )
         })}
       </div>
-
       {sections.map((section) => (
         <div key={section.title} className="flex flex-col gap-4">
           <h2 className="text-2xl font-semibold text-gray-200">

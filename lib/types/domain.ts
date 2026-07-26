@@ -50,11 +50,7 @@ export type DomainStatus = 'active' | 'parked' | 'reserved'
  * @public
  */
 export type DomainCategory =
-  | 'personal'
-  | 'service'
-  | 'project'
-  | 'fun'
-  | 'legacy'
+  'personal' | 'service' | 'project' | 'fun' | 'legacy'
 
 /**
  * Supported domain registrar identifiers.
@@ -67,10 +63,7 @@ export type DomainCategory =
  * @public
  */
 export type DomainRegistrarId =
-  | 'Spaceship'
-  | 'Namecheap'
-  | 'Name.com'
-  | 'Dynadot'
+  'Spaceship' | 'Namecheap' | 'Name.com' | 'Dynadot'
 
 /**
  * Sort options for domain lists.
@@ -223,7 +216,10 @@ export interface DomainWithMetrics extends Domain {
   /** Percentage of current renewal period completed (0-100) */
   renewalProgressPercent: number
 
-  /** True if expiring within 90 days */
+  /** True if domain expiration date has passed */
+  isExpired: boolean
+
+  /** True if expiring within 90 days (and not expired) */
   isExpiringSoon: boolean
 
   /** Date of next scheduled renewal */

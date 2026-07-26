@@ -6,10 +6,6 @@ on:
       - main
       - master
 
-permissions:
-  contents: read
-  packages: write
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -19,7 +15,7 @@ jobs:
 
       - name: Log in to Forgejo Container Registry
         run: |
-          echo "${{ github.token }}" | docker login git-registry.p0ntus.com -u "${{ github.actor }}" --password-stdin
+          echo "${{ secrets.FORGEJO_TOKEN || secrets.GITHUB_TOKEN }}" | docker login git-registry.p0ntus.com -u "${{ github.actor }}" --password-stdin
 
       - name: Build Docker image
         run: |

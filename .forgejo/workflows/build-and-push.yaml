@@ -15,15 +15,15 @@ jobs:
 
       - name: Log in to Forgejo Container Registry
         run: |
-          echo "${{ secrets.FORGEJO_TOKEN || gitea.token }}" | docker login git-registry.p0ntus.com -u "${{ gitea.actor }}" --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login git-registry.p0ntus.com -u "${{ github.actor }}" --password-stdin
 
       - name: Build Docker image
         run: |
           IMAGE_NAME="git-registry.p0ntus.com/aidan/aidanso"
-          docker build -t "${IMAGE_NAME}:latest" -t "${IMAGE_NAME}:${{ gitea.sha }}" .
+          docker build -t "${IMAGE_NAME}:latest" -t "${IMAGE_NAME}:${{ github.sha }}" .
 
       - name: Push Docker image
         run: |
           IMAGE_NAME="git-registry.p0ntus.com/aidan/aidanso"
           docker push "${IMAGE_NAME}:latest"
-          docker push "${IMAGE_NAME}:${{ gitea.sha }}"
+          docker push "${IMAGE_NAME}:${{ github.sha }}"

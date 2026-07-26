@@ -19,11 +19,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME="git-registry.p0ntus.com/${{ github.repository }}"
+          IMAGE_NAME="git-registry.p0ntus.com/aidan/aidanso"
           docker build -t "${IMAGE_NAME}:latest" -t "${IMAGE_NAME}:${{ github.sha }}" .
 
       - name: Push Docker image
         run: |
-          IMAGE_NAME="git-registry.p0ntus.com/${{ github.repository }}"
+          IMAGE_NAME="git-registry.p0ntus.com/aidan/aidanso"
           docker push "${IMAGE_NAME}:latest"
           docker push "${IMAGE_NAME}:${{ github.sha }}"

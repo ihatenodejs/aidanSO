@@ -20,11 +20,13 @@ Just create a `.env` file with the below variables, run `docker compose -d --bui
 | `LISTENBRAINZ_TOKEN`             | No        | Get this from your ListenBrainz [user settings](https://listenbrainz.org/settings/)        |
 | `GITHUB_PROJECTS_USER`           | No        | GitHub username to display in the footer projects list (defaults to `ihatenodejs`)         |
 | `GITHUB_USERNAME`                | No        | Fallback GitHub username if `GITHUB_PROJECTS_USER` is not set                              |
-| `GITHUB_PROJECTS_PAT`            | No        | GitHub personal access token used to increase API limits for the footer projects list      |
-| `GITHUB_PAT`                     | No        | Fallback GitHub personal access token if `GITHUB_PROJECTS_PAT` is not set                  |
+| `GITHUB_PAT`                     | Yes       | Server-only GitHub token for footer API requests and the Commit History GraphQL calendar   |
+| `FORGEJO_COMMIT_HISTORY_PAT`     | Yes       | Server-only Forgejo token with account/repository read access for its contribution heatmap |
 | `PORT`                           | No        | Server port (defaults to `3000`)                                                           |
 | `NODE_ENV`                       | No        | Environment mode (`production` or `development`, automatically set by deployment platform) |
 | `NEXT_PUBLIC_DEFAULT_TIME_RANGE` | No        | Default time range for AI usage page (defaults to `3m`)                                    |
+
+`GITHUB_PAT` and `FORGEJO_COMMIT_HISTORY_PAT` are required for the Commit History card to function.
 
 ## MusicBrainz
 

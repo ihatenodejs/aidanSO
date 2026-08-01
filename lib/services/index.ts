@@ -3,3 +3,7 @@ export { DeviceService } from './device.service'
 export { AIService } from './ai.service'
 export { StatusService } from './status.service'
 export { NowPlayingService } from './now-playing.service'
+export {
+  CommitHistoryService,
+  getCommitHistory
+} from './commit-history.service'

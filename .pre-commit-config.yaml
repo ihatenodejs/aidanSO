@@ -1,0 +1,27 @@
+repos:
+  - repo: local
+    hooks:
+      - id: typecheck
+        name: TypeScript typecheck
+        entry: bun run typecheck
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: eslint
+        name: ESLint
+        entry: bun run lint
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: prettier
+        name: Prettier
+        entry: bun run format
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: test
+        name: Bun tests
+        entry: bun run test
+        language: system
+        pass_filenames: false
+        always_run: true

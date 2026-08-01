@@ -96,6 +96,13 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
               links: [
                 {
                   type: 'link',
+                  label: 'modules',
+                  href: 'https://modules.aidan.so',
+                  icon: Package,
+                  external: true
+                },
+                {
+                  type: 'link',
                   label: 'commandcode-proxy',
                   href: 'https://github.com/ihatenodejs/commandcode-proxy',
                   icon: CommandCodeIcon,
@@ -103,16 +110,16 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
                 },
                 {
                   type: 'link',
-                  label: 'cereal',
-                  href: 'https://github.com/ihatenodejs/cereal',
-                  icon: TbBowlSpoon,
+                  label: 'p0ntus',
+                  href: 'https://p0ntus.com/',
+                  icon: TbDeviceGamepad2,
                   external: true
                 },
                 {
                   type: 'link',
-                  label: 'modules',
-                  href: 'https://github.com/abocn/modules',
-                  icon: Package,
+                  label: 'cereal',
+                  href: 'https://github.com/ihatenodejs/cereal',
+                  icon: TbBowlSpoon,
                   external: true
                 },
                 {
@@ -125,7 +132,7 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
                 {
                   type: 'link',
                   label: 'Kowalski',
-                  href: 'https://github.com/lucmsilva651/Kowalski',
+                  href: 'https://github.com/abocn/TelegramBot',
                   icon: KowalskiIcon,
                   external: true
                 },
@@ -134,13 +141,6 @@ export const headerNavigationConfig: NavigationMenuItem[] = [
                   label: 'LibreCloud',
                   href: 'https://github.com/ihatenodejs/librecloud-web/',
                   icon: Cloud,
-                  external: true
-                },
-                {
-                  type: 'link',
-                  label: 'p0ntus',
-                  href: 'https://p0ntus.com/',
-                  icon: TbDeviceGamepad2,
                   external: true
                 }
               ]

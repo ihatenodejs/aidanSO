@@ -280,8 +280,7 @@ export default function LoadingSkeleton() {
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       {groupProjects.map((project) => {
                         const domainUsage =
-                          project.domainInfo?.usage ??
-                          'Domain usage details unavailable'
+                          project.usage ?? 'Domain usage details unavailable'
 
                         return (
                           <div

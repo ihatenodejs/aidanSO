@@ -13,7 +13,7 @@ import {
   Smartphone
 } from 'lucide-react'
 import { FaYoutube } from 'react-icons/fa'
-import { MdOutlineAndroid } from 'react-icons/md'
+import { SiLineageos } from 'react-icons/si'
 import { RiTelegram2Fill } from 'react-icons/ri'
 import { VscTerminalLinux } from 'react-icons/vsc'
 
@@ -46,13 +46,13 @@ export const Content = () => (
       <Row label="Storage" value="128 GB UFS 4.0" icon={HardDrive} />
     </Section>
 
-    <Section id="software" title="Software Stack" icon={MdOutlineAndroid}>
+    <Section id="software" title="Software Stack" icon={SiLineageos}>
       <Row
         label="Android Version"
-        value="Android 16 Canary"
+        value="LineageOS 23.2 (A16)"
         filterValue="16"
-        icon={MdOutlineAndroid}
-        href="https://developer.android.com/about/canary"
+        icon={SiLineageos}
+        href="https://lineageos.org/Changelog-31/"
       />
       <Row label="Kernel" value="6.1.145 android14" icon={VscTerminalLinux} />
       <Row
@@ -72,12 +72,6 @@ export const Content = () => (
         href="https://mixplorer.com/"
       />
       <Row
-        label="Matrix"
-        value="Element X"
-        icon={RiTelegram2Fill}
-        href="https://f-droid.org/packages/io.element.android.x/"
-      />
-      <Row
         label="Telegram"
         value="AyuGram"
         icon={RiTelegram2Fill}
@@ -85,40 +79,32 @@ export const Content = () => (
       />
       <Row
         label="YouTube"
-        value="ReVanced"
+        value="Morphe"
         icon={FaYoutube}
-        href="https://revanced.app"
+        href="https://morphe.software/"
       />
     </Section>
 
-    <Modules id="modules" title="Module Suite" icon={Layers}>
+    <Modules id="modules" title="Modules" icon={Layers}>
       <Module
-        label="Busybox for Android NDK"
-        href="https://github.com/Magisk-Modules-Repo/busybox-ndk"
+        label="HMA-OSS Zygisk"
+        href="https://modules.aidan.so/module/frknkrc44-hma-oss"
       />
       <Module
-        label="De-Bloater"
-        href="https://github.com/sunilpaulmathew/De-Bloater"
-      />
-      <Module
-        label="LSPosed - Irena"
-        href="https://modules.lol/module/re-zero001-lsposed-irena"
-      />
-      <Module
-        label="Shamiko"
-        href="https://github.com/LSPosed/LSPosed.github.io/releases"
+        label="Play Integrity Fix [INJECT]"
+        href="https://modules.aidan.so/module/kowx712-play-integrity-fix-inject"
       />
       <Module
         label="Tricky Store"
-        href="https://modules.lol/module/5ec1cff-tricky-store"
+        href="https://modules.aidan.so/module/5ec1cff-tricky-store"
       />
       <Module
-        label="Yuri Keybox Manager"
-        href="https://modules.lol/module/dpejoh-and-yuri-yurikey"
+        label="Yurikey Manager"
+        href="https://modules.aidan.so/module/yurii0307-yurikey"
       />
       <Module
         label="Zygisk Next"
-        href="https://github.com/Dr-TSNG/ZygiskNext"
+        href="https://modules.aidan.so/module/dr-tsng-zygisk-next"
       />
     </Modules>
   </>

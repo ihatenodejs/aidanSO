@@ -14,7 +14,7 @@
  *
  * **Environment Variables:**
  * - `GITHUB_PROJECTS_USER` or `GITHUB_USERNAME`: Override default username
- * - `GITHUB_PROJECTS_PAT` or `GITHUB_PAT`: GitHub Personal Access Token (optional)
+ * - `GITHUB_PAT`: GitHub Personal Access Token (optional)
  *
  * @example
  * ```ts
@@ -243,7 +243,7 @@ const resolveConfiguredForgejoUrl = (): string => {
  * @internal
  */
 const resolveAuthHeader = (): string | undefined => {
-  const token = process.env.GITHUB_PROJECTS_PAT ?? process.env.GITHUB_PAT
+  const token = process.env.GITHUB_PAT?.trim()
 
   if (!token) {
     return undefined

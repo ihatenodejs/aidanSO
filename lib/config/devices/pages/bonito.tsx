@@ -89,11 +89,11 @@ export const Content = () => (
       />
       <Module
         label="Tricky Store"
-        href="https://modules.lol/module/5ec1cff-tricky-store"
+        href="https://modules.aidan.so/module/5ec1cff-tricky-store"
       />
       <Module
         label="Yuri Keybox Manager"
-        href="https://modules.lol/module/dpejoh-and-yuri-yurikey"
+        href="https://modules.aidan.so/module/yurii0307-yurikey"
       />
     </Modules>
   </>

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { StatusService } from '@/lib/services'
+import { StatusService } from '@/lib/services/status.service'
 
 export const runtime = 'edge'
 export const revalidate = 60 // in seconds

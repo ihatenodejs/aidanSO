@@ -31,7 +31,7 @@
  */
 
 import type { Domain } from '@/lib/types'
-import { DomainService } from '@/lib/services'
+import { DomainService } from '@/lib/services/domain.service'
 import type { DomainTimelineEvent } from '@/lib/types/domain'
 
 export type { Domain, Renewal } from '@/lib/types'

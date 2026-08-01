@@ -9,7 +9,7 @@ import { CardGrid } from '@/components/ui/CardGrid'
 import { SiGoogle } from 'react-icons/si'
 import { TbUser } from 'react-icons/tb'
 import { getFeaturedReposWithMetrics } from '@/lib/github'
-import { DeviceService } from '@/lib/services'
+import { DeviceService } from '@/lib/services/device.service'
 import { getDeviceOSInfo, getDeviceRootInfo } from '@/lib/utils/device-text'
 
 const getGitHubUsername = () => {

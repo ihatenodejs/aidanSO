@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from '@/components/objects/Link'
-import { DeviceService } from '@/lib/services'
+import { DeviceService } from '@/lib/services/device.service'
 import { Smartphone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

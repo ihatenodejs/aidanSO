@@ -7,7 +7,7 @@ import PageHeader from '@/components/objects/PageHeader'
 import PageShell from '@/components/layout/PageShell'
 import { Link, AlertCircle } from 'lucide-react'
 import { TbCurrencyDollarOff } from 'react-icons/tb'
-import { DomainService } from '@/lib/services'
+import { DomainService } from '@/lib/services/domain.service'
 import {
   getDaysUntilExpiration,
   getOwnershipDuration,

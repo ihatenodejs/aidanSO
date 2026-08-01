@@ -1,5 +1,5 @@
 import { CCData, DailyData, HeatmapDay, TimeRangeKey } from '@/lib/types'
-import { AIService } from '@/lib/services'
+import { AIService } from '@/lib/services/ai.service'
 import { Formatter } from '@/lib/utils/formatting'
 import type { HeatmapPalette } from '@/app/ai/theme'
 

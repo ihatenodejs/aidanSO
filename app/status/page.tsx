@@ -1,4 +1,4 @@
-import { StatusService } from '@/lib/services'
+import { StatusService } from '@/lib/services/status.service'
 import StatusPageClient, {
   type SerializedStatusReport
 } from './components/StatusPageClient'

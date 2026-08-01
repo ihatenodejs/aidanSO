@@ -5,7 +5,7 @@ import PageHeader from '@/components/objects/PageHeader'
 import PageShell from '@/components/layout/PageShell'
 import DeviceFilters from '@/components/device/DeviceFilters'
 import DeviceCard from '@/components/device/DeviceCard'
-import { DeviceService } from '@/lib/services'
+import { DeviceService } from '@/lib/services/device.service'
 import { Smartphone } from 'lucide-react'
 
 const allDevices = DeviceService.getAllDevicesEnriched()

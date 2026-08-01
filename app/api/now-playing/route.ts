@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { NowPlayingService } from '@/lib/services'
+import { NowPlayingService } from '@/lib/services/now-playing.service'
 import type { NowPlayingData } from '@/lib/types'
 
 export const runtime = 'nodejs'

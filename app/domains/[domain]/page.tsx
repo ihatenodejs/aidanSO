@@ -4,7 +4,7 @@ import DomainDetails from '@/components/domains/DomainDetails'
 import PageShell from '@/components/layout/PageShell'
 import { ArrowLeft, Globe } from 'lucide-react'
 import Link from 'next/link'
-import { DomainService } from '@/lib/services'
+import { DomainService } from '@/lib/services/domain.service'
 
 const domains = DomainService.getAllDomains()
 

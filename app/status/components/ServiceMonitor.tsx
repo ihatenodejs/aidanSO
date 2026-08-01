@@ -158,8 +158,7 @@ export default function ServiceMonitor({ services }: ServiceMonitorProps) {
       ? getErrorTypeConfig(result.errorType)
       : null
     const domainUsage =
-      result.project.domainInfo?.usage ??
-      'Status details are unavailable for this domain.'
+      result.project.usage ?? 'Status details are unavailable for this domain.'
 
     if (result.status === 'checking' && statusFilter === 'all') {
       return (

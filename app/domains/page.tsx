@@ -150,9 +150,7 @@ export default function Domains() {
           </div>
           <div className="rounded-lg border border-gray-800 bg-gray-900/50 p-4 backdrop-blur-sm">
             <div className="flex items-center justify-center gap-1 text-2xl font-bold text-gray-300">
-              {stats.expired > 0 && (
-                <AlertCircle className="text-orange-500" />
-              )}
+              {stats.expired > 0 && <AlertCircle className="text-orange-500" />}
               {stats.expired}
             </div>
             <div className="text-sm text-gray-500">Expired</div>

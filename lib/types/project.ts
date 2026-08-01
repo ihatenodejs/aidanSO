@@ -39,9 +39,6 @@ export interface Renewal {
  * @public
  */
 export interface ProjectDomainInfo {
-  /** Description of domain usage/purpose */
-  usage: string
-
   /** Registrar where domain is registered */
   registrar: DomainRegistrarId
 
@@ -101,8 +98,8 @@ export type ServiceCategory = 'personal' | 'project'
  *   id: 'aidan-so',
  *   domain: 'aidan.so',
  *   serviceCategory: 'personal',
+ *   usage: 'Primary portfolio website',
  *   domainInfo: {
- *     usage: 'Primary portfolio website',
  *     registrar: 'Dynadot',
  *     autoRenew: false,
  *     status: 'active',
@@ -127,6 +124,8 @@ export interface Project {
 
   /** Service category for status page organization */
   serviceCategory: ServiceCategory
+  /** Description of domain usage/purpose (broken out of domainInfo) */
+  usage?: string
 
   /** Domain registration and management details (optional - if null, excluded from domains page) */
   domainInfo?: ProjectDomainInfo

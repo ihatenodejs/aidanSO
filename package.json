@@ -1,21 +1,22 @@
 {
   "name": "aidanso",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
-    "dev": "bun run server.ts",
+    "dev": "next dev",
     "build": "next build",
-    "start": "NODE_ENV=production bun run server.ts",
+    "start": "next start",
     "typecheck": "bunx tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "bun test",
-    "scan": "bash -lc 'trap \"kill 0\" EXIT; bun run server.ts & bunx react-scan@latest localhost:3000'",
+    "scan": "bash -lc 'trap \"kill 0\" EXIT; next dev & bunx react-scan@latest localhost:3000'",
     "best-practices": "bun tools/best-practices.ts",
     "best-practices:ci": "bun tools/best-practices.ts --skip=page-load-performance",
     "check:best": "bun tools/best-practices.ts",
-    "sync:usage": "bun tools/sync-usage.ts"
+    "sync:usage": "bun tools/sync-usage.ts",
+    "check": "pre-commit run --all-files"
   },
   "dependencies": {
     "@lobehub/icons": "^5.15.0",
@@ -34,8 +35,6 @@
     "react-syntax-highlighter": "^16.1.0",
     "recharts": "^3.3.0",
     "remark-gfm": "^4.0.1",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7"
   },

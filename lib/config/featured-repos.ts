@@ -23,8 +23,7 @@ export const featuredRepos: FeaturedRepoConfig[] = [
     owner: 'abocn',
     repo: 'TelegramBot',
     description: 'An extendable Telegram bot written in TypeScript.',
-    platform: 'github',
-    url: 'https://kowalski.social'
+    platform: 'github'
   },
   {
     id: 3,
@@ -32,7 +31,7 @@ export const featuredRepos: FeaturedRepoConfig[] = [
     repo: 'modules',
     description: 'A Magisk/KernelSU module repository',
     platform: 'github',
-    url: 'https://modules.lol'
+    url: 'https://modules.aidan.so'
   },
   {
     id: 4,

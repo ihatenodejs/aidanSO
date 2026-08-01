@@ -8,11 +8,10 @@ import { FaBluetoothB } from 'react-icons/fa6'
 import { IoBatteryFullSharp } from 'react-icons/io5'
 import { IoIosPlay } from 'react-icons/io'
 import { TbDiscOff } from 'react-icons/tb'
-import { Progress } from '@/components/ui/progress'
 import Link from '@/components/objects/Link'
 import ScrollTxt from '@/components/objects/MusicText'
-import { connectSocket, disconnectSocket } from '@/lib/socket'
 import { effects } from '@/lib/theme/effects'
+import type { NowPlayingData } from '@/lib/types'
 
 const formatTime = (date: Date) => {
   return date.toLocaleTimeString('en-US', {
@@ -22,79 +21,68 @@ const formatTime = (date: Date) => {
   })
 }
 
-interface LastFmResponse {
-  album?: {
-    image?: Array<{ size: string; '#text': string }>
-  }
-  track?: {
-    album?: {
-      image?: Array<{ size: string; '#text': string }>
-    }
-  }
+interface NowPlayingProps {
+  onLiveChange?: (isLive: boolean) => void
 }
 
-interface NowPlayingData {
-  track_name?: string
-  artist_name?: string
-  release_name?: string
-  mbid?: string
-  coverArt?: string | null
-  lastFmData?: LastFmResponse
-  status: 'loading' | 'partial' | 'complete' | 'error'
-  message?: string
-}
-
-const NowPlaying: React.FC = () => {
+const NowPlaying: React.FC<NowPlayingProps> = ({ onLiveChange }) => {
   const [nowPlaying, setNowPlaying] = useState<NowPlayingData>({
     status: 'loading'
   })
   const [currentTime, setCurrentTime] = useState('--:--')
   const [volume, setVolume] = useState(25)
   const [screenOn, setScreenOn] = useState(true)
-  const [progressSteps, setProgressSteps] = useState({ current: 0, total: 3 })
 
   useEffect(() => {
-    const socket = connectSocket()
+    let active = true
+    let controller: AbortController | null = null
 
-    socket.on('connect', () => {
-      console.log('Connected to server')
-      socket.emit('requestNowPlaying')
-      socket.emit('startAutoRefresh')
-    })
+    const refreshNowPlaying = async () => {
+      controller?.abort()
+      const requestController = new AbortController()
+      controller = requestController
 
-    socket.on('disconnect', () => {
-      console.log('[i] Disconnected from server')
-    })
+      try {
+        const response = await fetch('/api/now-playing', {
+          signal: requestController.signal
+        })
+        const payload: unknown = await response.json()
 
-    socket.on('nowPlaying', (data: NowPlayingData) => {
-      console.log('Received now playing data:', data)
-      setNowPlaying((prevState) => ({
-        ...prevState,
-        ...data
-      }))
+        if (
+          !response.ok ||
+          !payload ||
+          typeof payload !== 'object' ||
+          !('status' in payload) ||
+          !['loading', 'partial', 'complete', 'error'].includes(
+            payload.status as string
+          )
+        ) {
+          throw new Error('Invalid now-playing response')
+        }
 
-      if (data.status === 'loading') {
-        setProgressSteps({ current: 1, total: 3 })
-      } else if (data.status === 'partial') {
-        setProgressSteps({ current: 2, total: 3 })
-      } else if (data.status === 'complete') {
-        setProgressSteps({ current: 3, total: 3 })
+        if (!active) return
+
+        const nowPlayingData = payload as NowPlayingData
+        setNowPlaying(nowPlayingData)
+        onLiveChange?.(nowPlayingData.status !== 'error')
+      } catch {
+        if (!active || requestController.signal.aborted) return
+
+        setNowPlaying({ status: 'error', message: 'Connection failed' })
+        onLiveChange?.(false)
       }
-    })
+    }
 
-    socket.on('connect_error', (error) => {
-      console.error('[!] Connection error:', error)
-      setNowPlaying({ status: 'error', message: 'Connection failed' })
-    })
+    onLiveChange?.(false)
+    void refreshNowPlaying()
+    const interval = setInterval(() => void refreshNowPlaying(), 30000)
 
     return () => {
-      socket.off('connect')
-      socket.off('disconnect')
-      socket.off('nowPlaying')
-      socket.off('connect_error')
-      disconnectSocket()
+      active = false
+      controller?.abort()
+      clearInterval(interval)
     }
-  }, [])
+  }, [onLiveChange])
 
   useEffect(() => {
     const updateTime = () => {
@@ -112,15 +100,7 @@ const NowPlaying: React.FC = () => {
         <div className="flex h-full flex-col items-center justify-center">
           <Loader2 className="mb-4 animate-spin text-white" size={32} />
           <div className="px-4 text-center text-xs text-white">
-            <div className="mb-2">{nowPlaying.message || 'Connecting...'}</div>
-            <Progress
-              value={
-                progressSteps.total > 0
-                  ? (progressSteps.current * 100) / progressSteps.total
-                  : 0
-              }
-              className="h-1"
-            />
+            {nowPlaying.message || 'Connecting...'}
           </div>
         </div>
       )

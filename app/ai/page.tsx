@@ -15,21 +15,18 @@ import {
 } from '@/lib/config/ai-usage'
 import { isInactiveTool } from './types'
 
-const statusOrder = {
-  primary: 0,
-  active: 1,
-  occasional: 2,
-  unused: 3,
-  cancelled: 4
-} as const
+const getEffectivePrice = (tool: {
+  price?: number
+  discountedPrice?: number
+}) => tool.discountedPrice ?? tool.price ?? 0
 
 export default function AI() {
   const activeTools = aiTools
     .filter((tool) => !isInactiveTool(tool))
-    .sort((a, b) => statusOrder[a.status] - statusOrder[b.status])
+    .sort((a, b) => getEffectivePrice(b) - getEffectivePrice(a))
 
   const sortedInactiveTools = [...inactiveAiTools].sort(
-    (a, b) => statusOrder[a.status] - statusOrder[b.status]
+    (a, b) => getEffectivePrice(b) - getEffectivePrice(a)
   )
 
   return (

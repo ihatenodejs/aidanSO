@@ -12,7 +12,7 @@ import type { Project } from '@/lib/types/project'
  * URLs for service monitoring are auto-generated as `https://${domain}`.
  *
  * Projects with `serviceInfo.trackStatus: false` are excluded from status monitoring.
- * The `domainInfo.usage` field takes precedence as the authoritative description.
+ * The top-level `usage` field takes precedence as the authoritative description.
  *
  * @example
  * ```ts
@@ -48,8 +48,8 @@ export const projects: Project[] = [
     id: 'aidan-so',
     domain: 'aidan.so',
     serviceCategory: 'personal',
+    usage: 'The home of my primary website',
     domainInfo: {
-      usage: 'The home of my primary website',
       registrar: 'Dynadot',
       autoRenew: false,
       status: 'active',
@@ -65,8 +65,8 @@ export const projects: Project[] = [
     id: 'aidxn-cc',
     domain: 'aidxn.cc',
     serviceCategory: 'personal',
+    usage: 'The old domain of my primary website',
     domainInfo: {
-      usage: 'The old domain of my primary website',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'active',
@@ -82,8 +82,8 @@ export const projects: Project[] = [
     id: 'disfunction-blog',
     domain: 'disfunction.blog',
     serviceCategory: 'personal',
+    usage: "My blog's official home",
     domainInfo: {
-      usage: "My blog's official home",
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'active',
@@ -101,8 +101,8 @@ export const projects: Project[] = [
     id: 'p0ntus-com',
     domain: 'p0ntus.com',
     serviceCategory: 'project',
+    usage: 'Roblox account store',
     domainInfo: {
-      usage: 'Roblox account store',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'active',
@@ -121,8 +121,8 @@ export const projects: Project[] = [
     id: 'git.p0ntus.com',
     domain: 'git.p0ntus.com',
     serviceCategory: 'project',
+    usage: 'Self-hosted Forgejo',
     domainInfo: {
-      usage: 'Self-hosted Forgejo',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'active',
@@ -139,17 +139,9 @@ export const projects: Project[] = [
   },
   {
     id: 'modules-lol',
-    domain: 'modules.lol',
+    domain: 'modules.aidan.so',
     serviceCategory: 'project',
-    domainInfo: {
-      usage: "An 'app store' of Magisk modules and FOSS Android apps",
-      registrar: 'Spaceship',
-      autoRenew: false,
-      status: 'active',
-      category: 'project',
-      tags: ['android', 'apps', 'open-source'],
-      renewals: [{ date: '2024-12-17', years: 1 }]
-    },
+    usage: "An 'app store' of Magisk modules and FOSS Android apps",
     serviceInfo: {
       trackStatus: true
     }
@@ -158,8 +150,8 @@ export const projects: Project[] = [
     id: 'dontbeevil-lol',
     domain: 'dontbeevil.lol',
     serviceCategory: 'project',
+    usage: 'A public Matrix homeserver',
     domainInfo: {
-      usage: 'A public Matrix homeserver',
       registrar: 'Namecheap',
       autoRenew: false,
       status: 'active',
@@ -168,15 +160,15 @@ export const projects: Project[] = [
       renewals: [{ date: '2025-01-08', years: 1 }]
     },
     serviceInfo: {
-      trackStatus: true
+      trackStatus: false
     }
   },
   {
     id: 'kowalski-social',
     domain: 'kowalski.social',
     serviceCategory: 'project',
+    usage: "The website for ABOCN's Kowalski project",
     domainInfo: {
-      usage: "A domain for ABOCN's Kowalski project",
       registrar: 'Name.com',
       autoRenew: true,
       status: 'active',
@@ -185,15 +177,15 @@ export const projects: Project[] = [
       renewals: [{ date: '2025-07-03', years: 1 }]
     },
     serviceInfo: {
-      trackStatus: true
+      trackStatus: false
     }
   },
   {
     id: 'pontushost-com',
     domain: 'pontushost.com',
     serviceCategory: 'project',
+    usage: 'My hosting provider project',
     domainInfo: {
-      usage: 'My hosting provider project',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'active',
@@ -209,8 +201,8 @@ export const projects: Project[] = [
     id: 'pontusmail-org',
     domain: 'pontusmail.org',
     serviceCategory: 'project',
+    usage: 'An email domain for LibreCloud Mail',
     domainInfo: {
-      usage: 'An email domain for LibreCloud Mail',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'active',
@@ -226,8 +218,8 @@ export const projects: Project[] = [
     id: 'ihate-college',
     domain: 'ihate.college',
     serviceCategory: 'project',
+    usage: 'One of my domains used for LibreCloud Mail and services',
     domainInfo: {
-      usage: 'One of my domains used for LibreCloud Mail and services',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'active',
@@ -239,14 +231,23 @@ export const projects: Project[] = [
       trackStatus: false
     }
   },
+  {
+    id: 'copyparty',
+    domain: 'files.aidan.so',
+    serviceCategory: 'personal',
+    usage: 'My public deployment of Copyparty',
+    serviceInfo: {
+      trackStatus: true
+    }
+  },
 
   // Reserved/Inactive Projects
   {
     id: 'pontus-pics',
     domain: 'pontus.pics',
     serviceCategory: 'project',
+    usage: 'An unused domain for an upcoming image hosting service',
     domainInfo: {
-      usage: 'An unused domain for an upcoming image hosting service',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'reserved',
@@ -262,8 +263,8 @@ export const projects: Project[] = [
     id: 'wikitools-cloud',
     domain: 'wikitools.cloud',
     serviceCategory: 'project',
+    usage: 'Unused (for now!)',
     domainInfo: {
-      usage: 'Unused (for now!)',
       registrar: 'Namecheap',
       autoRenew: false,
       status: 'reserved',
@@ -279,8 +280,8 @@ export const projects: Project[] = [
     id: 'androidintegrity-org',
     domain: 'androidintegrity.org',
     serviceCategory: 'project',
+    usage: 'A project to fix Play Integrity',
     domainInfo: {
-      usage: 'A project to fix Play Integrity',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'reserved',
@@ -298,8 +299,8 @@ export const projects: Project[] = [
     id: 'librecloud-cc',
     domain: 'librecloud.cc',
     serviceCategory: 'project',
+    usage: 'My old cloud services provider project',
     domainInfo: {
-      usage: 'My old cloud services provider project',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'parked',
@@ -315,8 +316,8 @@ export const projects: Project[] = [
     id: 'dont-be-evil-lol',
     domain: 'dont-be-evil.lol',
     serviceCategory: 'project',
+    usage: 'A domain for LibreCloud Mail',
     domainInfo: {
-      usage: 'A domain for LibreCloud Mail',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'parked',
@@ -332,8 +333,8 @@ export const projects: Project[] = [
     id: 'strongintegrity-life',
     domain: 'strongintegrity.life',
     serviceCategory: 'project',
+    usage: 'A domain used for LibreCloud Mail',
     domainInfo: {
-      usage: 'A domain used for LibreCloud Mail',
       registrar: 'Spaceship',
       autoRenew: false,
       status: 'reserved',
@@ -354,35 +355,11 @@ export const projects: Project[] = [
     }
   },
   {
-    id: 'paste.librecloud.cc',
-    domain: 'paste.librecloud.cc',
-    serviceCategory: 'project',
-    serviceInfo: {
-      trackStatus: false
-    }
-  },
-  {
-    id: 'kowalski.social',
-    domain: 'kowalski.social',
-    serviceCategory: 'project',
-    serviceInfo: {
-      trackStatus: false
-    }
-  },
-  {
     id: 'pass.librecloud.cc',
     domain: 'pass.librecloud.cc',
     serviceCategory: 'project',
     serviceInfo: {
       // Tracking is not accurate at the moment
-      trackStatus: false
-    }
-  },
-  {
-    id: 'memos.librecloud.cc',
-    domain: 'memos.librecloud.cc',
-    serviceCategory: 'project',
-    serviceInfo: {
       trackStatus: false
     }
   }

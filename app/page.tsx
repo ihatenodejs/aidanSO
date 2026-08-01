@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 
 import Button from '@/components/objects/Button'
 import PageShell from '@/components/layout/PageShell'
@@ -24,6 +25,7 @@ import { TbUserHeart, TbMessage } from 'react-icons/tb'
 import { BiDonateHeart } from 'react-icons/bi'
 
 export default function Home() {
+  const [isLive, setIsLive] = useState(false)
   const mainStrings: string[][] = [
     [
       "Hey there! My name is Aidan, and I'm a systems administrator, full-stack developer, and student from the Boston area. I primarily work with Linux, Docker, Next.js, Tailwind CSS and TypeScript.",
@@ -66,10 +68,10 @@ export default function Home() {
       <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="relative rounded-lg border-2 border-gray-700 p-4 transition-colors duration-300 hover:border-gray-600">
           <div className="absolute top-2 right-2">
-            <LiveIndicator />
+            <LiveIndicator isLive={isLive} />
           </div>
           <div className="flex h-full items-center justify-center">
-            <LastPlayed />
+            <LastPlayed onLiveChange={setIsLive} />
           </div>
         </div>
 

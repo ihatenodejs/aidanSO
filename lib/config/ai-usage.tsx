@@ -28,6 +28,14 @@ const rawAiTools = [
     price: 0
   },
   {
+    name: 'ChatGPT Pro',
+    icon: OpenAI,
+    description: 'Budget-friendly with decent ratelimits',
+    status: 'primary',
+    link: 'https://chatgpt.com/',
+    price: 100
+  },
+  {
     name: 'ChatGPT Business',
     icon: OpenAI,
     description: 'Feature-rich and budget-friendly (for now)',
@@ -93,7 +101,8 @@ const rawAiTools = [
       'Well-priced models for coding. Web Grok is good for doing research on X.',
     status: 'occasional',
     link: 'https://grok.com/',
-    price: 20
+    price: 30,
+    discountedPrice: 20
   },
   {
     name: 'Perplexity Pro',
@@ -162,14 +171,14 @@ export const favoriteModels: FavoriteModel[] = [
   {
     name: 'Gemini 3.6 Flash',
     provider: 'Google',
-    review: `A better-priced version of 3.6 with better output quality. Improved design capabilities, and nice for planning/execution.`,
-    rating: 9.0
+    review: `A better-priced version of 3.6 with decent output quality. Some looping and laziness not present in 3.5 Flash. Improved design capabilities, and nice for planning/execution.`,
+    rating: 8.5
   },
   {
     name: 'Gemini 3.5 Flash',
     provider: 'Google',
     review: `Great for use within Antigravity or Oh My Pi. It's dependable for day-to-day use and paired with an AI Pro subscription (or two), usable limits are bearable.`,
-    rating: 8.5
+    rating: 9.0
   },
   {
     name: 'MiMo-V2.5',
@@ -203,11 +212,25 @@ export const favoriteModels: FavoriteModel[] = [
     rating: 8.5
   },
   {
+    name: 'Claude 4.1 Opus',
+    provider: 'Anthropic',
+    review:
+      'Amazing planner, useful for Plan Mode in Claude Code. Useful in code generation, albeit at a higher cost.',
+    rating: 9.0
+  },
+  {
     name: 'Claude 4 Sonnet',
     provider: 'Anthropic',
     review:
       'The perfect balance of capability, speed, and price. Perfect for development with React.',
     rating: 8.0
+  },
+  {
+    name: 'GPT-5.6-Terra',
+    provider: 'OpenAI',
+    review:
+      'Decent model but sometimes sloppy in select harnasses. Cuts corners too much for a frontier mid-tier model.',
+    rating: 8.5
   },
   {
     name: 'gpt-5-codex',
@@ -216,11 +239,10 @@ export const favoriteModels: FavoriteModel[] = [
     rating: 8.0
   },
   {
-    name: 'Claude 4.1 Opus',
-    provider: 'Anthropic',
-    review:
-      'Amazing planner, useful for Plan Mode in Claude Code. Useful in code generation, albeit at a higher cost.',
-    rating: 9.0
+    name: 'GPT-5',
+    provider: 'OpenAI',
+    review: `A solid model for coding and instruction following. Lacks personality and quality critical thinking at times, but this isn't a barrier to quality output.`,
+    rating: 7.0
   },
   {
     name: 'Qwen3-235B-A22B',
@@ -228,12 +250,6 @@ export const favoriteModels: FavoriteModel[] = [
     review:
       'The OG thinking model. Amazing, funny, and smart for chats. Surprisingly good at coding too. Unfortunately, more of a novelty for "real work."',
     rating: 6.5
-  },
-  {
-    name: 'GPT-5',
-    provider: 'OpenAI',
-    review: `A solid model for coding and instruction following. Lacks personality and quality critical thinking at times, but this isn't a barrier to quality output.`,
-    rating: 7.0
   },
   {
     name: 'Qwen3-Max-Preview',
@@ -255,6 +271,20 @@ export const favoriteModels: FavoriteModel[] = [
     review:
       'My favorite for playing around with AI or creating a project. Easy to run locally and open weight!',
     rating: 5.0
+  },
+  {
+    name: 'Grok 4.5',
+    provider: 'xAI',
+    review:
+      'A good model for coding and planning. Usage limits and pricing are appropriate with SuperGrok plans.',
+    rating: 9.0
+  },
+  {
+    name: 'Grok 4.3',
+    provider: 'xAI',
+    review:
+      'Cheap and fast model, good for basic coding tasks and commit summaries. Good quality for the price, especially with SuperGrok plans.',
+    rating: 8.5
   }
 ]
 

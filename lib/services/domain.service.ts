@@ -164,7 +164,7 @@ export class DomainService {
       .filter((project) => project.domainInfo !== undefined)
       .map((project) => ({
         domain: project.domain,
-        usage: project.domainInfo!.usage,
+        usage: project.usage!,
         registrar: project.domainInfo!.registrar,
         autoRenew: project.domainInfo!.autoRenew,
         status: project.domainInfo!.status,
@@ -196,7 +196,7 @@ export class DomainService {
 
     const domain: Domain = {
       domain: project.domain,
-      usage: project.domainInfo.usage,
+      usage: project.usage!,
       registrar: project.domainInfo.registrar,
       autoRenew: project.domainInfo.autoRenew,
       status: project.domainInfo.status,
@@ -260,7 +260,7 @@ export class DomainService {
 
     const domains = filteredProjects.map((project) => ({
       domain: project.domain,
-      usage: project.domainInfo!.usage,
+      usage: project.usage!,
       registrar: project.domainInfo!.registrar,
       autoRenew: project.domainInfo!.autoRenew,
       status: project.domainInfo!.status,

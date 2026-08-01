@@ -7,9 +7,10 @@ interface FavoriteModelsProps {
 }
 
 export default function FavoriteModels({ models }: FavoriteModelsProps) {
+  const sorted = [...models].sort((a, b) => b.rating - a.rating)
   return (
     <PaginatedCardList
-      items={models}
+      items={sorted}
       title="Favorite Models"
       icon={<Brain size={24} />}
       subtitle="Based on personal preference"
